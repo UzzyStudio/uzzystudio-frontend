@@ -122,11 +122,14 @@ const ServicesStackSection = () => {
             ref={containerRef}
             sx={{
                 width: "100%",
+                maxWidth: "100vw",
                 height: { xs: "100vh", md: "100vh" },
-
                 position: "relative",
                 overflow: "hidden",
                 borderTop: "2px solid #E7E7E7",
+                margin: 0,
+                padding: 0,
+                boxSizing: "border-box",
             }}
         >
             {data?.services?.map((service, index) => (
@@ -139,13 +142,15 @@ const ServicesStackSection = () => {
                         // backgroundColor: service.bg,
                         height: "100vh",
                         maxWidth: "1600px",
+                        margin: "0 auto",
                         display: "flex",
                         justifyContent: "space-between",
                         flexDirection: { xs: "column", md: "row" },   // ← IMPORTANT
                         alignItems: "center",
                         padding: { xs: "110px 20px", md: "0px 50px" },
                         gap: { xs: 4, md: 6 },
-                        color: "#1D1D1B"
+                        color: "#1D1D1B",
+                        boxSizing: "border-box",
                     }}
                 >
 
@@ -242,7 +247,9 @@ const ServicesStackSection = () => {
 
                     {/* RIGHT IMAGE */}
                     < Box sx={{
-                        paddingRight: "80px", width: { xs: "100%", md: "35%" },
+                        paddingRight: { xs: 0, md: "50px" },
+                        width: { xs: "100%", md: "35%" },
+                        boxSizing: "border-box",
                     }}>
                         <img
                             src={urlFor(service.image).width(800).url()}

@@ -77,9 +77,12 @@ const VideoSection = () => {
             sx={{
                 position: "relative",
                 width: "100%",
+                maxWidth: "100vw",
                 // minHeight: "100vh",
                 overflow: "hidden",
                 py: 20,
+                margin: 0,
+                boxSizing: "border-box",
             }}
         >
             {/* TOP-LEFT LARGE IMAGE */}

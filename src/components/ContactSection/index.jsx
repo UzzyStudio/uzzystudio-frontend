@@ -64,7 +64,10 @@ export default function ContactSection() {
                 backgroundColor: "#fff",
                 py: { xs: 2, md: 12 },
                 px: { xs: 2, md: 6 },
-                width: "100%"
+                width: "100%",
+                maxWidth: "100vw",
+                margin: 0,
+                boxSizing: "border-box",
             }}
         >
             {/* INNER BOX */}
@@ -72,6 +75,7 @@ export default function ContactSection() {
                 width: "100%",
                 maxWidth: "1600px",
                 mx: "auto",
+                boxSizing: "border-box",
             }}>
                 <Grid container spacing={{ xs: 0, md: 15 }} alignItems="flex-start" justifyContent="space-between" flexWrap={{ xs: "wrap", sm: "wrap", md: "nowrap" }}
                 >
