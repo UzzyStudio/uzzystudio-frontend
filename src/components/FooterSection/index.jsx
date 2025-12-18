@@ -121,15 +121,20 @@ export default function FooterSection() {
             ref={sectionRef}
             sx={{
                 width: "100%",
+                maxWidth: "100vw",
                 color: "#fff",
                 fontFamily: "Inter Tight, sans-serif",
+                margin: 0,
+                padding: 0,
+                boxSizing: "border-box",
             }}
         >
             {/* INNER CONTAINER */}
             <Box sx={{
-                maxWidth: "1600px", width: "93%", paddingTop: { xs: "20px", md: "35px" },
+                maxWidth: "1600px", width: "100%", paddingTop: { xs: "20px", md: "35px" },
                 px: { xs: 1, sm: 2, md: 4 },
-                mx: "auto", backgroundColor: "#1D1D1B", borderTopLeftRadius: "20px", borderTopRightRadius: "20px"
+                mx: "auto", backgroundColor: "#1D1D1B", borderTopLeftRadius: "20px", borderTopRightRadius: "20px",
+                boxSizing: "border-box",
             }}>
 
                 {/* ========== ROW 1 — MENU ========== */}

@@ -134,7 +134,7 @@ export default function AnimatedMembers() {
             ref={containerRef}
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: "100vw",
                 mx: "auto",
                 height: isMobile ? "600px" : isTablet ? "100vh" : "100vh",
                 background: "#F8F8F8",
@@ -145,6 +145,8 @@ export default function AnimatedMembers() {
                 position: "relative",
                 overflow: "hidden",
                 padding: "0 20px",
+                margin: 0,
+                boxSizing: "border-box",
             }}
         >
             <Typography

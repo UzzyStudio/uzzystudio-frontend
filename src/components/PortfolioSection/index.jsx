@@ -360,8 +360,8 @@ const PortfolioSection = () => {
     // 🔥 RETURN
     // ************************************
     return (
-        <Box id="cases" ref={sectionRef} sx={{ width: "100%" }}>
-            <Box sx={{ maxWidth: "1600px", mx: "auto", px: 2, display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Box id="cases" ref={sectionRef} sx={{ width: "100%", maxWidth: "100vw", margin: 0, padding: 0, boxSizing: "border-box" }}>
+            <Box sx={{ maxWidth: "1600px", mx: "auto", px: 2, display: "flex", flexDirection: "column", gap: "10px", boxSizing: "border-box" }}>
 
                 {items.length === 5 && (
                     <>
