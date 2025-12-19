@@ -131,8 +131,6 @@ const SmoothAlternatingSlider1 = () => {
     const rafRef = useRef(null);
 
     useEffect(() => {
-        if (!isDesktop) return;
-
         const animate = () => {
             if (!isHovered.current && !isDragging.current) {
                 setOffset((prev) => {
@@ -147,7 +145,7 @@ const SmoothAlternatingSlider1 = () => {
 
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
-    }, [totalWidth, isDesktop]);
+    }, [totalWidth]);
 
 
 
