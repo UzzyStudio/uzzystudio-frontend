@@ -104,10 +104,32 @@ const SmoothAlternatingSlider1 = () => {
     /** ---------------- RESPONSIVE ---------------- */
     const isXs = useMediaQuery("(max-width:600px)");
     const isSm = useMediaQuery("(max-width:900px)");
+    const isLgDesktop = useMediaQuery("(min-width:1440px)");
 
-    const ITEM_WIDTH_BIG = isXs ? 180 : isSm ? 250 : 330;
-    const ITEM_WIDTH_SMALL = isXs ? 140 : isSm ? 200 : 240;
-    const GAP = isXs ? 20 : isSm ? 35 : 50;
+    // Make desktop items larger so only ~2 are fully visible, with neighbors partially cut
+    let ITEM_WIDTH_BIG;
+    let ITEM_WIDTH_SMALL;
+    let GAP;
+
+    if (isXs) {
+        ITEM_WIDTH_BIG = 180;
+        ITEM_WIDTH_SMALL = 140;
+        GAP = 20;
+    } else if (isSm) {
+        ITEM_WIDTH_BIG = 250;
+        ITEM_WIDTH_SMALL = 200;
+        GAP = 35;
+    } else if (isLgDesktop) {
+        // 1440px and above – scale up so proportions stay nice on big screens
+        ITEM_WIDTH_BIG = 520;
+        ITEM_WIDTH_SMALL = 420;
+        GAP = 80;
+    } else {
+        // Regular desktop
+        ITEM_WIDTH_BIG = 420;
+        ITEM_WIDTH_SMALL = 340;
+        GAP = 60;
+    }
 
     const getItemWidth = (i) =>
         i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
@@ -259,9 +281,7 @@ const SmoothAlternatingSlider1 = () => {
             onMouseMove={isDesktop ? handleMouseMove : undefined}
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
-                margin: "auto",
-                px: { xs: 2, sm: 4, md: 6 },
+                px: { xs: 2, sm: 3, md: 0 },
                 position: "relative",
                 overflow: "hidden",
                 height: isXs ? 200 : isSm ? 200 : 430,
