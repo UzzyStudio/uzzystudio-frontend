@@ -122,15 +122,13 @@ const Header = () => {
             elevation={0}
             sx={{
                 backgroundColor: "transparent",
-                position: "fixed", // fixed works better than sticky for this effect
+                position: "fixed",
                 top: 0,
                 width: "100%",
-                maxWidth: "1600px",
-                margin: "auto",
-                paddingX: 6,
-                paddingY: 1,
+                paddingX: { xs: 2, md: "3vw" },
+                paddingY: { xs: 1, md: "1vw" },
                 transition: "transform 0.3s ease",
-                transform: showHeader ? "translateY(0)" : "translateY(-120px)", // hide when scrolling down
+                transform: showHeader ? "translateY(0)" : "translateY(-120px)",
                 zIndex: 100,
             }}
         >
@@ -138,7 +136,7 @@ const Header = () => {
                 sx={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    maxWidth: "1600px",
+                    width: "100%",
                     animation: `${slideDownFast} 0.7s ease-out`,
                     animationFillMode: "forwards",
                 }}
@@ -147,8 +145,8 @@ const Header = () => {
                     {/* Logo */}
                     <Box
                         sx={{
-                            width: "46px",
-                            height: "46px",
+                            width: { xs: "46px", md: "4vw", lg: "4.5vw" },
+                            height: { xs: "46px", md: "4vw", lg: "4.5vw" },
                             backgroundColor: "#EEEEEE",
                             borderRadius: "50px",
                             display: "flex",
@@ -161,15 +159,28 @@ const Header = () => {
                             onClick={() => {
                                 window.scrollTo({
                                     top: 0,
-                                    behavior: "smooth", // smooth scroll
+                                    behavior: "smooth",
                                 });
                             }}
-                            src={Logo} alt="Logo" width="40" height="40" />
+                            src={Logo}
+                            alt="Logo"
+                            style={{
+                                width: "80%",
+                                height: "80%",
+                                objectFit: "contain",
+                            }}
+                        />
                     </Box>
 
                     {/* Desktop Menu */}
                     {!isMobile && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 20 }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: { md: "3vw", lg: "4vw" },
+                            }}
+                        >
                             <Box
                                 sx={{
                                     display: "flex",
@@ -177,7 +188,7 @@ const Header = () => {
                                     alignItems: "center",
                                     backgroundColor: "#EEEEEE",
                                     borderRadius: "70px",
-                                    padding: "8px 34px",
+                                    padding: { md: "0.5vw 2vw", lg: "0.6vw 2.4vw" },
                                 }}
                             >
                                 {menuItems.map((item) => (
@@ -185,13 +196,13 @@ const Header = () => {
                                         key={item.id}
                                         onClick={() => scrollToSection(item.id)}
                                         sx={{
-                                            fontSize: "15px",
+                                            fontSize: { md: "1vw", lg: "1.1vw" },
                                             fontWeight: 900,
                                             color: "#1D1D1B",
                                             cursor: "pointer",
                                             borderRadius: "12px",
                                             fontFamily: "Inter Tight, sans-serif",
-                                            padding: "6px 10px",
+                                            padding: { md: "0.35vw 0.7vw", lg: "0.4vw 0.8vw" },
                                             "&:hover": { backgroundColor: "#E5E5E5" },
                                         }}
                                     >
@@ -208,8 +219,8 @@ const Header = () => {
                                     backgroundColor: "#CAF55E",
                                     color: "#1D1D1B",
                                     borderRadius: "30px",
-                                    padding: "9px 18px",
-                                    fontSize: "15px",
+                                    padding: { md: "0.7vw 2vw", lg: "0.8vw 2.3vw" },
+                                    fontSize: { md: "1vw", lg: "1.1vw" },
                                     fontWeight: 900,
                                     fontFamily: "Inter Tight, sans-serif",
                                     boxShadow: "none",
