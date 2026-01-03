@@ -123,10 +123,11 @@ const ServicesStackSection = () => {
             sx={{
                 width: "100%",
                 height: { xs: "100vh", md: "100vh" },
-
                 position: "relative",
                 overflow: "hidden",
                 borderTop: "2px solid #E7E7E7",
+                margin: 0,
+                padding: 0,
             }}
         >
             {data?.services?.map((service, index) => (
@@ -135,17 +136,17 @@ const ServicesStackSection = () => {
                     ref={(el) => (cardRefs.current[index] = el)}
                     sx={{
                         width: "100%",
-                        // height: { xs: "none", md: "100%" },
-                        // backgroundColor: service.bg,
                         height: "100vh",
-                        maxWidth: isLargeScreen ? "100%" : "1600px",
+                        maxWidth: "100%", // Always full width
+                        margin: "0 auto", // Center on smaller screens if needed, but full width
                         display: "flex",
                         justifyContent: "space-between",
                         flexDirection: { xs: "column", md: "row" },   // ← IMPORTANT
                         alignItems: "center",
                         padding: { xs: "110px 20px", md: isLargeScreen ? "0px 100px" : "0px 50px" },
                         gap: { xs: 4, md: 6 },
-                        color: "#1D1D1B"
+                        color: "#1D1D1B",
+                        boxSizing: "border-box", // Ensure padding is included in width calculation
                     }}
                 >
 
