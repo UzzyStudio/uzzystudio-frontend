@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect, useRef, useState } from "react";
@@ -10,7 +10,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const PortfolioSection = () => {
-
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [items, setItems] = useState([]);
 
 
@@ -87,9 +87,9 @@ const PortfolioSection = () => {
             sx={{
                 position: "relative",
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                height: { xs: "300px", md: "500px" },
+                height: { xs: "300px", md: isLargeScreen ? "750px" : "500px" },
                 overflow: "hidden",        // IMPORTANT
                 borderRadius: 2,
             }}
@@ -132,7 +132,7 @@ const PortfolioSection = () => {
                             border: "1px solid white",
                             borderRadius: "20px",
                             color: "#fff",
-                            fontSize: { xs: "8px", md: "10px" },
+                            fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
                             fontFamily: "Inter Tight, sans-serif",
                             textTransform: "uppercase",
                         }}
@@ -156,10 +156,10 @@ const PortfolioSection = () => {
             >
                 <Typography
                     sx={{
-                        fontSize: { xs: "30px", md: "55px" },
+                        fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
                         fontFamily: "Inter Tight, sans-serif",
-                        letterSpacing: { xs: "-1.1px", md: "-3.9px" },
-                        lineHeight: { xs: "27px", md: "52px" },
+                        letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
+                        lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
                         fontWeight: 400,
                         color: "#fff",
                     }}
@@ -169,12 +169,12 @@ const PortfolioSection = () => {
 
                 <Typography
                     sx={{
-                        fontSize: { xs: "10px", md: "12px" },
+                        fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
                         fontWeight: 300,
                         color: "#fff",
                         textAlign: "right",
                         fontFamily: "Inter Tight, sans-serif",
-                        marginRight: "75px",
+                        marginRight: isLargeScreen ? "112px" : "75px",
                         opacity: 1,
                         width: "27%",
                         letterSpacing: "0.01px"
@@ -196,12 +196,12 @@ const PortfolioSection = () => {
             onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
             sx={{
                 flex: { xs: "unset", md: 1.1 },
-                px: { xs: 0, md: 6 },
+                px: { xs: 0, md: isLargeScreen ? 12 : 6 },
                 width: "100%",
                 position: "relative",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                height: { xs: "380px", md: "500px" },
+                height: { xs: "380px", md: isLargeScreen ? "750px" : "500px" },
                 overflow: "hidden",
                 borderRadius: 2,
             }}
@@ -241,7 +241,7 @@ const PortfolioSection = () => {
                             border: "1px solid white",
                             borderRadius: "20px",
                             color: "#fff",
-                            fontSize: { xs: "8px", md: "10px" },
+                            fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
                             fontFamily: "Inter Tight, sans-serif",
                             textTransform: "uppercase",
                         }}
@@ -265,10 +265,10 @@ const PortfolioSection = () => {
             >
                 <Typography
                     sx={{
-                        fontSize: { xs: "30px", md: "55px" },
+                        fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
                         fontFamily: "Inter Tight, sans-serif",
-                        letterSpacing: { xs: "-1.1px", md: "-3.9px" },
-                        lineHeight: { xs: "27px", md: "52px" },
+                        letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
+                        lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
                         fontWeight: 400,
                         color: "#fff",
                         width: "50%"
@@ -279,11 +279,11 @@ const PortfolioSection = () => {
 
                 <Typography
                     sx={{
-                        fontSize: { xs: "10px", md: "12px" },
+                        fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
                         fontWeight: 400,
                         color: "#fff",
                         textAlign: "right",
-                        marginRight: "75px",
+                        marginRight: isLargeScreen ? "112px" : "75px",
                         opacity: 1,
                         width: "37%",
                         fontFamily: "Inter Tight",
@@ -327,12 +327,12 @@ const PortfolioSection = () => {
             <Typography
                 sx={{
                     fontFamily: "Inter Tight",
-                    fontSize: { xs: "11px", sm: "14px", md: "15px" },
+                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
                     fontWeight: 900,
                     textTransform: "uppercase",
                     color: "#1D1D1B",
                     mb: 4,
-                    width: "180px",
+                    width: isLargeScreen ? "270px" : "180px",
                 }}
             >
                 You see what we do. Imagine what we can do for you
@@ -344,9 +344,9 @@ const PortfolioSection = () => {
                 sx={{
                     backgroundColor: "#1D1D1B",
                     color: "white",
-                    px: { xs: 2, sm: 3, md: 3 },
-                    py: { xs: 2, sm: 2.5, md: 3 },
-                    fontSize: { xs: "11px", sm: "14px", md: "13px" },
+                    px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 3 },
+                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
+                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "13px" },
                     borderRadius: "40px",
                     "&:hover": { backgroundColor: "#000" },
                 }}
@@ -361,7 +361,7 @@ const PortfolioSection = () => {
     // ************************************
     return (
         <Box id="cases" ref={sectionRef} sx={{ width: "100%" }}>
-            <Box sx={{ maxWidth: "1600px", mx: "auto", px: 2, display: "flex", flexDirection: "column", gap: "10px" }}>
+            <Box sx={{ maxWidth: isLargeScreen ? "100%" : "1600px", mx: "auto", px: isLargeScreen ? 12 : 2, display: "flex", flexDirection: "column", gap: "10px" }}>
 
                 {items.length === 5 && (
                     <>

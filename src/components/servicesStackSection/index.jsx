@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import img2 from "../../assets/img2.png";
 import { useRef, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 const ServicesStackSection = () => {
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -137,12 +138,12 @@ const ServicesStackSection = () => {
                         // height: { xs: "none", md: "100%" },
                         // backgroundColor: service.bg,
                         height: "100vh",
-                        maxWidth: "1600px",
+                        maxWidth: isLargeScreen ? "100%" : "1600px",
                         display: "flex",
                         justifyContent: "space-between",
                         flexDirection: { xs: "column", md: "row" },   // ← IMPORTANT
                         alignItems: "center",
-                        padding: { xs: "110px 20px", md: "0px 50px" },
+                        padding: { xs: "110px 20px", md: isLargeScreen ? "0px 100px" : "0px 50px" },
                         gap: { xs: 4, md: 6 },
                         color: "#1D1D1B"
                     }}
@@ -163,7 +164,7 @@ const ServicesStackSection = () => {
                         }}>
                             <Typography
                                 sx={{
-                                    fontSize: { xs: "23px", md: "30px" },
+                                    fontSize: { xs: "23px", md: isLargeScreen ? "45px" : "30px" },
                                     fontFamily: "Inter Tight, sans-serif",
                                     letterSpacing: "-1.1px",
                                     fontWeight: 800,
@@ -176,10 +177,10 @@ const ServicesStackSection = () => {
 
                             <Typography
                                 sx={{
-                                    fontSize: { xs: "11px", md: "14px" },
+                                    fontSize: { xs: "11px", md: isLargeScreen ? "21px" : "14px" },
                                     fontFamily: "Inter Tight, sans-serif",
                                     mb: 3,
-                                    maxWidth: { xs: "86%", md: "450px" },
+                                    maxWidth: { xs: "86%", md: isLargeScreen ? "675px" : "450px" },
                                     lineHeight: 1.4,
                                 }}
                             >
@@ -192,9 +193,9 @@ const ServicesStackSection = () => {
                                 onClick={handleScrollToContact}
 
                                 sx={{
-                                    px: { xs: "12px", md: "18px" },
-                                    py: { xs: "12px", md: "18px" },
-                                    fontSize: { xs: "11px", md: "14px" },
+                                    px: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
+                                    py: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
+                                    fontSize: { xs: "11px", md: isLargeScreen ? "21px" : "14px" },
                                     background: "#1D1D1B",
                                     borderRadius: "30px",
                                     display: "inline-block",
@@ -225,7 +226,7 @@ const ServicesStackSection = () => {
                             <Typography
                                 key={i}
                                 sx={{
-                                    fontSize: { xs: "11px", md: "14px" },
+                                    fontSize: { xs: "11px", md: isLargeScreen ? "21px" : "14px" },
                                     fontWeight: 400,
                                     fontFamily: "Inter Tight, sans-serif",
                                     lineHeight: 1.5,
@@ -241,7 +242,7 @@ const ServicesStackSection = () => {
 
                     {/* RIGHT IMAGE */}
                     < Box sx={{
-                        paddingRight: "80px", width: { xs: "100%", md: "35%" },
+                        paddingRight: isLargeScreen ? "120px" : "80px", width: { xs: "100%", md: "35%" },
                     }}>
                         <img
                             src={urlFor(service.image).width(800).url()}

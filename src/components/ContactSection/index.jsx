@@ -7,6 +7,7 @@ import {
     Button,
     Stack,
     Chip,
+    useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
 import CharacterContact from "../../assets/character-contact.svg";
@@ -16,6 +17,7 @@ import DribbbleLogo from "../../assets/dribble.svg";
 import InstagramLogo from "../../assets/dribble.svg";
 
 export default function ContactSection() {
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
     const wiggle = {
         '@keyframes wiggle': {
@@ -70,7 +72,7 @@ export default function ContactSection() {
             {/* INNER BOX */}
             <Box sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 mx: "auto",
             }}>
                 <Grid container spacing={{ xs: 0, md: 15 }} alignItems="flex-start" justifyContent="space-between" flexWrap={{ xs: "wrap", sm: "wrap", md: "nowrap" }}
@@ -82,7 +84,7 @@ export default function ContactSection() {
                             {/* HEADLINE */}
                             <Typography
                                 sx={{
-                                    fontSize: { xs: "26px", sm: "30px", md: "42px" },
+                                    fontSize: { xs: "26px", sm: "30px", md: isLargeScreen ? "63px" : "42px" },
                                     fontFamily: "Inter Tight, sans-serif",
                                     fontWeight: 700,
                                     lineHeight: 1.2,
@@ -98,7 +100,7 @@ export default function ContactSection() {
                                     src={CharacterContact}
                                     alt="character"
                                     sx={{
-                                        height: "34px",
+                                        height: isLargeScreen ? "51px" : "34px",
                                         mx: 1,
                                         display: "inline-block",
                                         verticalAlign: "middle",
@@ -110,7 +112,7 @@ export default function ContactSection() {
                             <Typography
                                 sx={{
                                     mt: 2,
-                                    fontSize: { xs: "16px", md: "22px" },
+                                    fontSize: { xs: "16px", md: isLargeScreen ? "33px" : "22px" },
                                     fontWeight: 400,
                                     fontFamily: "Inter Tight, sans-serif",
 
@@ -125,13 +127,14 @@ export default function ContactSection() {
                                 component="img"
                                 src={RatingImg}
                                 alt="rating"
-                                sx={{ width: "180px", mt: 3 }}
+                                sx={{ width: isLargeScreen ? "270px" : "180px", mt: 3 }}
                             />
 
                             {/* CLIENT TRUST US */}
                             <Typography
                                 sx={{
                                     mt: 0, mb: 8, fontWeight: 600, color: "black", fontFamily: "Inter Tight, sans-serif",
+                                    fontSize: isLargeScreen ? "24px" : undefined,
                                 }}
                             >
                                 Client trust us
@@ -140,6 +143,7 @@ export default function ContactSection() {
                             <Typography
                                 sx={{
                                     mt: 0, mb: 1, fontWeight: 500, color: "black", fontFamily: "Inter Tight, sans-serif",
+                                    fontSize: isLargeScreen ? "22px" : undefined,
                                 }}
                             >
                                 Follow Us
@@ -150,19 +154,19 @@ export default function ContactSection() {
                                     component="img"
                                     src={BehanceLogo}
                                     alt="Behance"
-                                    sx={{ height: { xs: "32px", md: "45px" } }}
+                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                 />
                                 <Box
                                     component="img"
                                     src={DribbbleLogo}
                                     alt="Dribbble"
-                                    sx={{ height: { xs: "32px", md: "45px" } }}
+                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                 />
                                 <Box
                                     component="img"
                                     src={InstagramLogo}
                                     alt="Instagram"
-                                    sx={{ height: { xs: "32px", md: "45px" } }}
+                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                 />
                             </Stack>
 
@@ -170,7 +174,7 @@ export default function ContactSection() {
                             <Typography
                                 sx={{
                                     mt: 5,
-                                    fontSize: "20px",
+                                    fontSize: isLargeScreen ? "30px" : "20px",
                                     fontWeight: 500,
                                     color: "black",
                                     textDecoration: "underline",
@@ -199,12 +203,12 @@ export default function ContactSection() {
                             maxWidth: {
                                 xs: "320px",   // mobile
                                 sm: "420px",   // tablet
-                                md: "780px",   // desktop
+                                md: isLargeScreen ? "1170px" : "780px",   // desktop
                             },
                             marginRight: {
                                 xs: 0, // mobile
                                 sm: 0, // tablet
-                                md: "100px", // desktop
+                                md: isLargeScreen ? "150px" : "100px", // desktop
                             },
                         }}>
                             {/* NAME FIELDS */}
@@ -212,7 +216,7 @@ export default function ContactSection() {
                                 {/* NAME & COMPANY */}
                                 <Grid item xs={12} md={6} sm={6} sx={{ width: { xs: "90%", sm: "90%", md: "47%" } }}>
                                     <Typography sx={{
-                                        mb: 1, fontWeight: 500, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: "15px" },
+                                        mb: 1, fontWeight: 500, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: isLargeScreen ? "22px" : "15px" },
                                     }}>
                                         Name & Company
                                     </Typography>
@@ -250,7 +254,7 @@ export default function ContactSection() {
                                 {/* EMAIL */}
                                 <Grid item xs={12} md={6} sm={6} sx={{ width: { xs: "90%", sm: "90%", md: "47%" } }}>
                                     <Typography sx={{
-                                        mb: 1, fontWeight: 500, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: "15px" },
+                                        mb: 1, fontWeight: 500, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: isLargeScreen ? "22px" : "15px" },
                                     }}>
                                         Email
                                     </Typography>
@@ -288,7 +292,7 @@ export default function ContactSection() {
                             {/* SERVICES */}
                             <Box sx={{ mt: 4 }}>
                                 <Typography sx={{
-                                    fontWeight: 500, mb: 1, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: "15px" },
+                                    fontWeight: 500, mb: 1, color: "#000", fontFamily: "Inter Tight, sans-serif", fontSize: { xs: "13px", md: isLargeScreen ? "22px" : "15px" },
                                 }}>
                                     I'm interested in...
                                 </Typography>
@@ -303,9 +307,9 @@ export default function ContactSection() {
                                                 ...wiggle, // add keyframes
 
                                                 borderRadius: "80px",
-                                                px: { xs: 1.5, sm: 2, md: 2.2 },   // left-right padding
-                                                py: { xs: 1.5, sm: 2, md: 3 },     // top-bottom padding
-                                                fontSize: { xs: "12px", sm: "13px", md: "14px" },
+                                                px: { xs: 1.5, sm: 2, md: isLargeScreen ? 3.3 : 2.2 },   // left-right padding
+                                                py: { xs: 1.5, sm: 2, md: isLargeScreen ? 4.5 : 3 },     // top-bottom padding
+                                                fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "21px" : "14px" },
                                                 cursor: "pointer",
                                                 backgroundColor: selectedServices.includes(item) ? "black" : "transparent",
                                                 color: selectedServices.includes(item) ? "white" : "black",
@@ -348,9 +352,9 @@ export default function ContactSection() {
                                                     ...wiggle, // add keyframes
 
                                                     borderRadius: "80px",
-                                                    px: { xs: 1.5, sm: 2, md: 2.2 },   // left-right padding
-                                                    py: { xs: 1.5, sm: 2, md: 3 },     // top-bottom padding
-                                                    fontSize: { xs: "12px", sm: "13px", md: "14px" },
+                                                    px: { xs: 1.5, sm: 2, md: isLargeScreen ? 3.3 : 2.2 },   // left-right padding
+                                                    py: { xs: 1.5, sm: 2, md: isLargeScreen ? 4.5 : 3 },     // top-bottom padding
+                                                    fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "21px" : "14px" },
                                                     cursor: "pointer",
                                                     backgroundColor: isSelected ? "#000" : "transparent",
                                                     color: isSelected ? "#fff" : "#000",
@@ -373,14 +377,32 @@ export default function ContactSection() {
 
                             {/* MESSAGE */}
                             <Box sx={{ mt: 4 }}>
-                                <Typography sx={labelStyle}>Write us a message</Typography>
+                                <Typography sx={{
+                                    mb: 1,
+                                    fontWeight: 500,
+                                    fontSize: { xs: "10px", md: isLargeScreen ? "22px" : "15px" },
+                                    fontFamily: "Inter Tight, sans-serif",
+                                    color: "#000",
+                                }}>Write us a message</Typography>
                                 <TextField
                                     fullWidth
                                     placeholder="Briefly describe your project"
 
                                     variant="standard"
                                     InputProps={{ disableUnderline: true }}
-                                    sx={singleLineInputStyle}
+                                    sx={{
+                                        "& .MuiInputBase-input": {
+                                            fontFamily: "Inter Tight, sans-serif",
+                                            fontSize: { xs: "10px", md: isLargeScreen ? "22px" : "15px" },
+                                            padding: "8px 0",
+                                            "&::placeholder": {
+                                                fontSize: { xs: "9px", md: isLargeScreen ? "22px" : "15px" },
+                                                opacity: 0.5,
+                                                fontFamily: "Inter Tight, sans-serif",
+                                            },
+                                        },
+                                        borderBottom: "1px solid #000",
+                                    }}
                                 />
                             </Box>
 
@@ -390,9 +412,9 @@ export default function ContactSection() {
 
                                     variant="contained"
                                     sx={{
-                                        py: { xs: 1.3, md: 1.6 },
-                                        px: { xs: 4, md: 7 },
-                                        fontSize: { xs: "13px", md: "14px" },
+                                        py: { xs: 1.3, md: isLargeScreen ? 2.4 : 1.6 },
+                                        px: { xs: 4, md: isLargeScreen ? 10.5 : 7 },
+                                        fontSize: { xs: "13px", md: isLargeScreen ? "21px" : "14px" },
                                         backgroundColor: "black",
                                         color: "white",
                                         fontFamily: "Inter Tight, sans-serif",
@@ -415,25 +437,3 @@ export default function ContactSection() {
         </Box >
     );
 }
-
-const labelStyle = {
-    mb: 1,
-    fontWeight: 500,
-    fontSize: { xs: "10px", md: "15px" },
-    fontFamily: "Inter Tight, sans-serif",
-    color: "#000",
-};
-
-const singleLineInputStyle = {
-    "& .MuiInputBase-input": {
-        fontFamily: "Inter Tight, sans-serif",
-        fontSize: { xs: "10px", md: "15px" },
-        padding: "8px 0",
-        "&::placeholder": {
-            fontSize: { xs: "9px", md: "15px" },
-            opacity: 0.5,
-            fontFamily: "Inter Tight, sans-serif",
-        },
-    },
-    borderBottom: "1px solid #000",
-};

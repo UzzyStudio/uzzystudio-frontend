@@ -50,6 +50,7 @@ const SmoothAlternatingSlider1 = () => {
     const lastMousePos = useRef({ x: 0, y: 0 });
     const containerRef = useRef(null);
     const sliderRef = useRef(null);
+    const [containerWidth, setContainerWidth] = useState(0);
 
     /** ---------------- CURSOR ---------------- */
 
@@ -104,10 +105,66 @@ const SmoothAlternatingSlider1 = () => {
     /** ---------------- RESPONSIVE ---------------- */
     const isXs = useMediaQuery("(max-width:600px)");
     const isSm = useMediaQuery("(max-width:900px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
-    const ITEM_WIDTH_BIG = isXs ? 180 : isSm ? 250 : 330;
-    const ITEM_WIDTH_SMALL = isXs ? 140 : isSm ? 200 : 240;
-    const GAP = isXs ? 20 : isSm ? 35 : 50;
+    // Calculate container width (accounting for padding)
+    useEffect(() => {
+        const updateContainerWidth = () => {
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                // Get computed padding
+                const computedStyle = window.getComputedStyle(containerRef.current);
+                const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+                const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+                // Available width is container width minus padding
+                const availableWidth = rect.width - paddingLeft - paddingRight;
+                setContainerWidth(availableWidth);
+            }
+        };
+
+        updateContainerWidth();
+        window.addEventListener("resize", updateContainerWidth);
+        // Also update when images load
+        const timer = setTimeout(updateContainerWidth, 100);
+        return () => {
+            window.removeEventListener("resize", updateContainerWidth);
+            clearTimeout(timer);
+        };
+    }, [images.length]);
+
+    // Calculate item widths to show 2 full images + 2 partial images
+    // Layout: [partial left ~30%] [gap] [full 1] [gap] [full 2] [gap] [partial right ~30%]
+    // Formula: 0.3*full + gap + full + gap + full + gap + 0.3*full = containerWidth
+    // Simplified: 2.6*full + 3*gap = containerWidth
+    const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
+    
+    const calculateItemWidths = () => {
+        if (containerWidth === 0 || containerWidth < 200) {
+            // Fallback to original sizes until container width is known
+            return {
+                big: isXs ? 180 : isSm ? 250 : isLargeScreen ? 495 : 330,
+                small: isXs ? 140 : isSm ? 200 : isLargeScreen ? 360 : 240,
+                partial: isXs ? 54 : isSm ? 75 : isLargeScreen ? 148 : 99,
+            };
+        }
+
+        const availableWidth = containerWidth;
+        // Calculate full width: 2.6 * full + 3 * gap = availableWidth
+        const fullWidth = (availableWidth - (3 * GAP)) / 2.6;
+        const partialWidth = fullWidth * 0.3;
+
+        // Use alternating sizes but ensure they fit
+        const bigWidth = Math.floor(fullWidth);
+        const smallWidth = Math.floor(fullWidth * 0.85); // Slightly smaller for variety
+
+        return {
+            big: Math.max(bigWidth, 100), // Minimum width
+            small: Math.max(smallWidth, 80), // Minimum width
+            partial: Math.floor(partialWidth),
+        };
+    };
+
+    const { big: ITEM_WIDTH_BIG, small: ITEM_WIDTH_SMALL, partial: PARTIAL_WIDTH } = calculateItemWidths();
 
     const getItemWidth = (i) =>
         i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
@@ -118,11 +175,22 @@ const SmoothAlternatingSlider1 = () => {
     );
 
     /** ---------------- OFFSET ---------------- */
-    const [offset, setOffset] = useState(-totalWidth / 3);
+    // Initial offset: position so we see partial left + 2 full + partial right
+    // Start with first image partially visible on left (showing ~30% of first image)
+    const [offset, setOffset] = useState(0);
 
     useEffect(() => {
-        setOffset(-totalWidth / 3);
-    }, [totalWidth]);
+        if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
+            // Position so first image is partially visible on left
+            // We want to show PARTIAL_WIDTH of the first image
+            // So offset should position the first image's right edge at PARTIAL_WIDTH from left
+            // If first image width is ITEM_WIDTH_BIG (assuming index 0 is big), then:
+            // offset = ITEM_WIDTH_BIG - PARTIAL_WIDTH
+            const firstImageWidth = (0 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+            const initialOffset = firstImageWidth - PARTIAL_WIDTH;
+            setOffset(initialOffset);
+        }
+    }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL]);
 
     /** ---------------- AUTO SCROLL ---------------- */
     const speed = useRef(0.7);
@@ -131,11 +199,14 @@ const SmoothAlternatingSlider1 = () => {
     const rafRef = useRef(null);
 
     useEffect(() => {
+        if (images.length === 0 || containerWidth === 0) return;
+
         const animate = () => {
             if (!isHovered.current && !isDragging.current) {
                 setOffset((prev) => {
                     let next = prev - speed.current;
                     const block = totalWidth / 3;
+                    // Keep offset within bounds for seamless loop
                     if (next < -block * 2) next += block;
                     return next;
                 });
@@ -145,7 +216,7 @@ const SmoothAlternatingSlider1 = () => {
 
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
-    }, [totalWidth]);
+    }, [totalWidth, images.length, containerWidth]);
 
 
 
@@ -259,16 +330,13 @@ const SmoothAlternatingSlider1 = () => {
             onMouseMove={isDesktop ? handleMouseMove : undefined}
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                px: { xs: 2, sm: 4, md: 6 },
+                px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 position: "relative",
                 overflow: "hidden",
-                height: isXs ? 200 : isSm ? 200 : 430,
-                // pt: isXs ? "40px" : "80px",
-                // pb: isXs ? "40px" : "80px",
+                height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 430,
                 cursor: "none", // 👈 hide default cursor
-
             }}
         >
             {/* SMILEY */}
@@ -277,9 +345,9 @@ const SmoothAlternatingSlider1 = () => {
                 src={Smiley}
                 sx={{
                     position: "absolute",
-                    right: isXs ? 20 : isSm ? 40 : 80,
+                    right: isXs ? 20 : isSm ? 40 : isLargeScreen ? 120 : 80,
                     bottom: isXs ? 20 : isSm ? 20 : 20,
-                    width: isXs ? 80 : isSm ? 120 : 180,
+                    width: isXs ? 80 : isSm ? 120 : isLargeScreen ? 270 : 180,
                     zIndex: 0,
                 }}
             />
@@ -293,7 +361,7 @@ const SmoothAlternatingSlider1 = () => {
                     gap: `${GAP}px`,
                     transform: `translateX(${offset}px)`,
                     willChange: "transform", // 🔥 smoother
-                    px: isXs ? 1 : 4,
+                    px: 0, // Remove padding to allow precise positioning
                 }}
             >
                 {images.map((img, i) => (
@@ -304,8 +372,8 @@ const SmoothAlternatingSlider1 = () => {
                             width: getItemWidth(i),
                             height:
                                 i % 2 === 0
-                                    ? (isXs ? 150 : isSm ? 220 : 330)
-                                    : (isXs ? 120 : isSm ? 170 : 260),
+                                    ? (isXs ? 150 : isSm ? 220 : isLargeScreen ? 495 : 330)
+                                    : (isXs ? 120 : isSm ? 170 : isLargeScreen ? 390 : 260),
                             overflow: "hidden",
                             borderRadius: "16px",
                         }}

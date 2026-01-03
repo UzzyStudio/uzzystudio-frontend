@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { client, urlFor } from "../../sanityClient";
@@ -22,6 +22,7 @@ export default function AnimatedMembers() {
     }, []);
 
     // 🔹 Responsive
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     useEffect(() => {
         const resize = () => setWindowWidth(window.innerWidth);
@@ -68,7 +69,7 @@ export default function AnimatedMembers() {
             ref={containerRef}
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 mx: "auto",
                 height: isMobile ? "600px" : "100vh",
                 background: "#F8F8F8",
@@ -77,15 +78,15 @@ export default function AnimatedMembers() {
                 justifyContent: "center",
                 position: "relative",
                 overflow: "hidden",
-                padding: "0 20px",
+                padding: isLargeScreen ? "0 120px" : "0 20px",
             }}
         >
             <Typography
                 sx={{
-                    fontSize: isMobile ? "30px" : isTablet ? "48px" : "75px",
+                    fontSize: isMobile ? "30px" : isTablet ? "48px" : isLargeScreen ? "112px" : "75px",
                     fontWeight: 700,
                     textAlign: "center",
-                    lineHeight: isMobile ? "40px" : isTablet ? "52px" : "80px",
+                    lineHeight: isMobile ? "40px" : isTablet ? "52px" : isLargeScreen ? "120px" : "80px",
                     fontFamily: "'Inter Tight', sans-serif",
                     color: "#121314",
                     letterSpacing: "-2px",
@@ -124,8 +125,8 @@ export default function AnimatedMembers() {
                                 key={i}
                                 src={urlFor(img).width(120).url()}
                                 style={{
-                                    width: isMobile ? 40 : isTablet ? 45 : 68,
-                                    height: isMobile ? 40 : isTablet ? 45 : 68,
+                                    width: isMobile ? 40 : isTablet ? 45 : isLargeScreen ? 102 : 68,
+                                    height: isMobile ? 40 : isTablet ? 45 : isLargeScreen ? 102 : 68,
                                     borderRadius: "50%",
                                     objectFit: "cover",
                                     position: "absolute",

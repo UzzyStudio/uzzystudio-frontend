@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { client } from "../../sanityClient";
@@ -9,7 +9,7 @@ import { useState } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
 const MotionSection = () => {
-
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [content, setContent] = useState(null);
 
     useEffect(() => {
@@ -110,15 +110,16 @@ const MotionSection = () => {
         >
             <Box sx={{
                 width: "100%",
-                maxWidth: "1600px",
-                mx: "auto"
+                maxWidth: isLargeScreen ? "100%" : "1600px",
+                mx: "auto",
+                px: isLargeScreen ? 12 : 0
             }}>
                 {/* Row 1 - Top Small Text */}
                 <Typography
                     ref={topRef}
                     sx={{
                         color: "#fff",
-                        fontSize: "13px",
+                        fontSize: isLargeScreen ? "19px" : "13px",
                         fontFamily: "Inter Tight, sans-serif",
                         willChange: "transform, opacity",
                     }}
@@ -143,7 +144,7 @@ const MotionSection = () => {
                             ref={leftRef}
                             sx={{
                                 color: "#fff",
-                                fontSize: "12px",
+                                fontSize: isLargeScreen ? "18px" : "12px",
                                 fontFamily: "Inter Tight, sans-serif",
                                 willChange: "transform, opacity",
                             }}
@@ -157,7 +158,7 @@ const MotionSection = () => {
                         <Typography
                             ref={headingRef}
                             sx={{
-                                fontSize: { xs: "36px", md: "84px" },
+                                fontSize: { xs: "36px", md: isLargeScreen ? "126px" : "84px" },
                                 fontWeight: 800,
                                 lineHeight: 1.1,
                                 color: "#CAF55E",
@@ -181,7 +182,7 @@ const MotionSection = () => {
                             ref={rightRef}
                             sx={{
                                 color: "#fff",
-                                fontSize: "12px",
+                                fontSize: isLargeScreen ? "18px" : "12px",
                                 fontFamily: "Inter Tight, sans-serif",
                                 willChange: "transform, opacity",
                             }}
@@ -196,7 +197,7 @@ const MotionSection = () => {
                     ref={bottomRef}
                     sx={{
                         color: "#fff",
-                        fontSize: "14px",
+                        fontSize: isLargeScreen ? "21px" : "14px",
                         fontFamily: "Inter Tight, sans-serif",
                     }}
                 >

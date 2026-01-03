@@ -21,6 +21,7 @@ const slideUp = keyframes`
 const Hero = () => {
     const isTablet = useMediaQuery("(max-width:1024px)");
     const isMobile = useMediaQuery("(max-width:600px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
     const [hero, setHero] = useState(null);
 
@@ -42,9 +43,9 @@ const Hero = () => {
             component="section"
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                px: { xs: 2, sm: 4, md: 6 },
+                px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 pt: isMobile ? 14 : 10,
                 pb: 20,
             }}
@@ -72,7 +73,9 @@ const Hero = () => {
                                     ? "240px"
                                     : isTablet
                                         ? "480px"
-                                        : "600px",
+                                        : isLargeScreen
+                                            ? "900px"
+                                            : "600px",
                                 height: "auto",
                                 position: "relative",
                                 top: isMobile ? -50 : isTablet ? -100 : -60,
@@ -101,14 +104,14 @@ const Hero = () => {
                     >
                         {/* Small Icon */}
                         <Box sx={{ mb: 1, pl: isMobile ? 0 : "30px" }}>
-                            <img src={SmallIcon} alt="icon" width={isMobile ? 22 : 24} />
+                            <img src={SmallIcon} alt="icon" width={isMobile ? 22 : isLargeScreen ? 30 : 24} />
                         </Box>
 
                         {/* Text */}
                         <Typography
                             sx={{
                                 fontFamily: "Inter Tight, sans-serif",
-                                fontSize: isMobile ? "12px" : "13px",
+                                fontSize: isMobile ? "12px" : isLargeScreen ? "18px" : "13px",
                                 fontWeight: 900,
                                 letterSpacing: "0.5px",
                                 textTransform: "uppercase",

@@ -65,6 +65,7 @@ const Header = () => {
     const [contactOpen, setContactOpen] = useState(false);
 
     const isMobile = useMediaQuery("(max-width:1124px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
     // Scroll handler for hide/show header (optimized)
     useEffect(() => {
@@ -125,9 +126,9 @@ const Header = () => {
                 position: "fixed", // fixed works better than sticky for this effect
                 top: 0,
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                paddingX: 6,
+                paddingX: isLargeScreen ? 12 : 6,
                 paddingY: 1,
                 transition: "transform 0.3s ease",
                 transform: showHeader ? "translateY(0)" : "translateY(-120px)", // hide when scrolling down
@@ -138,7 +139,7 @@ const Header = () => {
                 sx={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    maxWidth: "1600px",
+                    maxWidth: isLargeScreen ? "100%" : "1600px",
                     animation: `${slideDownFast} 0.7s ease-out`,
                     animationFillMode: "forwards",
                 }}
@@ -147,8 +148,8 @@ const Header = () => {
                     {/* Logo */}
                     <Box
                         sx={{
-                            width: "46px",
-                            height: "46px",
+                            width: isLargeScreen ? "60px" : "46px",
+                            height: isLargeScreen ? "60px" : "46px",
                             backgroundColor: "#EEEEEE",
                             borderRadius: "50px",
                             display: "flex",
@@ -164,7 +165,7 @@ const Header = () => {
                                     behavior: "smooth", // smooth scroll
                                 });
                             }}
-                            src={Logo} alt="Logo" width="40" height="40" />
+                            src={Logo} alt="Logo" width={isLargeScreen ? "52" : "40"} height={isLargeScreen ? "52" : "40"} />
                     </Box>
 
                     {/* Desktop Menu */}
@@ -185,13 +186,13 @@ const Header = () => {
                                         key={item.id}
                                         onClick={() => scrollToSection(item.id)}
                                         sx={{
-                                            fontSize: "15px",
+                                            fontSize: isLargeScreen ? "18px" : "15px",
                                             fontWeight: 900,
                                             color: "#1D1D1B",
                                             cursor: "pointer",
                                             borderRadius: "12px",
                                             fontFamily: "Inter Tight, sans-serif",
-                                            padding: "6px 10px",
+                                            padding: isLargeScreen ? "8px 12px" : "6px 10px",
                                             "&:hover": { backgroundColor: "#E5E5E5" },
                                         }}
                                     >
@@ -208,8 +209,8 @@ const Header = () => {
                                     backgroundColor: "#CAF55E",
                                     color: "#1D1D1B",
                                     borderRadius: "30px",
-                                    padding: "9px 18px",
-                                    fontSize: "15px",
+                                    padding: isLargeScreen ? "11px 22px" : "9px 18px",
+                                    fontSize: isLargeScreen ? "18px" : "15px",
                                     fontWeight: 900,
                                     fontFamily: "Inter Tight, sans-serif",
                                     boxShadow: "none",

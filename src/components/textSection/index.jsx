@@ -43,6 +43,7 @@ const CreativeTextSection = () => {
     const isTablet = useMediaQuery("(max-width: 1024px)");
     const isMobile = useMediaQuery("(max-width: 600px)");
     const isBigScreen = useMediaQuery("(min-width: 1300px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
 
     const containerRef = useRef(null);
@@ -78,10 +79,12 @@ const CreativeTextSection = () => {
         ? "38px"
         : isTablet
             ? "70px"
-            : isBigScreen
-                ? "130px"
-                : "100px";
-    const lineSpacingFix = isMobile ? "-5px" : isTablet ? "-10px" : "-25px";
+            : isLargeScreen
+                ? "180px"
+                : isBigScreen
+                    ? "130px"
+                    : "100px";
+    const lineSpacingFix = isMobile ? "-5px" : isTablet ? "-10px" : isLargeScreen ? "-35px" : "-25px";
 
     /** Responsive indent scale */
     const INDENT_SCALE = isMobile ? 0.3 : isTablet ? 0.6 : 1;
@@ -103,27 +106,27 @@ const CreativeTextSection = () => {
                 <Doodle
                     src={HeartDoodle}
                     sx={{
-                        top: isMobile ? "5%" : isTablet ? "12%" : isBigScreen ? "22%" : "23%",
-                        left: isMobile ? "60%" : isTablet ? "70%" : isBigScreen ? "79%" : "76%",
-                        width: isMobile ? "40px" : isTablet ? "70px" : isBigScreen ? "120px%" : "85px",
+                        top: isMobile ? "5%" : isTablet ? "12%" : isLargeScreen ? "22%" : isBigScreen ? "22%" : "23%",
+                        left: isMobile ? "60%" : isTablet ? "70%" : isLargeScreen ? "79%" : isBigScreen ? "79%" : "76%",
+                        width: isMobile ? "40px" : isTablet ? "70px" : isLargeScreen ? "180px" : isBigScreen ? "120px" : "85px",
                     }}
                 />
 
                 <Doodle
                     src={ZigZagDoodle}
                     sx={{
-                        top: isMobile ? "28%" : isTablet ? "35%" : isBigScreen ? "55%" : "53.9%",
-                        left: isMobile ? "20%" : isTablet ? "26%" : isBigScreen ? "49%" : "49%",
-                        width: isMobile ? "220px" : isTablet ? "380px" : isBigScreen ? "630px" : "498px",
+                        top: isMobile ? "28%" : isTablet ? "35%" : isLargeScreen ? "55%" : isBigScreen ? "55%" : "53.9%",
+                        left: isMobile ? "20%" : isTablet ? "26%" : isLargeScreen ? "49%" : isBigScreen ? "49%" : "49%",
+                        width: isMobile ? "220px" : isTablet ? "380px" : isLargeScreen ? "945px" : isBigScreen ? "630px" : "498px",
                     }}
                 />
 
                 <Doodle
                     src={RandomDoodle}
                     sx={{
-                        top: isMobile ? "50%" : isTablet ? "58%" : isBigScreen ? "78%" : "75%",
-                        left: isMobile ? "30%" : isTablet ? "36%" : isBigScreen ? "52%" : "51%",
-                        width: isMobile ? "150px" : isTablet ? "250px" : isBigScreen ? "500px" : "398px",
+                        top: isMobile ? "50%" : isTablet ? "58%" : isLargeScreen ? "78%" : isBigScreen ? "78%" : "75%",
+                        left: isMobile ? "30%" : isTablet ? "36%" : isLargeScreen ? "52%" : isBigScreen ? "52%" : "51%",
+                        width: isMobile ? "150px" : isTablet ? "250px" : isLargeScreen ? "750px" : isBigScreen ? "500px" : "398px",
                     }}
                 />
 
@@ -170,7 +173,7 @@ const CreativeTextSection = () => {
                     <img
                         src={BlinkFace}
                         style={{
-                            width: isMobile ? "80px" : "120px",
+                            width: isMobile ? "80px" : isLargeScreen ? "180px" : "120px",
                             height: "auto",
                         }}
                     />
@@ -191,7 +194,7 @@ const CreativeTextSection = () => {
                     <Typography
                         sx={{
                             fontFamily: "Inter Tight",
-                            fontSize: isMobile ? "11px" : "13px",
+                            fontSize: isMobile ? "11px" : isLargeScreen ? "18px" : "13px",
                             fontWeight: 900,
                             textTransform: "uppercase",
                             color: "#1D1D1B",
@@ -204,7 +207,7 @@ const CreativeTextSection = () => {
                     <Typography
                         sx={{
                             fontFamily: "Inter Tight",
-                            fontSize: isMobile ? "11px" : "13px",
+                            fontSize: isMobile ? "11px" : isLargeScreen ? "18px" : "13px",
                             fontWeight: 900,
                             textAlign: isMobile ? "center" : "left",
                             textTransform: "uppercase",
