@@ -139,27 +139,27 @@ const SmoothAlternatingSlider1 = () => {
     const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
     
     const calculateItemWidths = () => {
+        // Larger square is always 442px
+        const BIG_SQUARE_SIZE = 442;
+        // Smaller square is 85% of larger square
+        const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+        
         if (containerWidth === 0 || containerWidth < 200) {
             // Fallback to original sizes until container width is known
             return {
-                big: isXs ? 180 : isSm ? 250 : isLargeScreen ? 495 : 330,
-                small: isXs ? 140 : isSm ? 200 : isLargeScreen ? 360 : 240,
-                partial: isXs ? 54 : isSm ? 75 : isLargeScreen ? 148 : 99,
+                big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
+                small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
+                partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
             };
         }
 
         const availableWidth = containerWidth;
-        // Calculate full width: 2.6 * full + 3 * gap = availableWidth
-        const fullWidth = (availableWidth - (3 * GAP)) / 2.6;
-        const partialWidth = fullWidth * 0.3;
-
-        // Use alternating sizes but ensure they fit
-        const bigWidth = Math.floor(fullWidth);
-        const smallWidth = Math.floor(fullWidth * 0.85); // Slightly smaller for variety
+        // Calculate partial width for layout positioning
+        const partialWidth = BIG_SQUARE_SIZE * 0.3;
 
         return {
-            big: Math.max(bigWidth, 100), // Minimum width
-            small: Math.max(smallWidth, 80), // Minimum width
+            big: BIG_SQUARE_SIZE,
+            small: SMALL_SQUARE_SIZE,
             partial: Math.floor(partialWidth),
         };
     };
@@ -176,21 +176,30 @@ const SmoothAlternatingSlider1 = () => {
 
     /** ---------------- OFFSET ---------------- */
     // Initial offset: position so we see partial left + 2 full + partial right
-    // Start with first image partially visible on left (showing ~30% of first image)
+    // On larger screens: center 2 full images with partial images entering from sides
     const [offset, setOffset] = useState(0);
 
     useEffect(() => {
         if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
-            // Position so first image is partially visible on left
-            // We want to show PARTIAL_WIDTH of the first image
-            // So offset should position the first image's right edge at PARTIAL_WIDTH from left
-            // If first image width is ITEM_WIDTH_BIG (assuming index 0 is big), then:
-            // offset = ITEM_WIDTH_BIG - PARTIAL_WIDTH
+            // Calculate layout: [partial left] [gap] [full 1] [gap] [full 2] [gap] [partial right]
+            // On larger screens: center 2 full images with partial images entering from sides
             const firstImageWidth = (0 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
-            const initialOffset = firstImageWidth - PARTIAL_WIDTH;
+            const secondImageWidth = (1 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+            
+            // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
+            const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
+            
+            // Calculate remaining space for partial images on both sides
+            const remainingSpace = containerWidth - twoFullImagesWidth;
+            const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
+            
+            // Position so we show partial left (~30% of first image), then 2 full images, then partial right
+            // Offset should position first image so only the partial amount is visible on left
+            const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
+            const initialOffset = firstImageWidth - visiblePartialLeft;
             setOffset(initialOffset);
         }
-    }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL]);
+    }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
 
     /** ---------------- AUTO SCROLL ---------------- */
     const speed = useRef(0.7);
@@ -335,7 +344,7 @@ const SmoothAlternatingSlider1 = () => {
                 px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 position: "relative",
                 overflow: "hidden",
-                height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 430,
+                height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 460,
                 cursor: "none", // 👈 hide default cursor
             }}
         >
@@ -357,25 +366,34 @@ const SmoothAlternatingSlider1 = () => {
                 ref={sliderRef}
                 sx={{
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     gap: `${GAP}px`,
                     transform: `translateX(${offset}px)`,
                     willChange: "transform", // 🔥 smoother
                     px: 0, // Remove padding to allow precise positioning
+                    pt: isXs ? "10px" : isSm ? "10px" : "10px",
                 }}
             >
-                {images.map((img, i) => (
+                {images.map((img, i) => {
+                    const squareSize = getItemWidth(i);
+                    const isLargeSquare = i % 2 === 0;
+                    // Center smaller squares vertically relative to larger square
+                    const marginTop = !isLargeSquare ? (ITEM_WIDTH_BIG - ITEM_WIDTH_SMALL) / 2 : 0;
+                    return (
                     <Box
                         key={i}
                         sx={{
                             flexShrink: 0,
-                            width: getItemWidth(i),
-                            height:
-                                i % 2 === 0
-                                    ? (isXs ? 150 : isSm ? 220 : isLargeScreen ? 495 : 330)
-                                    : (isXs ? 120 : isSm ? 170 : isLargeScreen ? 390 : 260),
+                                width: squareSize,
+                                height: squareSize, // Make it a perfect square
                             overflow: "hidden",
-                            borderRadius: "16px",
+                                borderRadius: "14px",
+                                position: "relative",
+                                display: "block",
+                                marginTop: `${marginTop}px`,
+                                "& img": {
+                                    borderRadius: "14px",
+                                },
                         }}
                     >
                         <img
@@ -385,10 +403,16 @@ const SmoothAlternatingSlider1 = () => {
                                 width: "100%",
                                 height: "100%",
                                 objectFit: "cover",
+                                    borderRadius: "14px",
+                                    display: "block",
+                                    margin: 0,
+                                    padding: 0,
+                                    verticalAlign: "top",
                             }}
                         />
                     </Box>
-                ))}
+                    );
+                })}
             </Box>
 
             {/* ARROWS */}

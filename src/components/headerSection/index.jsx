@@ -37,6 +37,24 @@ const slideDownFast = keyframes`
   }
 `;
 
+const glassyRotate = keyframes`
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+  }
+`;
+
+const itemRotate = keyframes`
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+`;
+
 const Header = () => {
     const [menuItems, setMenuItems] = useState([]);
 
@@ -144,7 +162,17 @@ const Header = () => {
                     animationFillMode: "forwards",
                 }}
             >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, marginLeft: "auto" }}>
+                <Box 
+                    sx={{ 
+                        display: "flex", 
+                        alignItems: "center", 
+                        gap: 1, 
+                        marginLeft: "auto",
+                        width: isLargeScreen ? "50vw" : "47.625vw",
+                        maxWidth: isLargeScreen ? "50vw" : "47.625vw",
+                        justifyContent: "flex-end",
+                    }}
+                >
                     {/* Logo */}
                     <Box
                         sx={{
@@ -193,7 +221,36 @@ const Header = () => {
                                             borderRadius: "12px",
                                             fontFamily: "Inter Tight, sans-serif",
                                             padding: isLargeScreen ? "8px 12px" : "6px 10px",
-                                            "&:hover": { backgroundColor: "#E5E5E5" },
+                                            position: "relative",
+                                            overflow: "hidden",
+                                            transition: "all 0.3s ease",
+                                            transformStyle: "preserve-3d",
+                                            "&::before": {
+                                                content: '""',
+                                                position: "absolute",
+                                                top: "-50%",
+                                                left: "-50%",
+                                                width: "200%",
+                                                height: "200%",
+                                                background: "linear-gradient(45deg, transparent 20%, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.8) 55%, transparent 80%)",
+                                                borderRadius: "12px",
+                                                opacity: 0,
+                                                transition: "opacity 0.3s ease",
+                                                zIndex: 0,
+                                                pointerEvents: "none",
+                                            },
+                                            "&:hover": {
+                                                backgroundColor: "#E5E5E5",
+                                                animation: `${itemRotate} 0.6s ease-in-out`,
+                                                "&::before": {
+                                                    opacity: 1,
+                                                    animation: `${glassyRotate} 1.5s ease-in-out infinite`,
+                                                },
+                                            },
+                                            "& > *": {
+                                                position: "relative",
+                                                zIndex: 1,
+                                            },
                                         }}
                                     >
                                         {item.label}
