@@ -68,14 +68,7 @@ const Hero = () => {
                             src={urlFor(hero.heroImage).width(900).url()}
                             alt="Hero Logo"
                             style={{
-                                width: "100%",
-                                maxWidth: isMobile
-                                    ? "240px"
-                                    : isTablet
-                                        ? "480px"
-                                        : isLargeScreen
-                                            ? "900px"
-                                            : "600px",
+                                width: isLargeScreen ? "60vw" : "50.625vw",
                                 height: "auto",
                                 position: "relative",
                                 top: isMobile ? -50 : isTablet ? -100 : -60,
