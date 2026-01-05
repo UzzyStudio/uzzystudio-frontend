@@ -4,6 +4,8 @@ import { useRef, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../sanityClient";
 import gsap from "gsap";
+import "./style.css";
+
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
@@ -146,7 +148,7 @@ const ServicesStackSection = () => {
               width: { xs: "100%", sm: "100%", md: "33.33%" },
               display: "flex",
               flexDirection: "column",
-              justifyContent: { xs: "flex-start", md: "center" },
+              justifyContent: { xs: "flex-start", md: "space-around" },
               height: "100%",
               alignItems: { xs: "flex-start", md: "flex-start" },
             }}
@@ -191,20 +193,62 @@ const ServicesStackSection = () => {
                 onClick={handleScrollToContact}
                 sx={{
                   px: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
-                  py: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
+                  pt: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
+                  pb: { xs: "12px", md: isLargeScreen ? "20px" : "12px" },
                   fontSize: { xs: "11px", md: isLargeScreen ? "21px" : "14px" },
                   background: "#1D1D1B",
                   borderRadius: "30px",
                   display: "inline-block",
-                  color: "white",
                   fontWeight: 700,
                   fontFamily: "Inter Tight, sans-serif",
                   cursor: "pointer",
+                  overflow: "hidden",
+                  position: "relative",
+
+                  "&:hover .btn-text-top": {
+                    transform: "translateY(-100%)",
+                  },
+                  "&:hover .btn-text-bottom": {
+                    transform: "translateY(-100%)",
+                  },
                 }}
               >
-                let's work together
+                <Box
+                  sx={{
+                    position: "relative",
+                    overflow: "hidden",
+                    height: "auto",
+                    display: "inline-block",
+                  }}
+                >
+                  <Box
+                    className="btn-text-top"
+                    sx={{
+                      display: "block",
+                      color: "white",
+                      transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  >
+                    let's work together
+                  </Box>
+
+                  <Box
+                    className="btn-text-bottom"
+                    sx={{
+                      position: "absolute",
+                      left: 0,
+                      top: "100%",
+                      display: "block",
+                      color: "white",
+                      transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  >
+                    let's work together
+                  </Box>
+                </Box>
               </Box>
             </Box>
+
           </Box>
 
           {/* MIDDLE BULLETS */}
@@ -246,7 +290,7 @@ const ServicesStackSection = () => {
               display: "flex",
               justifyContent: "flex-end",
               alignItems: "center",
-              paddingRight: { xs: 0, md: "10px" },
+              paddingRight: { xs: 0, md: "35px" },
               marginLeft: "auto",
             }}
           >
