@@ -257,39 +257,157 @@ const SmoothAlternatingSlider1 = () => {
     /** ---------------- DRAG ---------------- */
     const startX = useRef(0);
     const startOffset = useRef(0);
+    const velocity = useRef(0);
+    const lastX = useRef(0);
+    const lastTime = useRef(0);
+    const momentumRef = useRef(null);
+
+    // Momentum animation after drag release
+    useEffect(() => {
+        if (images.length === 0 || containerWidth === 0) return;
+
+        const animateMomentum = () => {
+            if (isDragging.current) {
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+                return;
+            }
+
+            if (Math.abs(velocity.current) > 0.1) {
+                setOffset((prev) => {
+                    let next = prev + velocity.current;
+                    const block = totalWidth / 3;
+
+                    // Keep offset within bounds for seamless loop
+                    if (next > -block) next -= block;
+                    if (next < -block * 2) next += block;
+
+                    return next;
+                });
+
+                velocity.current *= 0.95; // Friction
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+            } else {
+                velocity.current = 0;
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+            }
+        };
+
+        momentumRef.current = requestAnimationFrame(animateMomentum);
+
+        return () => {
+            if (momentumRef.current) {
+                cancelAnimationFrame(momentumRef.current);
+            }
+        };
+    }, [totalWidth, images.length, containerWidth]);
 
     useEffect(() => {
-        if (!isDesktop) return; // 🚫 no drag on mobile
-
         const slider = sliderRef.current;
         if (!slider) return;
 
-        const startDrag = (x) => {
+        const startDrag = (x, isTouch = false) => {
             isDragging.current = true;
             startX.current = x;
             startOffset.current = offset;
+            lastX.current = x;
+            lastTime.current = performance.now();
+            velocity.current = 0;
+            
+            // Cancel any ongoing momentum
+            if (momentumRef.current) {
+                cancelAnimationFrame(momentumRef.current);
+                momentumRef.current = null;
+            }
         };
 
-        const handleMouseDown = (e) => startDrag(e.clientX);
+        const handleMove = (x, isTouch = false) => {
+            if (!isDragging.current) return;
+            
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastTime.current;
+            
+            if (deltaTime > 0) {
+                const deltaX = x - lastX.current;
+                velocity.current = deltaX / deltaTime * 16; // Normalize to 60fps
+            }
+            
+            lastX.current = x;
+            lastTime.current = currentTime;
+
+            const deltaX = x - startX.current;
+            setOffset((prev) => {
+                let next = startOffset.current + deltaX;
+                const block = totalWidth / 3;
+
+                // Keep offset within bounds for seamless loop
+                if (next > -block) next -= block;
+                if (next < -block * 2) next += block;
+
+                return next;
+            });
+        };
+
+        const handleEnd = () => {
+            isDragging.current = false;
+            // Velocity will continue in momentum effect
+        };
+
+        // Mouse events (desktop)
+        const handleMouseDown = (e) => {
+            if (!isDesktop) return;
+            e.preventDefault();
+            startDrag(e.clientX);
+        };
+
         const handleMouseMove = (e) => {
             if (!isDesktop) return;
-            if (!isDragging.current) return;
-            setOffset(startOffset.current + (e.clientX - startX.current));
-        };
-        const handleMouseUp = () => {
-            isDragging.current = false;
+            handleMove(e.clientX);
         };
 
+        const handleMouseUp = () => {
+            if (!isDesktop) return;
+            handleEnd();
+        };
+
+        // Touch events (mobile)
+        const handleTouchStart = (e) => {
+            if (isDesktop) return;
+            e.preventDefault();
+            startDrag(e.touches[0].clientX, true);
+        };
+
+        const handleTouchMove = (e) => {
+            if (isDesktop) return;
+            e.preventDefault();
+            handleMove(e.touches[0].clientX, true);
+        };
+
+        const handleTouchEnd = () => {
+            if (isDesktop) return;
+            handleEnd();
+        };
+
+        // Add event listeners
         slider.addEventListener("mousedown", handleMouseDown);
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", handleMouseUp);
+        
+        slider.addEventListener("touchstart", handleTouchStart, { passive: false });
+        slider.addEventListener("touchmove", handleTouchMove, { passive: false });
+        slider.addEventListener("touchend", handleTouchEnd);
+        slider.addEventListener("touchcancel", handleTouchEnd);
 
         return () => {
             slider.removeEventListener("mousedown", handleMouseDown);
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mouseup", handleMouseUp);
+            
+            slider.removeEventListener("touchstart", handleTouchStart);
+            slider.removeEventListener("touchmove", handleTouchMove);
+            slider.removeEventListener("touchend", handleTouchEnd);
+            slider.removeEventListener("touchcancel", handleTouchEnd);
         };
-    }, [offset, isDesktop]);
+    }, [offset, isDesktop, totalWidth]);
 
 
 
@@ -346,6 +464,8 @@ const SmoothAlternatingSlider1 = () => {
                 overflow: "hidden",
                 height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 460,
                 cursor: "none", // 👈 hide default cursor
+                userSelect: "none", // Prevent text selection during drag
+                WebkitUserSelect: "none",
             }}
         >
             {/* SMILEY */}
@@ -372,6 +492,8 @@ const SmoothAlternatingSlider1 = () => {
                     willChange: "transform", // 🔥 smoother
                     px: 0, // Remove padding to allow precise positioning
                     pt: isXs ? "10px" : isSm ? "10px" : "10px",
+                    userSelect: "none", // Prevent image selection during drag
+                    WebkitUserSelect: "none",
                 }}
             >
                 {images.map((img, i) => {
