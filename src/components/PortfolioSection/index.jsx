@@ -345,14 +345,57 @@ const PortfolioSection = () => {
                     backgroundColor: "#1D1D1B",
                     color: "white",
                     px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 3 },
-                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
+                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 }, // only top padding
                     fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "13px" },
                     borderRadius: "40px",
-                    "&:hover": { backgroundColor: "#000" },
+                    overflow: "hidden",
+                    position: "relative",
+                    textTransform: "uppercase",
+                    "&:hover": { backgroundColor: "#CAF55E", color: "#1D1D1B" },
+
+                    // Animate text on hover
+                    "&:hover .btn-text-top": {
+                        transform: "translateY(-100%)",
+                    },
+                    "&:hover .btn-text-bottom": {
+                        transform: "translateY(-100%)",
+                    },
                 }}
             >
-                Let's Work Together
+                {/* Container for animated text */}
+                <Box
+                    sx={{
+                        position: "relative",
+                        overflow: "hidden",
+                        display: "inline-block",
+                        height: "auto", // adjust based on font-size
+                    }}
+                >
+                    <Box
+                        className="btn-text-top"
+                        sx={{
+                            display: "block",
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)"
+                        }}
+                    >
+                        Let's Work Together
+                    </Box>
+
+                    <Box
+                        className="btn-text-bottom"
+                        sx={{
+                            position: "absolute",
+                            left: 0,
+                            top: "100%",
+                            display: "block",
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)"
+                        }}
+                    >
+                        Let's Work Together
+                    </Box>
+                </Box>
             </Button>
+
         </Box>
     );
 

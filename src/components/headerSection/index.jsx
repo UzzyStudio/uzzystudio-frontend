@@ -162,11 +162,11 @@ const Header = () => {
                     animationFillMode: "forwards",
                 }}
             >
-                <Box 
-                    sx={{ 
-                        display: "flex", 
-                        alignItems: "center", 
-                        gap: 1, 
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
                         marginLeft: "auto",
                         width: isLargeScreen ? "50vw" : "47.625vw",
                         maxWidth: isLargeScreen ? "50vw" : "47.625vw",
@@ -198,7 +198,7 @@ const Header = () => {
 
                     {/* Desktop Menu */}
                     {!isMobile && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 20 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 13 }}>
                             <Box
                                 sx={{
                                     display: "flex",
@@ -261,7 +261,6 @@ const Header = () => {
                             <Button
                                 variant="contained"
                                 onClick={() => setContactOpen(true)}
-
                                 sx={{
                                     backgroundColor: "#CAF55E",
                                     color: "#1D1D1B",
@@ -272,26 +271,56 @@ const Header = () => {
                                     fontFamily: "Inter Tight, sans-serif",
                                     boxShadow: "none",
                                     textTransform: "none",
+                                    overflow: "hidden",
+
                                     "&:hover": {
                                         backgroundColor: "#B6E450",
                                         boxShadow: "none",
-                                    },
-                                    "&:focus": {
-                                        outline: "none",
+
+                                        "& .btn-text-top": {
+                                            transform: "translateY(-100%)",
+                                        },
+
+                                        "& .btn-text-bottom": {
+                                            transform: "translateY(-100%)",
+                                        },
                                     },
 
-                                    "&:focus-visible": {
-                                        outline: "none",
-                                        boxShadow: "none",
-                                    },
-
-                                    "&.Mui-focusVisible": {
-                                        outline: "none",
-                                        boxShadow: "none",
-                                    },
+                                    "&:focus": { outline: "none" },
+                                    "&:focus-visible": { outline: "none", boxShadow: "none" },
+                                    "&.Mui-focusVisible": { boxShadow: "none" },
                                 }}
                             >
-                                start a project
+                                <Box
+                                    sx={{
+                                        position: "relative",
+                                        overflow: "hidden",
+                                        height: "auto",
+                                        display: "inline-block",
+                                    }}
+                                >
+                                    <Box
+                                        className="btn-text-top"
+                                        sx={{
+                                            display: "block",
+                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        }}
+                                    >
+                                        start a project
+                                    </Box>
+
+                                    <Box
+                                        className="btn-text-bottom"
+                                        sx={{
+                                            position: "absolute",
+                                            left: 0,
+                                            top: "100%",
+                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        }}
+                                    >
+                                        start a project
+                                    </Box>
+                                </Box>
                             </Button>
                         </Box>
                     )}

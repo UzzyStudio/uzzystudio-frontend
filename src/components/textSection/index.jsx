@@ -103,14 +103,14 @@ const CreativeTextSection = () => {
                 }}
             >
                 {/* DOODLES (RESPONSIVE POSITIONS) */}
-                <Doodle
+                {/* <Doodle
                     src={HeartDoodle}
                     sx={{
                         top: isMobile ? "5%" : isTablet ? "12%" : isLargeScreen ? "22%" : isBigScreen ? "22%" : "23%",
                         left: isMobile ? "60%" : isTablet ? "70%" : isLargeScreen ? "79%" : isBigScreen ? "79%" : "76%",
                         width: isMobile ? "40px" : isTablet ? "70px" : isLargeScreen ? "180px" : isBigScreen ? "120px" : "85px",
                     }}
-                />
+                /> */}
 
                 <Doodle
                     src={ZigZagDoodle}

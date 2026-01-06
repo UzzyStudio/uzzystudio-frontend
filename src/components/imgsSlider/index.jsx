@@ -137,13 +137,13 @@ const SmoothAlternatingSlider1 = () => {
     // Formula: 0.3*full + gap + full + gap + full + gap + 0.3*full = containerWidth
     // Simplified: 2.6*full + 3*gap = containerWidth
     const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
-    
+
     const calculateItemWidths = () => {
         // Larger square is always 442px
         const BIG_SQUARE_SIZE = 442;
         // Smaller square is 85% of larger square
         const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
-        
+
         if (containerWidth === 0 || containerWidth < 200) {
             // Fallback to original sizes until container width is known
             return {
@@ -185,14 +185,14 @@ const SmoothAlternatingSlider1 = () => {
             // On larger screens: center 2 full images with partial images entering from sides
             const firstImageWidth = (0 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
             const secondImageWidth = (1 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
-            
+
             // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
             const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
-            
+
             // Calculate remaining space for partial images on both sides
             const remainingSpace = containerWidth - twoFullImagesWidth;
             const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
-            
+
             // Position so we show partial left (~30% of first image), then 2 full images, then partial right
             // Offset should position first image so only the partial amount is visible on left
             const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
@@ -226,8 +226,6 @@ const SmoothAlternatingSlider1 = () => {
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
     }, [totalWidth, images.length, containerWidth]);
-
-
 
 
     useEffect(() => {
@@ -459,6 +457,7 @@ const SmoothAlternatingSlider1 = () => {
                 width: "100%",
                 maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
+                pb: "120px",
                 px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 position: "relative",
                 overflow: "hidden",
@@ -474,8 +473,8 @@ const SmoothAlternatingSlider1 = () => {
                 src={Smiley}
                 sx={{
                     position: "absolute",
-                    right: isXs ? 20 : isSm ? 40 : isLargeScreen ? 120 : 80,
-                    bottom: isXs ? 20 : isSm ? 20 : 20,
+                    right: isXs ? 20 : isSm ? 40 : isLargeScreen ? 120 : 140,
+                    bottom: isXs ? 20 : isSm ? 20 : -10,
                     width: isXs ? 80 : isSm ? 120 : isLargeScreen ? 270 : 180,
                     zIndex: 0,
                 }}
@@ -502,13 +501,13 @@ const SmoothAlternatingSlider1 = () => {
                     // Center smaller squares vertically relative to larger square
                     const marginTop = !isLargeSquare ? (ITEM_WIDTH_BIG - ITEM_WIDTH_SMALL) / 2 : 0;
                     return (
-                    <Box
-                        key={i}
-                        sx={{
-                            flexShrink: 0,
+                        <Box
+                            key={i}
+                            sx={{
+                                flexShrink: 0,
                                 width: squareSize,
                                 height: squareSize, // Make it a perfect square
-                            overflow: "hidden",
+                                overflow: "hidden",
                                 borderRadius: "14px",
                                 position: "relative",
                                 display: "block",
@@ -516,23 +515,23 @@ const SmoothAlternatingSlider1 = () => {
                                 "& img": {
                                     borderRadius: "14px",
                                 },
-                        }}
-                    >
-                        <img
-                            src={urlFor(img).width(800).quality(80).url()}
-                            alt="slider image"
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
+                            }}
+                        >
+                            <img
+                                src={urlFor(img).width(800).quality(80).url()}
+                                alt="slider image"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
                                     borderRadius: "14px",
                                     display: "block",
                                     margin: 0,
                                     padding: 0,
                                     verticalAlign: "top",
-                            }}
-                        />
-                    </Box>
+                                }}
+                            />
+                        </Box>
                     );
                 })}
             </Box>

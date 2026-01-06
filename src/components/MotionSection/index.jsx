@@ -161,23 +161,24 @@ const MotionSection = () => {
             <Typography
               ref={headingRef}
               sx={{
-                fontSize: { xs: "36px", md: isLargeScreen ? "126px" : "84px" },
+                fontSize: {
+                  xs: "36px",
+                  sm: "48px",
+                  md: isLargeScreen ? "126px" : "84px",
+                },
                 fontWeight: 800,
-                lineHeight: 1.1,
+                lineHeight: 1.05,
+                letterSpacing: "-0.02em",
                 color: "#CAF55E",
                 textAlign: "center",
                 fontFamily: "Inter Tight, sans-serif",
+                whiteSpace: "pre-line", // 👈 KEY LINE
                 willChange: "transform, opacity",
               }}
             >
-              {content?.centerHeading.split("\n").map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  <br />
-                  {/* <br /> */}
-                </React.Fragment>
-              ))}
+              {content?.centerHeading}
             </Typography>
+
           </Box>
 
           {/* RIGHT TEXT */}
