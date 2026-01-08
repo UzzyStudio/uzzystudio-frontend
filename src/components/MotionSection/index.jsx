@@ -182,7 +182,7 @@ const MotionSection = () => {
           position: "absolute",
           top: "50%",
           left: "50%",
-          width: "400vw",     // 👈 oversized
+          width: "410vw",     // 👈 oversized
           height: "auto",
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
