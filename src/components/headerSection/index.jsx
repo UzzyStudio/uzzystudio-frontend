@@ -178,7 +178,7 @@ const Header = () => {
                         sx={{
                             width: isLargeScreen ? "60px" : "46px",
                             height: isLargeScreen ? "60px" : "46px",
-                            backgroundColor: "#EEEEEE",
+                            backgroundColor: "#ffffff",
                             borderRadius: "50px",
                             display: "flex",
                             alignItems: "center",
@@ -204,7 +204,7 @@ const Header = () => {
                                     display: "flex",
                                     gap: 2,
                                     alignItems: "center",
-                                    backgroundColor: "#EEEEEE",
+                                    backgroundColor: "#ffffff",
                                     borderRadius: "70px",
                                     padding: "8px 34px",
                                 }}
@@ -227,7 +227,7 @@ const Header = () => {
                                             transition: "background-color 0.25s ease",
 
                                             "&:hover": {
-                                                backgroundColor: "#E5E5E5",
+                                                backgroundColor: "#ffffff",
 
                                                 "& .menu-text-top": {
                                                     transform: "translateY(-100%)",
