@@ -226,28 +226,68 @@ export default function FooterSection() {
                             <Button
                                 onClick={handleScrollToContact}
                                 ref={buttonRef}
+                                disableElevation
                                 sx={{
-                                    px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },   // smaller padding on mobile
+                                    position: "relative",
+                                    overflow: "hidden",
+
+                                    px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },
                                     py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
                                     fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
                                     borderRadius: "40px",
-                                    backgroundColor: "#CAF55E",
-                                    color: "#1D1D1B",
+                                    backgroundColor: "#CAF55E", // original button bg
+                                    color: "#1D1D1B",           // original text color
                                     fontWeight: 700,
                                     fontFamily: "Inter Tight, sans-serif",
-                                    transform: "rotate(-20deg)",   // slight left tilt
+                                    textTransform: "lowercase",
+                                    transform: "rotate(-20deg)", // slight tilt
                                     boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
-                                    textTransform: "lowercase",   // small letters
-                                    transition: "0.25s ease",
+                                    border: "none",
+                                    transition: "transform 0.25s ease",
 
+                                    // REMOVE BLUE FOCUS BORDER
+                                    "&:focus, &:focus-visible, &.Mui-focusVisible": {
+                                        outline: "none",
+                                        boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
+                                    },
+
+                                    // OVERLAY FOR BOTTOM → TOP FILL
+                                    "&::before": {
+                                        content: '""',
+                                        position: "absolute",
+                                        left: 0,
+                                        bottom: 0,
+                                        width: "100%",
+                                        height: "0%",
+                                        backgroundColor: "#000", // hover color
+                                        transition: "height 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        zIndex: 0,
+                                    },
+
+                                    // TEXT ABOVE OVERLAY
+                                    "& span": {
+                                        position: "relative",
+                                        zIndex: 1,
+                                        color: "#1D1D1B",
+                                        transition: "color 0.25s ease",
+                                    },
+
+                                    // HOVER EFFECT
+                                    "&:hover::before": {
+                                        height: "100%", // fill from bottom
+                                    },
                                     "&:hover": {
-                                        backgroundColor: "#d4ff74",
-                                        transform: "rotate(0deg) scale(1.03)", // hover correction + pop
+                                        transform: "rotate(0deg) scale(1.03)", // pop + straighten
+                                    },
+                                    "&:hover span": {
+                                        color: "#fff", // text becomes white on black fill
                                     },
                                 }}
                             >
-                                Let's Work Together
+                                <span>Let's Work Together</span>
                             </Button>
+
+
                         </Grid>
 
                         {/* RIGHT — RANDOM IMAGE */}
