@@ -146,6 +146,7 @@ const ManifestoSection = () => {
 
 
     const isMobile = useMediaQuery("(max-width:700px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [offset, setOffset] = useState(0);
     const scrollPrev = useRef(0);
 
@@ -208,8 +209,8 @@ const ManifestoSection = () => {
 
 
     /* font sizes */
-    const smallTextSize = isMobile ? "10px" : "13px";
-    const bigTextSize = isMobile ? "40px" : "110px";
+    const smallTextSize = isMobile ? "10px" : isLargeScreen ? "19px" : "13px";
+    const bigTextSize = isMobile ? "40px" : isLargeScreen ? "165px" : "110px";
 
     return (
         <Box sx={{ width: "100%", position: "relative", top: "50px", overflow: "hidden", mx: "auto", paddingTop: "330px" }}>
@@ -246,7 +247,7 @@ const ManifestoSection = () => {
                         <Typography
                             component="span"
                             sx={{
-                                fontSize: "14px",
+                                fontSize: isLargeScreen ? "21px" : "14px",
                                 fontWeight: 900,
                                 fontFamily: "Inter Tight, sans-serif",
                                 textTransform: "uppercase",
@@ -270,7 +271,7 @@ const ManifestoSection = () => {
                         <Typography
                             component="span"
                             sx={{
-                                fontSize: "14px",
+                                fontSize: isLargeScreen ? "21px" : "14px",
                                 fontWeight: 900,
                                 fontFamily: "Inter Tight, sans-serif",
                                 textTransform: "uppercase",
@@ -374,7 +375,7 @@ const ManifestoSection = () => {
             >
                 <Typography
                     sx={{
-                        fontSize: isMobile ? "110px" : "250px",
+                        fontSize: isMobile ? "110px" : isLargeScreen ? "375px" : "250px",
                         fontWeight: 800,
                         fontFamily: "Inter Tight, sans-serif",
                         textTransform: "capitalize",
@@ -408,7 +409,7 @@ const ManifestoSection = () => {
                         position: "absolute",
                         left: isMobile ? "8%" : "12%",
                         bottom: isMobile ? "6%" : "250px",
-                        width: isMobile ? "30px" : "90px",
+                        width: isMobile ? "30px" : isLargeScreen ? "135px" : "90px",
                         opacity: 1,
                         zIndex: 1,
                     }}
@@ -439,7 +440,7 @@ const ManifestoSection = () => {
                         left: "56%",
                         top: isMobile ? "88%" : "76%",
                         transform: "translateX(-50%)",
-                        width: isMobile ? "100px" : "350px",
+                        width: isMobile ? "100px" : isLargeScreen ? "525px" : "350px",
                         zIndex: isMobile ? 0 : 0,
                         opacity: 1,
                     }}

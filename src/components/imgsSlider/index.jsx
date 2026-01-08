@@ -50,6 +50,7 @@ const SmoothAlternatingSlider1 = () => {
     const lastMousePos = useRef({ x: 0, y: 0 });
     const containerRef = useRef(null);
     const sliderRef = useRef(null);
+    const [containerWidth, setContainerWidth] = useState(0);
 
     /** ---------------- CURSOR ---------------- */
 
@@ -104,10 +105,66 @@ const SmoothAlternatingSlider1 = () => {
     /** ---------------- RESPONSIVE ---------------- */
     const isXs = useMediaQuery("(max-width:600px)");
     const isSm = useMediaQuery("(max-width:900px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
-    const ITEM_WIDTH_BIG = isXs ? 180 : isSm ? 250 : 330;
-    const ITEM_WIDTH_SMALL = isXs ? 140 : isSm ? 200 : 240;
-    const GAP = isXs ? 20 : isSm ? 35 : 50;
+    // Calculate container width (accounting for padding)
+    useEffect(() => {
+        const updateContainerWidth = () => {
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                // Get computed padding
+                const computedStyle = window.getComputedStyle(containerRef.current);
+                const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+                const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+                // Available width is container width minus padding
+                const availableWidth = rect.width - paddingLeft - paddingRight;
+                setContainerWidth(availableWidth);
+            }
+        };
+
+        updateContainerWidth();
+        window.addEventListener("resize", updateContainerWidth);
+        // Also update when images load
+        const timer = setTimeout(updateContainerWidth, 100);
+        return () => {
+            window.removeEventListener("resize", updateContainerWidth);
+            clearTimeout(timer);
+        };
+    }, [images.length]);
+
+    // Calculate item widths to show 2 full images + 2 partial images
+    // Layout: [partial left ~30%] [gap] [full 1] [gap] [full 2] [gap] [partial right ~30%]
+    // Formula: 0.3*full + gap + full + gap + full + gap + 0.3*full = containerWidth
+    // Simplified: 2.6*full + 3*gap = containerWidth
+    const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
+
+    const calculateItemWidths = () => {
+        // Larger square is always 442px
+        const BIG_SQUARE_SIZE = 442;
+        // Smaller square is 85% of larger square
+        const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+
+        if (containerWidth === 0 || containerWidth < 200) {
+            // Fallback to original sizes until container width is known
+            return {
+                big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
+                small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
+                partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
+            };
+        }
+
+        const availableWidth = containerWidth;
+        // Calculate partial width for layout positioning
+        const partialWidth = BIG_SQUARE_SIZE * 0.3;
+
+        return {
+            big: BIG_SQUARE_SIZE,
+            small: SMALL_SQUARE_SIZE,
+            partial: Math.floor(partialWidth),
+        };
+    };
+
+    const { big: ITEM_WIDTH_BIG, small: ITEM_WIDTH_SMALL, partial: PARTIAL_WIDTH } = calculateItemWidths();
 
     const getItemWidth = (i) =>
         i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
@@ -118,11 +175,31 @@ const SmoothAlternatingSlider1 = () => {
     );
 
     /** ---------------- OFFSET ---------------- */
-    const [offset, setOffset] = useState(-totalWidth / 3);
+    // Initial offset: position so we see partial left + 2 full + partial right
+    // On larger screens: center 2 full images with partial images entering from sides
+    const [offset, setOffset] = useState(0);
 
     useEffect(() => {
-        setOffset(-totalWidth / 3);
-    }, [totalWidth]);
+        if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
+            // Calculate layout: [partial left] [gap] [full 1] [gap] [full 2] [gap] [partial right]
+            // On larger screens: center 2 full images with partial images entering from sides
+            const firstImageWidth = (0 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+            const secondImageWidth = (1 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+
+            // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
+            const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
+
+            // Calculate remaining space for partial images on both sides
+            const remainingSpace = containerWidth - twoFullImagesWidth;
+            const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
+
+            // Position so we show partial left (~30% of first image), then 2 full images, then partial right
+            // Offset should position first image so only the partial amount is visible on left
+            const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
+            const initialOffset = firstImageWidth - visiblePartialLeft;
+            setOffset(initialOffset);
+        }
+    }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
 
     /** ---------------- AUTO SCROLL ---------------- */
     const speed = useRef(0.7);
@@ -131,11 +208,14 @@ const SmoothAlternatingSlider1 = () => {
     const rafRef = useRef(null);
 
     useEffect(() => {
+        if (images.length === 0 || containerWidth === 0) return;
+
         const animate = () => {
             if (!isHovered.current && !isDragging.current) {
                 setOffset((prev) => {
                     let next = prev - speed.current;
                     const block = totalWidth / 3;
+                    // Keep offset within bounds for seamless loop
                     if (next < -block * 2) next += block;
                     return next;
                 });
@@ -145,9 +225,7 @@ const SmoothAlternatingSlider1 = () => {
 
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
-    }, [totalWidth]);
-
-
+    }, [totalWidth, images.length, containerWidth]);
 
 
     useEffect(() => {
@@ -177,39 +255,157 @@ const SmoothAlternatingSlider1 = () => {
     /** ---------------- DRAG ---------------- */
     const startX = useRef(0);
     const startOffset = useRef(0);
+    const velocity = useRef(0);
+    const lastX = useRef(0);
+    const lastTime = useRef(0);
+    const momentumRef = useRef(null);
+
+    // Momentum animation after drag release
+    useEffect(() => {
+        if (images.length === 0 || containerWidth === 0) return;
+
+        const animateMomentum = () => {
+            if (isDragging.current) {
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+                return;
+            }
+
+            if (Math.abs(velocity.current) > 0.1) {
+                setOffset((prev) => {
+                    let next = prev + velocity.current;
+                    const block = totalWidth / 3;
+
+                    // Keep offset within bounds for seamless loop
+                    if (next > -block) next -= block;
+                    if (next < -block * 2) next += block;
+
+                    return next;
+                });
+
+                velocity.current *= 0.95; // Friction
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+            } else {
+                velocity.current = 0;
+                momentumRef.current = requestAnimationFrame(animateMomentum);
+            }
+        };
+
+        momentumRef.current = requestAnimationFrame(animateMomentum);
+
+        return () => {
+            if (momentumRef.current) {
+                cancelAnimationFrame(momentumRef.current);
+            }
+        };
+    }, [totalWidth, images.length, containerWidth]);
 
     useEffect(() => {
-        if (!isDesktop) return; // 🚫 no drag on mobile
-
         const slider = sliderRef.current;
         if (!slider) return;
 
-        const startDrag = (x) => {
+        const startDrag = (x, isTouch = false) => {
             isDragging.current = true;
             startX.current = x;
             startOffset.current = offset;
+            lastX.current = x;
+            lastTime.current = performance.now();
+            velocity.current = 0;
+            
+            // Cancel any ongoing momentum
+            if (momentumRef.current) {
+                cancelAnimationFrame(momentumRef.current);
+                momentumRef.current = null;
+            }
         };
 
-        const handleMouseDown = (e) => startDrag(e.clientX);
+        const handleMove = (x, isTouch = false) => {
+            if (!isDragging.current) return;
+            
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastTime.current;
+            
+            if (deltaTime > 0) {
+                const deltaX = x - lastX.current;
+                velocity.current = deltaX / deltaTime * 16; // Normalize to 60fps
+            }
+            
+            lastX.current = x;
+            lastTime.current = currentTime;
+
+            const deltaX = x - startX.current;
+            setOffset((prev) => {
+                let next = startOffset.current + deltaX;
+                const block = totalWidth / 3;
+
+                // Keep offset within bounds for seamless loop
+                if (next > -block) next -= block;
+                if (next < -block * 2) next += block;
+
+                return next;
+            });
+        };
+
+        const handleEnd = () => {
+            isDragging.current = false;
+            // Velocity will continue in momentum effect
+        };
+
+        // Mouse events (desktop)
+        const handleMouseDown = (e) => {
+            if (!isDesktop) return;
+            e.preventDefault();
+            startDrag(e.clientX);
+        };
+
         const handleMouseMove = (e) => {
             if (!isDesktop) return;
-            if (!isDragging.current) return;
-            setOffset(startOffset.current + (e.clientX - startX.current));
-        };
-        const handleMouseUp = () => {
-            isDragging.current = false;
+            handleMove(e.clientX);
         };
 
+        const handleMouseUp = () => {
+            if (!isDesktop) return;
+            handleEnd();
+        };
+
+        // Touch events (mobile)
+        const handleTouchStart = (e) => {
+            if (isDesktop) return;
+            e.preventDefault();
+            startDrag(e.touches[0].clientX, true);
+        };
+
+        const handleTouchMove = (e) => {
+            if (isDesktop) return;
+            e.preventDefault();
+            handleMove(e.touches[0].clientX, true);
+        };
+
+        const handleTouchEnd = () => {
+            if (isDesktop) return;
+            handleEnd();
+        };
+
+        // Add event listeners
         slider.addEventListener("mousedown", handleMouseDown);
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", handleMouseUp);
+        
+        slider.addEventListener("touchstart", handleTouchStart, { passive: false });
+        slider.addEventListener("touchmove", handleTouchMove, { passive: false });
+        slider.addEventListener("touchend", handleTouchEnd);
+        slider.addEventListener("touchcancel", handleTouchEnd);
 
         return () => {
             slider.removeEventListener("mousedown", handleMouseDown);
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mouseup", handleMouseUp);
+            
+            slider.removeEventListener("touchstart", handleTouchStart);
+            slider.removeEventListener("touchmove", handleTouchMove);
+            slider.removeEventListener("touchend", handleTouchEnd);
+            slider.removeEventListener("touchcancel", handleTouchEnd);
         };
-    }, [offset, isDesktop]);
+    }, [offset, isDesktop, totalWidth]);
 
 
 
@@ -259,16 +455,16 @@ const SmoothAlternatingSlider1 = () => {
             onMouseMove={isDesktop ? handleMouseMove : undefined}
             sx={{
                 width: "100%",
-                maxWidth: "1600px",
+                maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                px: { xs: 2, sm: 4, md: 6 },
+                pb: "120px",
+                px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 position: "relative",
                 overflow: "hidden",
-                height: isXs ? 200 : isSm ? 200 : 430,
-                // pt: isXs ? "40px" : "80px",
-                // pb: isXs ? "40px" : "80px",
+                height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 460,
                 cursor: "none", // 👈 hide default cursor
-
+                userSelect: "none", // Prevent text selection during drag
+                WebkitUserSelect: "none",
             }}
         >
             {/* SMILEY */}
@@ -277,9 +473,9 @@ const SmoothAlternatingSlider1 = () => {
                 src={Smiley}
                 sx={{
                     position: "absolute",
-                    right: isXs ? 20 : isSm ? 40 : 80,
-                    bottom: isXs ? 20 : isSm ? 20 : 20,
-                    width: isXs ? 80 : isSm ? 120 : 180,
+                    right: isXs ? 20 : isSm ? 40 : isLargeScreen ? 120 : 140,
+                    bottom: isXs ? 20 : isSm ? 20 : -10,
+                    width: isXs ? 80 : isSm ? 120 : isLargeScreen ? 270 : 180,
                     zIndex: 0,
                 }}
             />
@@ -289,38 +485,55 @@ const SmoothAlternatingSlider1 = () => {
                 ref={sliderRef}
                 sx={{
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     gap: `${GAP}px`,
                     transform: `translateX(${offset}px)`,
                     willChange: "transform", // 🔥 smoother
-                    px: isXs ? 1 : 4,
+                    px: 0, // Remove padding to allow precise positioning
+                    pt: isXs ? "10px" : isSm ? "10px" : "10px",
+                    userSelect: "none", // Prevent image selection during drag
+                    WebkitUserSelect: "none",
                 }}
             >
-                {images.map((img, i) => (
-                    <Box
-                        key={i}
-                        sx={{
-                            flexShrink: 0,
-                            width: getItemWidth(i),
-                            height:
-                                i % 2 === 0
-                                    ? (isXs ? 150 : isSm ? 220 : 330)
-                                    : (isXs ? 120 : isSm ? 170 : 260),
-                            overflow: "hidden",
-                            borderRadius: "16px",
-                        }}
-                    >
-                        <img
-                            src={urlFor(img).width(800).quality(80).url()}
-                            alt="slider image"
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
+                {images.map((img, i) => {
+                    const squareSize = getItemWidth(i);
+                    const isLargeSquare = i % 2 === 0;
+                    // Center smaller squares vertically relative to larger square
+                    const marginTop = !isLargeSquare ? (ITEM_WIDTH_BIG - ITEM_WIDTH_SMALL) / 2 : 0;
+                    return (
+                        <Box
+                            key={i}
+                            sx={{
+                                flexShrink: 0,
+                                width: squareSize,
+                                height: squareSize, // Make it a perfect square
+                                overflow: "hidden",
+                                borderRadius: "14px",
+                                position: "relative",
+                                display: "block",
+                                marginTop: `${marginTop}px`,
+                                "& img": {
+                                    borderRadius: "14px",
+                                },
                             }}
-                        />
-                    </Box>
-                ))}
+                        >
+                            <img
+                                src={urlFor(img).width(800).quality(80).url()}
+                                alt="slider image"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    borderRadius: "14px",
+                                    display: "block",
+                                    margin: 0,
+                                    padding: 0,
+                                    verticalAlign: "top",
+                                }}
+                            />
+                        </Box>
+                    );
+                })}
             </Box>
 
             {/* ARROWS */}

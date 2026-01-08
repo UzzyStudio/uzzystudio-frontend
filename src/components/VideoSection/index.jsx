@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../sanityClient";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,6 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const VideoSection = () => {
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [data, setData] = useState(null);
 
 
@@ -87,8 +88,8 @@ const VideoSection = () => {
                 sx={{
                     position: "absolute",
                     top: "60px",
-                    left: "160px",
-                    width: { xs: "130px", md: "220px" },
+                    left: isLargeScreen ? "240px" : "160px",
+                    width: { xs: "130px", md: isLargeScreen ? "330px" : "220px" },
                     opacity: 0.9,
                 }}
             >
@@ -102,8 +103,8 @@ const VideoSection = () => {
                 sx={{
                     position: "absolute",
                     bottom: "32px",
-                    right: "100px",
-                    width: { xs: "100px", md: "250px" },
+                    right: isLargeScreen ? "150px" : "100px",
+                    width: { xs: "100px", md: isLargeScreen ? "375px" : "250px" },
                     opacity: 0.9,
                 }}
             >
@@ -121,7 +122,7 @@ const VideoSection = () => {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    width: { xs: "80%", md: "750px" },
+                    width: { xs: "80%", md: isLargeScreen ? "1125px" : "750px" },
                     zIndex: 3,
                     borderRadius: "0px",
                     overflow: "hidden",
@@ -168,7 +169,7 @@ const VideoSection = () => {
                                 xs: "18px",   // mobile
                                 sm: "22px",   // small tablets
                                 md: "30px",   // large tablets
-                                lg: "40px",   // desktop
+                                lg: isLargeScreen ? "60px" : "40px",   // desktop
                             },
                             fontWeight: 500,
                             color: "#000",

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Button } from "@mui/material";
+import { Box, Grid, Typography, Button, useMediaQuery } from "@mui/material";
 import BigLogo from "../../assets/bigLogoFooter.svg";
 import RandomImg from "../../assets/randomimg.svg";
 import { client, urlFor } from "../../sanityClient";
@@ -11,6 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FooterSection() {
+    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
     const [footerData, setFooterData] = useState(null);
 
     useEffect(() => {
@@ -127,8 +128,8 @@ export default function FooterSection() {
         >
             {/* INNER CONTAINER */}
             <Box sx={{
-                maxWidth: "1600px", width: "93%", paddingTop: { xs: "20px", md: "35px" },
-                px: { xs: 1, sm: 2, md: 4 },
+                maxWidth: isLargeScreen ? "100%" : "1600px", width: "93%", paddingTop: { xs: "20px", md: "35px" },
+                px: isLargeScreen ? { xs: 1, sm: 2, md: 12 } : { xs: 1, sm: 2, md: 4 },
                 mx: "auto", backgroundColor: "#1D1D1B", borderTopLeftRadius: "20px", borderTopRightRadius: "20px"
             }}>
 
@@ -152,13 +153,13 @@ export default function FooterSection() {
                                 <Grid item key={i} >
                                     <Typography
                                         onClick={() => handleScrollToSection(item.scrollId)} sx={{
-                                            fontSize: { xs: "12px", sm: "13px", md: "15px" },
+                                            fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
                                             fontWeight: 500,
                                             cursor: "pointer",
                                             fontFamily: "Inter Tight, sans-serif",
                                             "&:hover": { opacity: 0.6 },
                                             textTransform: "Lowercase",
-                                            marginLeft: "20px",
+                                            marginLeft: isLargeScreen ? "30px" : "20px",
                                             willChange: 'transform',
                                         }}
                                     >
@@ -180,14 +181,14 @@ export default function FooterSection() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     sx={{
-                                        fontSize: { xs: "10px", sm: "13px", md: "15px" },
+                                        fontSize: { xs: "10px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
                                         fontWeight: 500,
                                         color: "#fff",
                                         fontFamily: "Inter Tight, sans-serif",
                                         cursor: "pointer",
                                         "&:hover": { opacity: 0.6 },
                                         textTransform: "uppercase",
-                                        marginRight: "20px",
+                                        marginRight: isLargeScreen ? "30px" : "20px",
                                         textDecoration: "none",
                                     }}
                                 >
@@ -225,28 +226,68 @@ export default function FooterSection() {
                             <Button
                                 onClick={handleScrollToContact}
                                 ref={buttonRef}
+                                disableElevation
                                 sx={{
-                                    px: { xs: 1.8, sm: 3, md: 4 },   // smaller padding on mobile
-                                    py: { xs: 1.4, sm: 2.5, md: 3 },
-                                    fontSize: { xs: "10px", sm: "14px", md: "15px" },
+                                    position: "relative",
+                                    overflow: "hidden",
+
+                                    px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },
+                                    py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
+                                    fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
                                     borderRadius: "40px",
-                                    backgroundColor: "#CAF55E",
-                                    color: "#1D1D1B",
+                                    backgroundColor: "#CAF55E", // original button bg
+                                    color: "#1D1D1B",           // original text color
                                     fontWeight: 700,
                                     fontFamily: "Inter Tight, sans-serif",
-                                    transform: "rotate(-20deg)",   // slight left tilt
+                                    textTransform: "lowercase",
+                                    transform: "rotate(-20deg)", // slight tilt
                                     boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
-                                    textTransform: "lowercase",   // small letters
-                                    transition: "0.25s ease",
+                                    border: "none",
+                                    transition: "transform 0.25s ease",
 
+                                    // REMOVE BLUE FOCUS BORDER
+                                    "&:focus, &:focus-visible, &.Mui-focusVisible": {
+                                        outline: "none",
+                                        boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
+                                    },
+
+                                    // OVERLAY FOR BOTTOM → TOP FILL
+                                    "&::before": {
+                                        content: '""',
+                                        position: "absolute",
+                                        left: 0,
+                                        bottom: 0,
+                                        width: "100%",
+                                        height: "0%",
+                                        backgroundColor: "#000", // hover color
+                                        transition: "height 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        zIndex: 0,
+                                    },
+
+                                    // TEXT ABOVE OVERLAY
+                                    "& span": {
+                                        position: "relative",
+                                        zIndex: 1,
+                                        color: "#1D1D1B",
+                                        transition: "color 0.25s ease",
+                                    },
+
+                                    // HOVER EFFECT
+                                    "&:hover::before": {
+                                        height: "100%", // fill from bottom
+                                    },
                                     "&:hover": {
-                                        backgroundColor: "#d4ff74",
-                                        transform: "rotate(0deg) scale(1.03)", // hover correction + pop
+                                        transform: "rotate(0deg) scale(1.03)", // pop + straighten
+                                    },
+                                    "&:hover span": {
+                                        color: "#fff", // text becomes white on black fill
                                     },
                                 }}
                             >
-                                Let’s Work Together
+                                <span>Let's Work Together</span>
                             </Button>
+
+
                         </Grid>
 
                         {/* RIGHT — RANDOM IMAGE */}
@@ -266,11 +307,11 @@ export default function FooterSection() {
                                 src={RandomImg}
                                 alt="random"
                                 style={{
-                                    width: { xs: "5px", md: "75px" }, height: "auto", maxWidth: { xs: "20px", sm: "55px", md: "75px" }
+                                    width: isLargeScreen ? "112px" : { xs: "5px", md: "75px" }, height: "auto", maxWidth: isLargeScreen ? "112px" : { xs: "20px", sm: "55px", md: "75px" }
                                 }}
                             />
                             <Typography sx={{
-                                fontSize: { xs: "10px", sm: "12px", md: "15px" }, fontFamily: "Inter Tight, sans-serif", marginTop: { xs: "10px", sm: "20px", md: "30px" },
+                                fontSize: { xs: "10px", sm: "12px", md: isLargeScreen ? "22px" : "15px" }, fontFamily: "Inter Tight, sans-serif", marginTop: { xs: "10px", sm: "20px", md: isLargeScreen ? "45px" : "30px" },
                             }}>
                                 {footerData?.footerEmail}
                             </Typography>
