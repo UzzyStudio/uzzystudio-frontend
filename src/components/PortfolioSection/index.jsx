@@ -342,40 +342,68 @@ const PortfolioSection = () => {
                 onClick={handleScrollToContact}
                 variant="contained"
                 sx={{
+                    position: "relative",
                     backgroundColor: "#1D1D1B",
-                    color: "white",
+                    color: "#fff",
                     px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 3 },
-                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 }, // only top padding
+                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
                     fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "13px" },
                     borderRadius: "40px",
                     overflow: "hidden",
-                    position: "relative",
                     textTransform: "uppercase",
-                    "&:hover": { backgroundColor: "#CAF55E", color: "#1D1D1B" },
+                    boxShadow: "none",
 
-                    // Animate text on hover
-                    "&:hover .btn-text-top": {
-                        transform: "translateY(-100%)",
+                    /* keep text above background */
+                    "& > *": {
+                        position: "relative",
+                        zIndex: 2,
                     },
-                    "&:hover .btn-text-bottom": {
-                        transform: "translateY(-100%)",
+
+                    /* hover bg layer */
+                    "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        inset: 0,
+                        backgroundColor: "#CAF55E",
+                        transform: "scaleY(0)",
+                        transformOrigin: "bottom",
+                        transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+                        zIndex: 1,
                     },
+
+                    "&:hover": {
+                        color: "#1D1D1B",
+                        boxShadow: "none",
+
+                        "&::before": {
+                            transform: "scaleY(1)",
+                        },
+
+                        "& .btn-text-top": {
+                            transform: "translateY(-100%)",
+                        },
+
+                        "& .btn-text-bottom": {
+                            transform: "translateY(-100%)",
+                        },
+                    },
+
+                    "&:focus": { outline: "none" },
+                    "&:focus-visible": { outline: "none", boxShadow: "none" },
                 }}
             >
-                {/* Container for animated text */}
                 <Box
                     sx={{
                         position: "relative",
                         overflow: "hidden",
                         display: "inline-block",
-                        height: "auto", // adjust based on font-size
                     }}
                 >
                     <Box
                         className="btn-text-top"
                         sx={{
                             display: "block",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)"
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
                         }}
                     >
                         Let's Work Together
@@ -387,14 +415,14 @@ const PortfolioSection = () => {
                             position: "absolute",
                             left: 0,
                             top: "100%",
-                            display: "block",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)"
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
                         }}
                     >
                         Let's Work Together
                     </Box>
                 </Box>
             </Button>
+
 
         </Box>
     );

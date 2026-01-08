@@ -15,6 +15,7 @@ import SmoothAlternatingSlider1 from "./components/imgsSlider";
 import { useEffect } from "react";
 import Lenis from "@studio-freight/lenis";
 function App() {
+
   useEffect(() => {
     if (!window.lenis) return;
 

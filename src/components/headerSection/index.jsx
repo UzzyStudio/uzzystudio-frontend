@@ -214,17 +214,35 @@ const Header = () => {
                                         key={item.id}
                                         onClick={() => scrollToSection(item.id)}
                                         sx={{
-                                            fontSize: isLargeScreen ? "18px" : "15px",
-                                            fontWeight: 900,
-                                            color: "#1D1D1B",
                                             cursor: "pointer",
                                             borderRadius: "12px",
+                                            padding: isLargeScreen ? "8px 12px 8px 12px" : "6px 10px 6px 10px",
+                                            fontSize: isLargeScreen ? "18px" : "15px",
+                                            fontWeight: 900,
                                             fontFamily: "Inter Tight, sans-serif",
-                                            padding: isLargeScreen ? "8px 12px" : "6px 10px",
+                                            color: "#1D1D1B",
                                             position: "relative",
                                             overflow: "hidden",
-                                            transition: "all 0.3s ease",
-                                            transformStyle: "preserve-3d",
+                                            backgroundColor: "transparent",
+                                            transition: "background-color 0.25s ease",
+
+                                            "&:hover": {
+                                                backgroundColor: "#E5E5E5",
+
+                                                "& .menu-text-top": {
+                                                    transform: "translateY(-100%)",
+                                                },
+
+                                                "& .menu-text-bottom": {
+                                                    transform: "translateY(-100%)",
+                                                },
+
+                                                "&::before": {
+                                                    opacity: 1,
+                                                    transform: "translateX(200%) rotate(45deg)",
+                                                },
+                                            },
+
                                             "&::before": {
                                                 content: '""',
                                                 position: "absolute",
@@ -232,29 +250,48 @@ const Header = () => {
                                                 left: "-50%",
                                                 width: "200%",
                                                 height: "200%",
-                                                background: "linear-gradient(45deg, transparent 20%, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.8) 55%, transparent 80%)",
-                                                borderRadius: "12px",
+                                                background:
+                                                    "linear-gradient(45deg, transparent 20%, rgba(255,255,255,.6) 45%, rgba(255,255,255,.8) 50%, rgba(255,255,255,.6) 55%, transparent 80%)",
                                                 opacity: 0,
-                                                transition: "opacity 0.3s ease",
-                                                zIndex: 0,
+                                                transition: "opacity 0.3s ease, transform 1.2s ease",
                                                 pointerEvents: "none",
-                                            },
-                                            "&:hover": {
-                                                backgroundColor: "#E5E5E5",
-                                                animation: `${itemRotate} 0.6s ease-in-out`,
-                                                "&::before": {
-                                                    opacity: 1,
-                                                    animation: `${glassyRotate} 1.5s ease-in-out infinite`,
-                                                },
-                                            },
-                                            "& > *": {
-                                                position: "relative",
-                                                zIndex: 1,
                                             },
                                         }}
                                     >
-                                        {item.label}
+                                        <Box
+                                            sx={{
+                                                position: "relative",
+                                                overflow: "hidden",
+                                                height: "auto",
+                                                display: "block",
+                                            }}
+                                        >
+                                            <Box
+                                                className="menu-text-top"
+                                                sx={{
+                                                    display: "block",
+                                                    transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                                    willChange: "transform",
+                                                }}
+                                            >
+                                                {item.label}
+                                            </Box>
+
+                                            <Box
+                                                className="menu-text-bottom"
+                                                sx={{
+                                                    position: "absolute",
+                                                    left: 0,
+                                                    top: "100%",
+                                                    transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                                    willChange: "transform",
+                                                }}
+                                            >
+                                                {item.label}
+                                            </Box>
+                                        </Box>
                                     </Box>
+
                                 ))}
                             </Box>
 
@@ -262,6 +299,7 @@ const Header = () => {
                                 variant="contained"
                                 onClick={() => setContactOpen(true)}
                                 sx={{
+                                    position: "relative",
                                     backgroundColor: "#CAF55E",
                                     color: "#1D1D1B",
                                     borderRadius: "30px",
@@ -273,9 +311,31 @@ const Header = () => {
                                     textTransform: "none",
                                     overflow: "hidden",
 
+                                    /* TEXT ABOVE BG */
+                                    "& > *": {
+                                        position: "relative",
+                                        zIndex: 2,
+                                    },
+
+                                    /* HOVER BACKGROUND LAYER */
+                                    "&::before": {
+                                        content: '""',
+                                        position: "absolute",
+                                        inset: 0,
+                                        backgroundColor: "#000",
+                                        transform: "scaleY(0)",
+                                        transformOrigin: "bottom",
+                                        transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        zIndex: 1,
+                                    },
+
                                     "&:hover": {
-                                        backgroundColor: "#B6E450",
                                         boxShadow: "none",
+                                        color: "#fff",
+
+                                        "&::before": {
+                                            transform: "scaleY(1)",
+                                        },
 
                                         "& .btn-text-top": {
                                             transform: "translateY(-100%)",
@@ -295,7 +355,6 @@ const Header = () => {
                                     sx={{
                                         position: "relative",
                                         overflow: "hidden",
-                                        height: "auto",
                                         display: "inline-block",
                                     }}
                                 >
@@ -322,6 +381,7 @@ const Header = () => {
                                     </Box>
                                 </Box>
                             </Button>
+
                         </Box>
                     )}
 
