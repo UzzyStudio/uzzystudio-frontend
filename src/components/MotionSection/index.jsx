@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { client } from "../../sanityClient";
 import { useState } from "react";
+import bgMover from "../../assets/web-mover.svg";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +25,69 @@ const MotionSection = () => {
   const rightRef = useRef(null);
   const headingRef = useRef(null);
   const bottomRef = useRef(null);
+  const bgRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const bg = bgRef.current;
+
+    if (!section || !bg) return;
+    if (window.innerWidth < 768) return;
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    const ease = 0.08; // Adjusted for that "heavy/smooth" feel in the video
+
+    const animate = () => {
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+
+      // We use translate3d for performance and combine the 50% centering 
+      // with the dynamic pixel offset
+      bg.style.transform = `translate3d(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px), 0)`;
+
+      requestAnimationFrame(animate);
+    };
+
+    const animationFrame = requestAnimationFrame(animate);
+
+    const handleMouseMove = (e) => {
+      const rect = section.getBoundingClientRect();
+
+      // 1. Find the center point of the section
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // 2. Calculate the pixel distance from center to mouse
+      // This makes the SVG follow the mouse 1:1 regardless of section size
+      targetX = e.clientX - centerX;
+      targetY = e.clientY - centerY;
+    };
+
+    const handleMouseLeave = () => {
+      targetX = 0;
+      targetY = 0;
+    };
+
+    section.addEventListener("mousemove", handleMouseMove);
+    section.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      section.removeEventListener("mousemove", handleMouseMove);
+      section.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (!content) return; // Wait for content
@@ -104,8 +169,30 @@ const MotionSection = () => {
         py: 14,
         textAlign: "center",
         position: "relative",
+        overflow: "hidden",
+
       }}
     >
+      <Box
+        component="img"
+        ref={bgRef}
+        src={bgMover}
+        alt=""
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: "400vw",     // 👈 oversized
+          height: "auto",
+          transform: "translate(-50%, -50%)",
+          pointerEvents: "none",
+          maxWidth: "none",
+          zIndex: 0,
+          willChange: "transform",
+        }}
+      />
+
+
       <Box
         sx={{
           width: "100%",
