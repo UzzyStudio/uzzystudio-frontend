@@ -85,6 +85,7 @@ const Hero = () => {
                         sx={{
                             position: isMobile ? "relative" : "absolute",
                             right: isSmallScreen ? 0 : isMobile ? "-135px" : "130px",
+                            left: isSmallScreen ? "100%" : isMobile ? 0 : "0",
                             top: isSmallScreen ? 0 : isMobile ? "-28px" : "200px",
                             textAlign: isSmallScreen ? "center" : isMobile ? "center" : "right",
                             display: "flex",
