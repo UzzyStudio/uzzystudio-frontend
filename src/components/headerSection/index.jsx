@@ -83,6 +83,7 @@ const Header = () => {
     const [contactOpen, setContactOpen] = useState(false);
 
     const isMobile = useMediaQuery("(max-width:1124px)");
+    const isSmallScreen = useMediaQuery("(max-width:600px)");
     const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
     // Scroll handler for hide/show header (optimized)
@@ -146,8 +147,8 @@ const Header = () => {
                 width: "100%",
                 maxWidth: isLargeScreen ? "100%" : "1600px",
                 margin: "auto",
-                paddingX: isLargeScreen ? 12 : 6,
-                paddingY: 1,
+                paddingX: isSmallScreen ? 2 : isMobile ? 3 : isLargeScreen ? 12 : 6,
+                paddingY: isSmallScreen ? 0.5 : 1,
                 transition: "transform 0.3s ease",
                 transform: showHeader ? "translateY(0)" : "translateY(-120px)", // hide when scrolling down
                 zIndex: 100,
@@ -166,18 +167,18 @@ const Header = () => {
                     sx={{
                         display: "flex",
                         alignItems: "center",
-                        gap: 1,
+                        gap: isSmallScreen ? 0.5 : 1,
                         marginLeft: "auto",
-                        width: isLargeScreen ? "50vw" : "47.625vw",
-                        maxWidth: isLargeScreen ? "50vw" : "47.625vw",
+                        width: isSmallScreen ? "auto" : isMobile ? "auto" : isLargeScreen ? "50vw" : "47.625vw",
+                        maxWidth: isSmallScreen ? "none" : isMobile ? "none" : isLargeScreen ? "50vw" : "47.625vw",
                         justifyContent: "flex-end",
                     }}
                 >
                     {/* Logo */}
                     <Box
                         sx={{
-                            width: isLargeScreen ? "60px" : "46px",
-                            height: isLargeScreen ? "60px" : "46px",
+                            width: isSmallScreen ? "36px" : isLargeScreen ? "60px" : "46px",
+                            height: isSmallScreen ? "36px" : isLargeScreen ? "60px" : "46px",
                             backgroundColor: "#ffffff",
                             borderRadius: "50px",
                             display: "flex",
@@ -193,7 +194,7 @@ const Header = () => {
                                     behavior: "smooth", // smooth scroll
                                 });
                             }}
-                            src={Logo} alt="Logo" width={isLargeScreen ? "52" : "40"} height={isLargeScreen ? "52" : "40"} />
+                            src={Logo} alt="Logo" width={isSmallScreen ? "32" : isLargeScreen ? "52" : "40"} height={isSmallScreen ? "32" : isLargeScreen ? "52" : "40"} />
                     </Box>
 
                     {/* Desktop Menu */}
@@ -397,8 +398,13 @@ const Header = () => {
 
                     {/* Mobile Menu Toggle */}
                     {isMobile && (
-                        <IconButton onClick={() => setDrawerOpen(true)}>
-                            <MenuIcon sx={{ color: "#1D1D1B" }} />
+                        <IconButton 
+                            onClick={() => setDrawerOpen(true)}
+                            sx={{
+                                padding: isSmallScreen ? 1 : 1.5,
+                            }}
+                        >
+                            <MenuIcon sx={{ color: "#1D1D1B", fontSize: isSmallScreen ? "24px" : "28px" }} />
                         </IconButton>
                     )}
                 </Box>

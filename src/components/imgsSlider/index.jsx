@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { client, urlFor } from "../../sanityClient";
 
 
@@ -139,21 +139,32 @@ const SmoothAlternatingSlider1 = () => {
     const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
 
     const calculateItemWidths = () => {
-        // Larger square is always 442px
-        const BIG_SQUARE_SIZE = 442;
-        // Smaller square is 85% of larger square
-        const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+        // Base sizes for different screen sizes
+        let BIG_SQUARE_SIZE, SMALL_SQUARE_SIZE;
+        
+        if (isXs) {
+            // Extra small screens
+            BIG_SQUARE_SIZE = 140;
+            SMALL_SQUARE_SIZE = 120; // Increased from 110 to 120 (85.7% of big)
+        } else if (isSm) {
+            // Small-medium screens
+            BIG_SQUARE_SIZE = 200;
+            SMALL_SQUARE_SIZE = 180; // Increased from 170 to 180 (90% of big)
+        } else {
+            // Larger screens: use fixed size
+            BIG_SQUARE_SIZE = 442;
+            SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.90); // Increased from 0.85 to 0.90 (90% of big)
+        }
 
         if (containerWidth === 0 || containerWidth < 200) {
             // Fallback to original sizes until container width is known
             return {
-                big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
-                small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
-                partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
+                big: BIG_SQUARE_SIZE,
+                small: SMALL_SQUARE_SIZE,
+                partial: isXs ? 42 : isSm ? 60 : Math.floor(BIG_SQUARE_SIZE * 0.3),
             };
         }
 
-        const availableWidth = containerWidth;
         // Calculate partial width for layout positioning
         const partialWidth = BIG_SQUARE_SIZE * 0.3;
 
@@ -174,42 +185,113 @@ const SmoothAlternatingSlider1 = () => {
         0
     );
 
+    // Helper functions to calculate offset for centering one image
+    const { getOffsetForImage, findNearestImageIndex } = useMemo(() => {
+        const getItemWidthLocal = (i) =>
+            i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+
+        const getOffsetForImage = (imageIndex) => {
+            if (containerWidth === 0 || images.length === 0) return 0;
+            
+            let cumulativeWidth = 0;
+            for (let i = 0; i < imageIndex; i++) {
+                cumulativeWidth += getItemWidthLocal(i) + GAP;
+            }
+            
+            const imageWidth = getItemWidthLocal(imageIndex);
+            // Center the image: container center - (cumulative width + image center)
+            return (containerWidth / 2) - (cumulativeWidth + imageWidth / 2);
+        };
+
+        const findNearestImageIndex = (currentOffset) => {
+            if (images.length === 0 || originalImages.length === 0) return 0;
+            
+            let minDistance = Infinity;
+            let nearestIndex = 0;
+            
+            // Only check original images (not the triplicated ones)
+            for (let i = 0; i < originalImages.length; i++) {
+                const targetOffset = getOffsetForImage(i);
+                const distance = Math.abs(currentOffset - targetOffset);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestIndex = i;
+                }
+            }
+            
+            return nearestIndex;
+        };
+
+        return { getOffsetForImage, findNearestImageIndex };
+    }, [containerWidth, images.length, originalImages.length, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
+
     /** ---------------- OFFSET ---------------- */
-    // Initial offset: start from the left side
+    // Initial offset: center one image in view
     const [offset, setOffset] = useState(0);
+    const currentImageIndex = useRef(0);
 
     useEffect(() => {
-        if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
-            // Start from the left - set offset to 0 so first image starts at the left edge
-            setOffset(0);
+        if (containerWidth > 0 && images.length > 0 && totalWidth > 0 && getOffsetForImage) {
+            // Center the first image in the container
+            const initialOffset = getOffsetForImage(0);
+            setOffset(initialOffset);
+            currentImageIndex.current = 0;
         }
-    }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
+    }, [totalWidth, containerWidth, images.length, getOffsetForImage]);
 
     /** ---------------- AUTO SCROLL ---------------- */
-    const speed = useRef(0.7);
+    const speed = useRef(0.5); // Constant speed in pixels per frame
     const isHovered = useRef(false);
     const isDragging = useRef(false);
     const rafRef = useRef(null);
+    const targetImageIndex = useRef(0);
 
     useEffect(() => {
-        if (images.length === 0 || containerWidth === 0) return;
+        if (images.length === 0 || containerWidth === 0 || !getOffsetForImage || originalImages.length === 0) return;
 
         const animate = () => {
             if (!isHovered.current && !isDragging.current) {
                 setOffset((prev) => {
-                    let next = prev - speed.current;
-                    const block = totalWidth / 3;
-                    // Keep offset within bounds for seamless loop
-                    if (next < -block * 2) next += block;
-                    return next;
+                    // Get current target offset
+                    const targetOffset = getOffsetForImage(targetImageIndex.current);
+                    
+                    // Calculate distance to target
+                    const diff = targetOffset - prev;
+                    
+                    // If very close to target, move to next image
+                    if (Math.abs(diff) < 2) {
+                        targetImageIndex.current = (targetImageIndex.current + 1) % originalImages.length;
+                        const nextTargetOffset = getOffsetForImage(targetImageIndex.current);
+                        const nextDiff = nextTargetOffset - prev;
+                        
+                        // Move towards next target at constant speed
+                        const direction = nextDiff > 0 ? 1 : -1;
+                        const step = speed.current * direction;
+                        return prev + step;
+                    }
+                    
+                    // Move at constant speed towards current target
+                    const direction = diff > 0 ? 1 : -1;
+                    const step = speed.current * direction;
+                    const newOffset = prev + step;
+                    
+                    // Don't overshoot the target
+                    if ((direction > 0 && newOffset >= targetOffset) || (direction < 0 && newOffset <= targetOffset)) {
+                        return targetOffset;
+                    }
+                    
+                    return newOffset;
                 });
             }
             rafRef.current = requestAnimationFrame(animate);
         };
 
+        // Initialize target to first image
+        targetImageIndex.current = 0;
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
-    }, [totalWidth, images.length, containerWidth]);
+    }, [totalWidth, images.length, containerWidth, getOffsetForImage, originalImages.length]);
 
 
     useEffect(() => {
@@ -246,7 +328,7 @@ const SmoothAlternatingSlider1 = () => {
 
     // Momentum animation after drag release
     useEffect(() => {
-        if (images.length === 0 || containerWidth === 0) return;
+        if (images.length === 0 || containerWidth === 0 || !findNearestImageIndex || !getOffsetForImage) return;
 
         const animateMomentum = () => {
             if (isDragging.current) {
@@ -257,20 +339,31 @@ const SmoothAlternatingSlider1 = () => {
             if (Math.abs(velocity.current) > 0.1) {
                 setOffset((prev) => {
                     let next = prev + velocity.current;
-                    const block = totalWidth / 3;
-
-                    // Keep offset within bounds for seamless loop
-                    if (next > -block) next -= block;
-                    if (next < -block * 2) next += block;
-
+                    
+                    // Find nearest image and snap to it when velocity is low
+                    if (Math.abs(velocity.current) < 2) {
+                        const nearestIndex = findNearestImageIndex(next);
+                        const targetOffset = getOffsetForImage(nearestIndex);
+                        const diff = targetOffset - next;
+                        
+                        // Snap if close enough
+                        if (Math.abs(diff) < 50) {
+                            return targetOffset;
+                        }
+                    }
+                    
                     return next;
                 });
 
                 velocity.current *= 0.95; // Friction
                 momentumRef.current = requestAnimationFrame(animateMomentum);
             } else {
+                // Snap to nearest image when momentum stops
+                setOffset((prev) => {
+                    const nearestIndex = findNearestImageIndex(prev);
+                    return getOffsetForImage(nearestIndex);
+                });
                 velocity.current = 0;
-                momentumRef.current = requestAnimationFrame(animateMomentum);
             }
         };
 
@@ -281,7 +374,7 @@ const SmoothAlternatingSlider1 = () => {
                 cancelAnimationFrame(momentumRef.current);
             }
         };
-    }, [totalWidth, images.length, containerWidth]);
+    }, [totalWidth, images.length, containerWidth, findNearestImageIndex, getOffsetForImage]);
 
     useEffect(() => {
         const slider = sliderRef.current;
@@ -318,14 +411,7 @@ const SmoothAlternatingSlider1 = () => {
 
             const deltaX = x - startX.current;
             setOffset((prev) => {
-                let next = startOffset.current + deltaX;
-                const block = totalWidth / 3;
-
-                // Keep offset within bounds for seamless loop
-                if (next > -block) next -= block;
-                if (next < -block * 2) next += block;
-
-                return next;
+                return startOffset.current + deltaX;
             });
         };
 
@@ -405,15 +491,23 @@ const SmoothAlternatingSlider1 = () => {
 
                 isHovered.current = true;
 
-                setOffset((prev) => {
-                    let next = prev - e.deltaX;
-                    const block = totalWidth / 3;
-
-                    if (next > -block) next -= block;
-                    if (next < -block * 2) next += block;
-
-                    return next;
-                });
+                if (findNearestImageIndex && getOffsetForImage && originalImages.length > 0) {
+                    setOffset((prev) => {
+                        const currentIndex = findNearestImageIndex(prev);
+                        let nextIndex = currentIndex;
+                        
+                        // Determine direction
+                        if (e.deltaX > 0) {
+                            // Scroll right - go to previous image
+                            nextIndex = currentIndex > 0 ? currentIndex - 1 : originalImages.length - 1;
+                        } else {
+                            // Scroll left - go to next image
+                            nextIndex = (currentIndex + 1) % originalImages.length;
+                        }
+                        
+                        return getOffsetForImage(nextIndex);
+                    });
+                }
             }
         };
 
@@ -445,7 +539,7 @@ const SmoothAlternatingSlider1 = () => {
                 px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
                 position: "relative",
                 overflow: "hidden",
-                height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 460,
+                height: isXs ? 160 : isSm ? 220 : isLargeScreen ? 645 : 460,
                 cursor: "none", // 👈 hide default cursor
                 userSelect: "none", // Prevent text selection during drag
                 WebkitUserSelect: "none",
