@@ -11,6 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const MotionSection = () => {
   const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+  const isXLScreen = useMediaQuery("(min-width: 1920px)");
+  const isLGScreen = useMediaQuery("(min-width: 1440px)");
   const [content, setContent] = useState(null);
 
   useEffect(() => {
@@ -26,6 +28,19 @@ const MotionSection = () => {
   const headingRef = useRef(null);
   const bottomRef = useRef(null);
   const bgRef = useRef(null);
+
+  const handleScrollToServices = () => {
+    const servicesSection = document.getElementById("services");
+    if (!servicesSection || !window.lenis) return;
+
+    const headerOffset = 120;
+    const y = servicesSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+    window.lenis.scrollTo(y, {
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    });
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -161,16 +176,43 @@ const MotionSection = () => {
   }, [content]); // <-- run GSAP when content loads
 
   return (
+    <Box padding="40px" >
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
     <Box
       ref={sectionRef}
+      onClick={handleScrollToServices}
+      data-clickable="true"
+      borderRadius=".5rem"
       sx={{
         backgroundColor: "#1D1D1B",
         color: "#CAF55E",
-        py: 14,
         textAlign: "center",
         position: "relative",
+        padding: { xs: "40px 20px", md: 0 },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        maxWidth: "calc(2250px + 42px)",
+        margin: "0 auto",
+        minHeight: "70vh",
         overflow: "hidden",
-
+        isolation: "isolate",
+        contain: "layout style paint",
+        zIndex: 1,
+        clipPath: "inset(0)",
+        cursor: "pointer",
+        transition: "opacity 0.3s ease",
+        "&:hover": {
+          opacity: 0.95,
+        },
       }}
     >
       <Box
@@ -182,13 +224,15 @@ const MotionSection = () => {
           position: "absolute",
           top: "50%",
           left: "50%",
-          width: "410vw",     // 👈 oversized
+          width: "100vw",    
           height: "auto",
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
           maxWidth: "none",
           zIndex: 0,
           willChange: "transform",
+          clipPath: "inset(0)",
+          contain: "layout style paint",
         }}
       />
 
@@ -196,9 +240,27 @@ const MotionSection = () => {
       <Box
         sx={{
           width: "100%",
-          maxWidth: isLargeScreen ? "100%" : "1600px",
-          mx: "auto",
-          px: isLargeScreen ? 12 : 0,
+          maxWidth: "100%",
+          margin: "0 auto",
+          paddingTop: {
+            xs: 0,
+            md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
+          },
+          paddingLeft: {
+            xs: "20px",
+            md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
+          },
+          paddingRight: {
+            xs: "20px",
+            md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
+          },
+          paddingBottom: {
+            xs: 0,
+            md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
+          },
+          boxSizing: "border-box",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Row 1 - Top Small Text */}
@@ -206,7 +268,10 @@ const MotionSection = () => {
           ref={topRef}
           sx={{
             color: "#fff",
-            fontSize: isLargeScreen ? "19px" : "13px",
+            fontSize: { 
+              xs: "13px", 
+              md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "19px" : "16px" 
+            },
             fontFamily: "Inter Tight, sans-serif",
             willChange: "transform, opacity",
             textAlign: "center",
@@ -224,7 +289,7 @@ const MotionSection = () => {
             flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-around",
             alignItems: "center",
-            margin: { xs: "30px 23px", md: "60px 60px" },
+            margin: { xs: "30px 0", md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0" },
             gap: { xs: 3, md: 0 },
           }}
         >
@@ -234,7 +299,10 @@ const MotionSection = () => {
               ref={leftRef}
               sx={{
                 color: "#fff",
-                fontSize: isLargeScreen ? "18px" : "12px",
+                fontSize: { 
+                  xs: "12px", 
+                  md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
+                },
                 fontFamily: "Inter Tight, sans-serif",
                 willChange: "transform, opacity",
               }}
@@ -251,7 +319,7 @@ const MotionSection = () => {
                 fontSize: {
                   xs: "36px",
                   sm: "48px",
-                  md: isLargeScreen ? "126px" : "84px",
+                  md: isLargeScreen ? "150px" : isXLScreen ? "130px" : isLGScreen ? "110px" : "84px",
                 },
                 fontWeight: 800,
                 lineHeight: 1.05,
@@ -274,7 +342,10 @@ const MotionSection = () => {
               ref={rightRef}
               sx={{
                 color: "#fff",
-                fontSize: isLargeScreen ? "18px" : "12px",
+                fontSize: { 
+                  xs: "12px", 
+                  md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
+                },
                 fontFamily: "Inter Tight, sans-serif",
                 willChange: "transform, opacity",
               }}
@@ -289,13 +360,18 @@ const MotionSection = () => {
           ref={bottomRef}
           sx={{
             color: "#fff",
-            fontSize: isLargeScreen ? "21px" : "14px",
+            fontSize: { 
+              xs: "14px", 
+              md: isLargeScreen ? "28px" : isXLScreen ? "24px" : isLGScreen ? "21px" : "18px" 
+            },
             fontFamily: "Inter Tight, sans-serif",
           }}
         >
           {content?.bottomText}
         </Typography>
       </Box>
+    </Box>
+    </Box>
     </Box>
   );
 };

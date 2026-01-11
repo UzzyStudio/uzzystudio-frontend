@@ -416,17 +416,47 @@ export default function ContactSection() {
                                         px: { xs: 4, md: isLargeScreen ? 10.5 : 7 },
                                         fontSize: { xs: "13px", md: isLargeScreen ? "21px" : "14px" },
                                         backgroundColor: "black",
-                                        color: "white",
                                         fontFamily: "Inter Tight, sans-serif",
                                         borderRadius: "80px",
                                         fontWeight: 400,
                                         textTransform: "none",
-                                        "&:hover": {
-                                            backgroundColor: "#111",
+                                        overflow: "hidden",
+                                        position: "relative",
+                                        cursor: "default",
+                                        "&::before": {
+                                            content: '""',
+                                            position: "absolute",
+                                            bottom: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "0%",
+                                            backgroundColor: "#CAF55E",
+                                            transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                            zIndex: 0,
+                                        },
+                                        "&:hover::before": {
+                                            height: "100%",
+                                        },
+                                        "& .MuiButton-label": {
+                                            position: "relative",
+                                            zIndex: 2,
+                                        },
+                                        "&:hover .button-text-wrapper": {
+                                            color: "#1D1D1B !important",
                                         },
                                     }}
                                 >
-                                    Submit
+                                    <Box 
+                                        className="button-text-wrapper"
+                                        sx={{ 
+                                            position: "relative", 
+                                            zIndex: 2,
+                                            color: "white",
+                                            transition: "color 0.4s ease",
+                                        }}
+                                    >
+                                        Submit
+                                    </Box>
                                 </Button>
                             </Box>
                         </Box>

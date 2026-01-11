@@ -310,6 +310,26 @@ const Header = () => {
                                     boxShadow: "none",
                                     textTransform: "none",
                                     overflow: "hidden",
+                                    position: "relative",
+                                    transition: "color 0.4s ease",
+                                    cursor: "default",
+
+                                    /* HOVER BACKGROUND LAYER */
+                                    "&::before": {
+                                        content: '""',
+                                        position: "absolute",
+                                        bottom: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "0%",
+                                        backgroundColor: "#000",
+                                        transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        zIndex: 0,
+                                    },
+
+                                    "&:hover::before": {
+                                        height: "100%",
+                                    },
 
                                     /* TEXT ABOVE BG */
                                     "& > *": {
@@ -317,32 +337,15 @@ const Header = () => {
                                         zIndex: 2,
                                     },
 
-                                    /* HOVER BACKGROUND LAYER */
-                                    "&::before": {
-                                        content: '""',
-                                        position: "absolute",
-                                        inset: 0,
-                                        backgroundColor: "#000",
-                                        transform: "scaleY(0)",
-                                        transformOrigin: "bottom",
-                                        transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
-                                        zIndex: 1,
-                                    },
-
                                     "&:hover": {
                                         boxShadow: "none",
-                                        color: "#fff",
-
-                                        "&::before": {
-                                            transform: "scaleY(1)",
-                                        },
-
                                         "& .btn-text-top": {
                                             transform: "translateY(-100%)",
+                                            color: "#fff",
                                         },
-
                                         "& .btn-text-bottom": {
                                             transform: "translateY(-100%)",
+                                            color: "#fff",
                                         },
                                     },
 
@@ -356,13 +359,18 @@ const Header = () => {
                                         position: "relative",
                                         overflow: "hidden",
                                         display: "inline-block",
+                                        width: "100%",
+                                        zIndex: 1,
                                     }}
                                 >
                                     <Box
                                         className="btn-text-top"
                                         sx={{
                                             display: "block",
-                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                            color: "#1D1D1B",
+                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
+                                            position: "relative",
+                                            zIndex: 1,
                                         }}
                                     >
                                         start a project
@@ -374,7 +382,9 @@ const Header = () => {
                                             position: "absolute",
                                             left: 0,
                                             top: "100%",
-                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                            color: "#1D1D1B",
+                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
+                                            zIndex: 1,
                                         }}
                                     >
                                         start a project
@@ -433,9 +443,27 @@ const Header = () => {
                                 borderRadius: "30px",
                                 fontWeight: 900,
                                 boxShadow: "none",
+                                overflow: "hidden",
+                                position: "relative",
+                                transition: "color 0.4s ease",
+                                cursor: "default",
+                                "&::before": {
+                                    content: '""',
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "0%",
+                                    backgroundColor: "#000",
+                                    transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                    zIndex: 0,
+                                },
+                                "&:hover::before": {
+                                    height: "100%",
+                                },
                                 "&:hover": {
-                                    backgroundColor: "#B6E450",
                                     boxShadow: "none",
+                                    color: "#fff",
                                 },
                                 "&:focus": { outline: "none" },
                                 "&:focus-visible": { outline: "none" },

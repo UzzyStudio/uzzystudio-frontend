@@ -175,29 +175,13 @@ const SmoothAlternatingSlider1 = () => {
     );
 
     /** ---------------- OFFSET ---------------- */
-    // Initial offset: position so we see partial left + 2 full + partial right
-    // On larger screens: center 2 full images with partial images entering from sides
+    // Initial offset: start from the left side
     const [offset, setOffset] = useState(0);
 
     useEffect(() => {
         if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
-            // Calculate layout: [partial left] [gap] [full 1] [gap] [full 2] [gap] [partial right]
-            // On larger screens: center 2 full images with partial images entering from sides
-            const firstImageWidth = (0 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
-            const secondImageWidth = (1 % 2 === 0) ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
-
-            // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
-            const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
-
-            // Calculate remaining space for partial images on both sides
-            const remainingSpace = containerWidth - twoFullImagesWidth;
-            const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
-
-            // Position so we show partial left (~30% of first image), then 2 full images, then partial right
-            // Offset should position first image so only the partial amount is visible on left
-            const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
-            const initialOffset = firstImageWidth - visiblePartialLeft;
-            setOffset(initialOffset);
+            // Start from the left - set offset to 0 so first image starts at the left edge
+            setOffset(0);
         }
     }, [totalWidth, containerWidth, images.length, PARTIAL_WIDTH, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
 

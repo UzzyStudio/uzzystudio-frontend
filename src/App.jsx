@@ -77,7 +77,7 @@ function App() {
     <>
       <CursorFollower />
       <Header />
-      <Hero />
+      <Hero /> 
       <SmoothAlternatingSlider1 />
       <CreativeTextSection />
       <ManifestoSection />

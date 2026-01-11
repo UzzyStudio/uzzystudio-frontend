@@ -235,56 +235,52 @@ export default function FooterSection() {
                                     py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
                                     fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
                                     borderRadius: "40px",
-                                    backgroundColor: "#CAF55E", // original button bg
-                                    color: "#1D1D1B",           // original text color
+                                    backgroundColor: "#CAF55E",
                                     fontWeight: 700,
                                     fontFamily: "Inter Tight, sans-serif",
                                     textTransform: "lowercase",
-                                    transform: "rotate(-20deg)", // slight tilt
+                                    transform: "rotate(-20deg)",
                                     boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
-                                    border: "none",
-                                    transition: "transform 0.25s ease",
-
-                                    // REMOVE BLUE FOCUS BORDER
-                                    "&:focus, &:focus-visible, &.Mui-focusVisible": {
-                                        outline: "none",
-                                        boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
-                                    },
-
-                                    // OVERLAY FOR BOTTOM → TOP FILL
+                                    overflow: "hidden",
+                                    position: "relative",
+                                    cursor: "default",
                                     "&::before": {
                                         content: '""',
                                         position: "absolute",
-                                        left: 0,
                                         bottom: 0,
+                                        left: 0,
                                         width: "100%",
                                         height: "0%",
-                                        backgroundColor: "#000", // hover color
-                                        transition: "height 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        backgroundColor: "#000",
+                                        transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
                                         zIndex: 0,
                                     },
-
-                                    // TEXT ABOVE OVERLAY
-                                    "& span": {
-                                        position: "relative",
-                                        zIndex: 1,
-                                        color: "#1D1D1B",
-                                        transition: "color 0.25s ease",
-                                    },
-
-                                    // HOVER EFFECT
                                     "&:hover::before": {
-                                        height: "100%", // fill from bottom
+                                        height: "100%",
                                     },
-                                    "&:hover": {
-                                        transform: "rotate(0deg) scale(1.03)", // pop + straighten
+                                    "&:hover .button-text-wrapper": {
+                                        color: "#fff",
                                     },
-                                    "&:hover span": {
-                                        color: "#fff", // text becomes white on black fill
+                                    "& .MuiButton-label": {
+                                        position: "relative",
+                                        zIndex: 2,
                                     },
+                                    "&:focus": { outline: "none" },
+                                    "&:focus-visible": { outline: "none", boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
+                                    "&.Mui-focusVisible": { boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
                                 }}
                             >
-                                <span>Let's Work Together</span>
+                                <Box 
+                                    className="button-text-wrapper"
+                                    sx={{ 
+                                        position: "relative", 
+                                        zIndex: 2,
+                                        color: "#1D1D1B",
+                                        transition: "color 0.4s ease",
+                                    }}
+                                >
+                                    Let's Work Together
+                                </Box>
                             </Button>
 
 
