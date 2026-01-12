@@ -197,7 +197,7 @@ const ServicesStackSection = () => {
               sx={{
                 width: "100%",
                 minWidth: { md: isLGScreen ? "1440px" : "100%" },
-                maxWidth: "134rem",
+                maxWidth: "100rem",
                 // height: "60vh",
                 height: { xs: "auto", md: "100%" },
                 display: "flex",
