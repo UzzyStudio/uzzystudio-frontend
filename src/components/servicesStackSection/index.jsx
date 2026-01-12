@@ -1,5 +1,4 @@
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import img2 from "../../assets/img2.png";
 import { useRef, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../sanityClient";
@@ -14,6 +13,7 @@ const ServicesStackSection = () => {
   const isLargeScreen = useMediaQuery("(min-width: 2560px)");
   const isXLScreen = useMediaQuery("(min-width: 1920px)");
   const isLGScreen = useMediaQuery("(min-width: 1440px)");
+  const isSmScreen = useMediaQuery("(min-width: 600px)");
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -173,7 +173,8 @@ const ServicesStackSection = () => {
               justifyContent: "center", // Center the content wrapper
               alignItems: "center",
               padding: {
-                xs: "110px 20px",
+                xs: "30px 0",
+                sm: "40px 0",
                 md: 0,
               },
               color: "#1D1D1B",
@@ -203,7 +204,8 @@ const ServicesStackSection = () => {
                 flexDirection: { xs: "column", md: "row" },
                 alignItems: "center",
                 paddingTop: {
-                  xs: 0,
+                  xs: "20px",
+                  sm: "30px",
                   md: isLargeScreen
                     ? "80px"
                     : isXLScreen
@@ -213,7 +215,8 @@ const ServicesStackSection = () => {
                     : "50px",
                 },
                 paddingLeft: {
-                  xs: 0,
+                  xs: "20px",
+                  sm: "30px",
                   md: isLargeScreen
                     ? "100px"
                     : isXLScreen
@@ -223,7 +226,8 @@ const ServicesStackSection = () => {
                     : "50px",
                 },
                 paddingRight: {
-                  xs: 0,
+                  xs: "20px",
+                  sm: "30px",
                   md: isLargeScreen
                     ? "120px"
                     : isXLScreen
@@ -232,8 +236,8 @@ const ServicesStackSection = () => {
                     ? "80px"
                     : "50px",
                 },
-                paddingBottom: { xs: 0, md: 0 },
-                gap: { xs: 4, md: 0 },
+                paddingBottom: { xs: "30px", sm: "40px", md: 0 },
+                gap: { xs: 3, sm: 4, md: 0 },
                 margin: "0 auto",
                 boxSizing: "border-box",
               }}
@@ -248,6 +252,9 @@ const ServicesStackSection = () => {
                   justifyContent: { xs: "flex-start", md: "space-around" },
                   height: "100%",
                   alignItems: { xs: "flex-start", md: "flex-start" },
+                  position: "relative",
+                  zIndex: { xs: 2, md: 1 },
+                  order: { xs: 1, md: 0 },
                 }}
               >
                 <Box
@@ -259,14 +266,15 @@ const ServicesStackSection = () => {
                   <Typography
                     sx={{
                       fontSize: {
-                        xs: "23px",
+                        xs: "20px",
+                        sm: "23px",
                         md: isLargeScreen ? "55px" : "38px",
                       },
                       fontFamily: "Inter Tight, sans-serif",
                       letterSpacing: "-1.1px",
                       fontWeight: 800,
                       textTransform: "lowercase",
-                      mb: 1,
+                      mb: { xs: 0.5, md: 1 },
                     }}
                   >
                     {service.title}
@@ -275,13 +283,15 @@ const ServicesStackSection = () => {
                   <Typography
                     sx={{
                       fontSize: {
-                        xs: "11px",
+                        xs: "10px",
+                        sm: "11px",
                         md: isLargeScreen ? "26px" : "18px",
                       },
                       fontFamily: "Inter Tight, sans-serif",
-                      mb: 3,
+                      mb: { xs: 2, md: 3 },
                       maxWidth: {
-                        xs: "86%",
+                        xs: "100%",
+                        sm: "86%",
                         md: isLargeScreen ? "675px" : "450px",
                       },
                       lineHeight: 1.4,
@@ -291,15 +301,16 @@ const ServicesStackSection = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ mt: { xs: 0, md: 4 } }}>
+                <Box sx={{ mt: { xs: 2, sm: 3, md: 4 } }}>
                   <Box
                     onClick={handleScrollToContact}
                     sx={{
-                      px: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
-                      pt: { xs: "12px", md: isLargeScreen ? "27px" : "18px" },
-                      pb: { xs: "12px", md: isLargeScreen ? "20px" : "12px" },
+                      px: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "18px" },
+                      pt: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "18px" },
+                      pb: { xs: "10px", sm: "12px", md: isLargeScreen ? "20px" : "12px" },
                       fontSize: {
-                        xs: "11px",
+                        xs: "10px",
+                        sm: "11px",
                         md: isLargeScreen ? "26px" : "18px",
                       },
                       background: "#1D1D1B",
@@ -392,11 +403,16 @@ const ServicesStackSection = () => {
                   width: { xs: "100%", sm: "100%", md: "auto" },
                   flexShrink: 0,
                   flexDirection: "column",
-                  gap: 1,
+                  gap: { xs: 0.75, sm: 1, md: 1 },
                   alignItems: "flex-start",
                   justifyContent: { xs: "flex-start", md: "center" },
-                  height: "100%",
+                  height: { xs: "auto", md: "100%" },
                   margin: { xs: 0, md: "0 auto" },
+                  mt: { xs: 2, sm: 3, md: 0 },
+                  mb: { xs: 2, sm: 3, md: 0 },
+                  position: "relative",
+                  zIndex: { xs: 2, md: 1 },
+                  order: { xs: 2, md: 0 },
                 }}
               >
                 {service.points?.map((p, i) => (
@@ -404,7 +420,8 @@ const ServicesStackSection = () => {
                     key={i}
                     sx={{
                       fontSize: {
-                        xs: "11px",
+                        xs: "10px",
+                        sm: "11px",
                         md: isLargeScreen ? "26px" : "18px",
                       },
                       fontWeight: 400,
@@ -429,6 +446,9 @@ const ServicesStackSection = () => {
                   alignItems: "center",
                   paddingRight: { xs: 0, md: "35px" },
                   marginLeft: "auto",
+                  position: "relative",
+                  zIndex: { xs: 1, md: 1 },
+                  order: { xs: 3, md: 0 },
                 }}
               >
                 <Box
@@ -438,7 +458,7 @@ const ServicesStackSection = () => {
                   sx={{
                     width: "100%",
                     maxWidth: "100%",
-                    height: { xs: "400px", md: "auto" },
+                    height: { xs: "250px", sm: "350px", md: "auto" },
                     borderRadius: "8px",
                     objectFit: "cover",
                   }}

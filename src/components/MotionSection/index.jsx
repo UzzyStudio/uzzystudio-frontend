@@ -13,6 +13,8 @@ const MotionSection = () => {
   const isLargeScreen = useMediaQuery("(min-width: 2560px)");
   const isXLScreen = useMediaQuery("(min-width: 1920px)");
   const isLGScreen = useMediaQuery("(min-width: 1440px)");
+  const isMdScreen = useMediaQuery("(min-width: 900px)");
+  const isSmScreen = useMediaQuery("(min-width: 600px)");
   const [content, setContent] = useState(null);
 
   useEffect(() => {
@@ -176,7 +178,7 @@ const MotionSection = () => {
   }, [content]); // <-- run GSAP when content loads
 
   return (
-    <Box padding="40px" >
+    <Box padding={{ xs: "20px", sm: "30px", md: "40px" }} >
     <Box
       sx={{
         width: "100%",
@@ -195,7 +197,7 @@ const MotionSection = () => {
         color: "#CAF55E",
         textAlign: "center",
         position: "relative",
-        padding: { xs: "40px 20px", md: 0 },
+        padding: { xs: "20px 16px", sm: "10px 24px", md: 0 },
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -224,7 +226,7 @@ const MotionSection = () => {
           position: "absolute",
           top: "50%",
           left: "50%",
-          width: "100vw",    
+          width: "450vw",    
           height: "auto",
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
@@ -243,19 +245,23 @@ const MotionSection = () => {
           maxWidth: "100%",
           margin: "0 auto",
           paddingTop: {
-            xs: 0,
+            xs: "30px",
+            sm: "40px",
             md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
           },
           paddingLeft: {
-            xs: "20px",
+            xs: "16px",
+            sm: "24px",
             md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
           },
           paddingRight: {
-            xs: "20px",
+            xs: "16px",
+            sm: "24px",
             md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
           },
           paddingBottom: {
-            xs: 0,
+            xs: "30px",
+            sm: "40px",
             md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
           },
           boxSizing: "border-box",
@@ -269,7 +275,8 @@ const MotionSection = () => {
           sx={{
             color: "#fff",
             fontSize: { 
-              xs: "13px", 
+              xs: "10px",
+              sm: "12px",
               md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "19px" : "16px" 
             },
             fontFamily: "Inter Tight, sans-serif",
@@ -286,11 +293,15 @@ const MotionSection = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: "row", // Keep row layout on all screens
             justifyContent: "space-around",
             alignItems: "center",
-            margin: { xs: "30px 0", md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0" },
-            gap: { xs: 3, md: 0 },
+            margin: { 
+              xs: "20px 0",
+              sm: "30px 0",
+              md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0" 
+            },
+            gap: 0,
           }}
         >
           {/* LEFT TEXT */}
@@ -300,7 +311,8 @@ const MotionSection = () => {
               sx={{
                 color: "#fff",
                 fontSize: { 
-                  xs: "12px", 
+                  xs: "9px",
+                  sm: "11px",
                   md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
                 },
                 fontFamily: "Inter Tight, sans-serif",
@@ -317,8 +329,8 @@ const MotionSection = () => {
               ref={headingRef}
               sx={{
                 fontSize: {
-                  xs: "36px",
-                  sm: "48px",
+                  xs: "28px",
+                  sm: "36px",
                   md: isLargeScreen ? "150px" : isXLScreen ? "130px" : isLGScreen ? "110px" : "84px",
                 },
                 fontWeight: 800,
@@ -343,7 +355,8 @@ const MotionSection = () => {
               sx={{
                 color: "#fff",
                 fontSize: { 
-                  xs: "12px", 
+                  xs: "9px",
+                  sm: "11px",
                   md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
                 },
                 fontFamily: "Inter Tight, sans-serif",
@@ -361,7 +374,8 @@ const MotionSection = () => {
           sx={{
             color: "#fff",
             fontSize: { 
-              xs: "14px", 
+              xs: "11px",
+              sm: "13px",
               md: isLargeScreen ? "28px" : isXLScreen ? "24px" : isLGScreen ? "21px" : "18px" 
             },
             fontFamily: "Inter Tight, sans-serif",

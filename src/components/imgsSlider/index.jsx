@@ -185,11 +185,12 @@ const SmoothAlternatingSlider1 = () => {
         0
     );
 
-    // Helper functions to calculate offset for centering one image
-    const { getOffsetForImage, findNearestImageIndex } = useMemo(() => {
+    // Helper functions to calculate offset for positioning images
+    const { getOffsetForImage, getOffsetForImageLeft, findNearestImageIndex } = useMemo(() => {
         const getItemWidthLocal = (i) =>
             i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
 
+        // Get offset for centering an image (used for auto-scroll)
         const getOffsetForImage = (imageIndex) => {
             if (containerWidth === 0 || images.length === 0) return 0;
             
@@ -203,6 +204,20 @@ const SmoothAlternatingSlider1 = () => {
             return (containerWidth / 2) - (cumulativeWidth + imageWidth / 2);
         };
 
+        // Get offset for left-aligning an image (used for initial position and snapping)
+        const getOffsetForImageLeft = (imageIndex) => {
+            if (containerWidth === 0 || images.length === 0) return 0;
+            
+            let cumulativeWidth = 0;
+            for (let i = 0; i < imageIndex; i++) {
+                cumulativeWidth += getItemWidthLocal(i) + GAP;
+            }
+            
+            // Position from left edge - first image starts at 0 (no white space)
+            // The containerWidth already accounts for padding, so 0 means start at visible left edge
+            return -cumulativeWidth;
+        };
+
         const findNearestImageIndex = (currentOffset) => {
             if (images.length === 0 || originalImages.length === 0) return 0;
             
@@ -211,7 +226,7 @@ const SmoothAlternatingSlider1 = () => {
             
             // Only check original images (not the triplicated ones)
             for (let i = 0; i < originalImages.length; i++) {
-                const targetOffset = getOffsetForImage(i);
+                const targetOffset = getOffsetForImageLeft(i);
                 const distance = Math.abs(currentOffset - targetOffset);
                 
                 if (distance < minDistance) {
@@ -223,38 +238,38 @@ const SmoothAlternatingSlider1 = () => {
             return nearestIndex;
         };
 
-        return { getOffsetForImage, findNearestImageIndex };
+        return { getOffsetForImage, getOffsetForImageLeft, findNearestImageIndex };
     }, [containerWidth, images.length, originalImages.length, ITEM_WIDTH_BIG, ITEM_WIDTH_SMALL, GAP]);
 
     /** ---------------- OFFSET ---------------- */
-    // Initial offset: center one image in view
+    // Initial offset: start from left
     const [offset, setOffset] = useState(0);
     const currentImageIndex = useRef(0);
 
     useEffect(() => {
-        if (containerWidth > 0 && images.length > 0 && totalWidth > 0 && getOffsetForImage) {
-            // Center the first image in the container
-            const initialOffset = getOffsetForImage(0);
+        if (containerWidth > 0 && images.length > 0 && totalWidth > 0 && getOffsetForImageLeft) {
+            // Start from the left with the first image
+            const initialOffset = getOffsetForImageLeft(0);
             setOffset(initialOffset);
             currentImageIndex.current = 0;
         }
-    }, [totalWidth, containerWidth, images.length, getOffsetForImage]);
+    }, [totalWidth, containerWidth, images.length, getOffsetForImageLeft]);
 
     /** ---------------- AUTO SCROLL ---------------- */
-    const speed = useRef(0.5); // Constant speed in pixels per frame
+    const speed = useRef(0.3); // Slower constant speed in pixels per frame
     const isHovered = useRef(false);
     const isDragging = useRef(false);
     const rafRef = useRef(null);
     const targetImageIndex = useRef(0);
 
     useEffect(() => {
-        if (images.length === 0 || containerWidth === 0 || !getOffsetForImage || originalImages.length === 0) return;
+        if (images.length === 0 || containerWidth === 0 || !getOffsetForImageLeft || originalImages.length === 0) return;
 
         const animate = () => {
             if (!isHovered.current && !isDragging.current) {
                 setOffset((prev) => {
-                    // Get current target offset
-                    const targetOffset = getOffsetForImage(targetImageIndex.current);
+                    // Get current target offset (using left alignment)
+                    const targetOffset = getOffsetForImageLeft(targetImageIndex.current);
                     
                     // Calculate distance to target
                     const diff = targetOffset - prev;
@@ -262,16 +277,16 @@ const SmoothAlternatingSlider1 = () => {
                     // If very close to target, move to next image
                     if (Math.abs(diff) < 2) {
                         targetImageIndex.current = (targetImageIndex.current + 1) % originalImages.length;
-                        const nextTargetOffset = getOffsetForImage(targetImageIndex.current);
+                        const nextTargetOffset = getOffsetForImageLeft(targetImageIndex.current);
                         const nextDiff = nextTargetOffset - prev;
                         
-                        // Move towards next target at constant speed
+                        // Move towards next target at constant speed (smooth easing)
                         const direction = nextDiff > 0 ? 1 : -1;
                         const step = speed.current * direction;
                         return prev + step;
                     }
                     
-                    // Move at constant speed towards current target
+                    // Move at constant speed towards current target with smooth easing
                     const direction = diff > 0 ? 1 : -1;
                     const step = speed.current * direction;
                     const newOffset = prev + step;
@@ -291,7 +306,7 @@ const SmoothAlternatingSlider1 = () => {
         targetImageIndex.current = 0;
         rafRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafRef.current);
-    }, [totalWidth, images.length, containerWidth, getOffsetForImage, originalImages.length]);
+    }, [totalWidth, images.length, containerWidth, getOffsetForImageLeft, originalImages.length]);
 
 
     useEffect(() => {
@@ -325,10 +340,14 @@ const SmoothAlternatingSlider1 = () => {
     const lastX = useRef(0);
     const lastTime = useRef(0);
     const momentumRef = useRef(null);
+    const dragTargetOffset = useRef(0); // For smooth drag interpolation
+    const wheelScrollAccumulator = useRef(0); // Accumulate wheel scroll delta
+    const wheelTargetIndex = useRef(0); // Target image index for wheel scroll
+    const wheelScrollRef = useRef(null); // Animation frame for smooth wheel scroll
 
     // Momentum animation after drag release
     useEffect(() => {
-        if (images.length === 0 || containerWidth === 0 || !findNearestImageIndex || !getOffsetForImage) return;
+        if (images.length === 0 || containerWidth === 0 || !findNearestImageIndex || !getOffsetForImageLeft) return;
 
         const animateMomentum = () => {
             if (isDragging.current) {
@@ -343,7 +362,7 @@ const SmoothAlternatingSlider1 = () => {
                     // Find nearest image and snap to it when velocity is low
                     if (Math.abs(velocity.current) < 2) {
                         const nearestIndex = findNearestImageIndex(next);
-                        const targetOffset = getOffsetForImage(nearestIndex);
+                        const targetOffset = getOffsetForImageLeft(nearestIndex);
                         const diff = targetOffset - next;
                         
                         // Snap if close enough
@@ -355,15 +374,27 @@ const SmoothAlternatingSlider1 = () => {
                     return next;
                 });
 
-                velocity.current *= 0.95; // Friction
+                velocity.current *= 0.92; // More friction for smoother deceleration
                 momentumRef.current = requestAnimationFrame(animateMomentum);
             } else {
-                // Snap to nearest image when momentum stops
+                // Smoothly snap to nearest image when momentum stops
                 setOffset((prev) => {
                     const nearestIndex = findNearestImageIndex(prev);
-                    return getOffsetForImage(nearestIndex);
+                    const targetOffset = getOffsetForImageLeft(nearestIndex);
+                    const diff = targetOffset - prev;
+                    
+                    // If very close, snap directly
+                    if (Math.abs(diff) < 1) {
+                        velocity.current = 0;
+                        return targetOffset;
+                    }
+                    
+                    // Smooth interpolation - continue animating until target is reached
+                    const step = diff * 0.15; // Smooth easing factor
+                    velocity.current = 0;
+                    momentumRef.current = requestAnimationFrame(animateMomentum);
+                    return prev + step;
                 });
-                velocity.current = 0;
             }
         };
 
@@ -374,7 +405,7 @@ const SmoothAlternatingSlider1 = () => {
                 cancelAnimationFrame(momentumRef.current);
             }
         };
-    }, [totalWidth, images.length, containerWidth, findNearestImageIndex, getOffsetForImage]);
+    }, [totalWidth, images.length, containerWidth, findNearestImageIndex, getOffsetForImageLeft]);
 
     useEffect(() => {
         const slider = sliderRef.current;
@@ -384,6 +415,7 @@ const SmoothAlternatingSlider1 = () => {
             isDragging.current = true;
             startX.current = x;
             startOffset.current = offset;
+            dragTargetOffset.current = offset; // Initialize smooth drag target
             lastX.current = x;
             lastTime.current = performance.now();
             velocity.current = 0;
@@ -410,8 +442,17 @@ const SmoothAlternatingSlider1 = () => {
             lastTime.current = currentTime;
 
             const deltaX = x - startX.current;
+            // Slow down drag significantly for smooth, controlled movement
+            const dragSensitivity = 0.25; // Reduced from 0.4 to 0.25 (75% slower)
+            
+            // Calculate target offset with sensitivity
+            dragTargetOffset.current = startOffset.current + (deltaX * dragSensitivity);
+            
+            // Apply smooth interpolation for even smoother dragging
             setOffset((prev) => {
-                return startOffset.current + deltaX;
+                const diff = dragTargetOffset.current - prev;
+                // Smooth interpolation factor (0.5 = 50% per frame = smooth and responsive)
+                return prev + diff * 0.5;
             });
         };
 
@@ -481,9 +522,29 @@ const SmoothAlternatingSlider1 = () => {
 
     useEffect(() => {
         if (!isDesktop) return;
+        if (images.length === 0 || containerWidth === 0 || !getOffsetForImageLeft || originalImages.length === 0) return;
 
         const container = containerRef.current;
         if (!container) return;
+
+        // Smooth wheel scroll animation function
+        const animateWheelScroll = () => {
+            setOffset((prev) => {
+                const targetOffset = getOffsetForImageLeft(wheelTargetIndex.current);
+                const diff = targetOffset - prev;
+                
+                // If very close, snap directly and stop animation
+                if (Math.abs(diff) < 1) {
+                    wheelScrollRef.current = null;
+                    return targetOffset;
+                }
+                
+                // Smooth interpolation (0.12 = slow and smooth)
+                const step = diff * 0.12;
+                wheelScrollRef.current = requestAnimationFrame(animateWheelScroll);
+                return prev + step;
+            });
+        };
 
         const onWheel = (e) => {
             if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
@@ -491,22 +552,41 @@ const SmoothAlternatingSlider1 = () => {
 
                 isHovered.current = true;
 
-                if (findNearestImageIndex && getOffsetForImage && originalImages.length > 0) {
-                    setOffset((prev) => {
-                        const currentIndex = findNearestImageIndex(prev);
-                        let nextIndex = currentIndex;
-                        
-                        // Determine direction
-                        if (e.deltaX > 0) {
-                            // Scroll right - go to previous image
-                            nextIndex = currentIndex > 0 ? currentIndex - 1 : originalImages.length - 1;
-                        } else {
-                            // Scroll left - go to next image
-                            nextIndex = (currentIndex + 1) % originalImages.length;
-                        }
-                        
-                        return getOffsetForImage(nextIndex);
-                    });
+                if (findNearestImageIndex && getOffsetForImageLeft && originalImages.length > 0) {
+                    // Accumulate scroll delta (slower response)
+                    wheelScrollAccumulator.current += e.deltaX * 0.25; // Slow down scroll sensitivity (reduced from 0.3)
+                    
+                    // Threshold to move to next/previous image (higher = slower scrolling)
+                    const scrollThreshold = 120; // Increased threshold for slower scrolling
+                    
+                    if (Math.abs(wheelScrollAccumulator.current) >= scrollThreshold) {
+                        setOffset((prev) => {
+                            const currentIndex = findNearestImageIndex(prev);
+                            let nextIndex = currentIndex;
+                            
+                            // Determine direction based on accumulated scroll
+                            if (wheelScrollAccumulator.current > 0) {
+                                // Scroll right - go to previous image
+                                nextIndex = currentIndex > 0 ? currentIndex - 1 : originalImages.length - 1;
+                            } else {
+                                // Scroll left - go to next image
+                                nextIndex = (currentIndex + 1) % originalImages.length;
+                            }
+                            
+                            // Reset accumulator
+                            wheelScrollAccumulator.current = 0;
+                            
+                            // Set target for smooth animation
+                            wheelTargetIndex.current = nextIndex;
+                            
+                            // Start smooth animation if not already running
+                            if (!wheelScrollRef.current) {
+                                wheelScrollRef.current = requestAnimationFrame(animateWheelScroll);
+                            }
+                            
+                            return prev; // Don't jump immediately, let animation handle it
+                        });
+                    }
                 }
             }
         };
@@ -515,8 +595,11 @@ const SmoothAlternatingSlider1 = () => {
 
         return () => {
             container.removeEventListener("wheel", onWheel);
+            if (wheelScrollRef.current) {
+                cancelAnimationFrame(wheelScrollRef.current);
+            }
         };
-    }, [totalWidth, isDesktop]);
+    }, [totalWidth, isDesktop, findNearestImageIndex, getOffsetForImageLeft, originalImages.length, images.length, containerWidth]);
 
 
     return (
@@ -569,7 +652,8 @@ const SmoothAlternatingSlider1 = () => {
                     willChange: "transform", // 🔥 smoother
                     px: 0, // Remove padding to allow precise positioning
                     pt: isXs ? "10px" : isSm ? "10px" : "10px",
-                    userSelect: "none", // Prevent image selection during drag
+                    margin: 0, // Ensure no margin creates white space
+                    userSelect: "none", // Prevent text selection during drag
                     WebkitUserSelect: "none",
                 }}
             >
