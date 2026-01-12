@@ -207,30 +207,30 @@ const ServicesStackSection = () => {
                   md: isLargeScreen
                     ? "80px"
                     : isXLScreen
-                    ? "70px"
-                    : isLGScreen
-                    ? "57px"
-                    : "50px",
+                      ? "70px"
+                      : isLGScreen
+                        ? "57px"
+                        : "50px",
                 },
                 paddingLeft: {
                   xs: 0,
                   md: isLargeScreen
                     ? "100px"
                     : isXLScreen
-                    ? "80px"
-                    : isLGScreen
-                    ? "67px"
-                    : "50px",
+                      ? "80px"
+                      : isLGScreen
+                        ? "67px"
+                        : "50px",
                 },
                 paddingRight: {
                   xs: 0,
                   md: isLargeScreen
                     ? "120px"
                     : isXLScreen
-                    ? "100px"
-                    : isLGScreen
-                    ? "80px"
-                    : "50px",
+                      ? "100px"
+                      : isLGScreen
+                        ? "80px"
+                        : "50px",
                 },
                 paddingBottom: { xs: 0, md: 0 },
                 gap: { xs: 4, md: 0 },
