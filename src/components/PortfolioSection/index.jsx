@@ -344,61 +344,66 @@ const PortfolioSection = () => {
                 sx={{
                     position: "relative",
                     backgroundColor: "#1D1D1B",
+                    color: "#fff",
                     px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 3 },
                     py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
                     fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "13px" },
                     borderRadius: "40px",
                     overflow: "hidden",
                     textTransform: "uppercase",
-                    cursor: "default",
+                    boxShadow: "none",
+
+                    /* keep text above background */
+                    "& > *": {
+                        position: "relative",
+                        zIndex: 2,
+                    },
+
+                    /* hover bg layer */
                     "&::before": {
                         content: '""',
                         position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "0%",
+                        inset: 0,
                         backgroundColor: "#CAF55E",
-                        transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-                        zIndex: 0,
-                    },
-                    "&:hover::before": {
-                        height: "100%",
-                    },
-                    "&:hover": { 
-                        color: "#1D1D1B",
+                        transform: "scaleY(0)",
+                        transformOrigin: "bottom",
+                        transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+                        zIndex: 1,
                     },
 
-                    // Animate text on hover
-                    "&:hover .btn-text-top": {
-                        transform: "translateY(-100%)",
+                    "&:hover": {
+                        color: "#1D1D1B",
+                        boxShadow: "none",
+
+                        "&::before": {
+                            transform: "scaleY(1)",
+                        },
+
+                        "& .btn-text-top": {
+                            transform: "translateY(-100%)",
+                        },
+
+                        "& .btn-text-bottom": {
+                            transform: "translateY(-100%)",
+                        },
                     },
-                    "&:hover .btn-text-bottom": {
-                        transform: "translateY(-100%)",
-                    },
+
                     "&:focus": { outline: "none" },
                     "&:focus-visible": { outline: "none", boxShadow: "none" },
                 }}
             >
-                {/* Container for animated text */}
                 <Box
                     sx={{
                         position: "relative",
                         overflow: "hidden",
                         display: "inline-block",
-                        height: "auto",
-                        width: "100%",
-                        zIndex: 1,
                     }}
                 >
                     <Box
                         className="btn-text-top"
                         sx={{
                             display: "block",
-                            color: "white",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.4s ease",
-                            position: "relative",
-                            zIndex: 1,
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
                         }}
                     >
                         Let's Work Together
@@ -410,10 +415,7 @@ const PortfolioSection = () => {
                             position: "absolute",
                             left: 0,
                             top: "100%",
-                            display: "block",
-                            color: "white",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.4s ease",
-                            zIndex: 1,
+                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
                         }}
                     >
                         Let's Work Together

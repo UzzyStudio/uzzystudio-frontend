@@ -1,13 +1,85 @@
 import React, { useEffect, useRef } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { client } from "../../sanityClient";
 import { useState } from "react";
 import bgMover from "../../assets/web-mover.svg";
+import { motion } from "framer-motion";
 
+const ease = [0.22, 1, 0.36, 1];
 
-gsap.registerPlugin(ScrollTrigger);
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: "blur(6px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.3, ease },
+  },
+};
+
+const fadeDown = {
+  hidden: {
+    opacity: 0,
+    y: -20,
+    filter: "blur(6px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.3, ease },
+  },
+};
+
+const fadeLeft = {
+  hidden: {
+    opacity: 0,
+    x: -20,
+    filter: "blur(6px)",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.3, ease },
+  },
+};
+
+const fadeRight = {
+  hidden: {
+    opacity: 0,
+    x: 20,
+    filter: "blur(6px)",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.3, ease },
+  },
+};
+
+const headingAnim = {
+  hidden: {
+    opacity: 0,
+    scale: 0.92,
+    y: 15,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.8, ease },
+  },
+};
+
 
 const MotionSection = () => {
   const isLargeScreen = useMediaQuery("(min-width: 2560px)");
@@ -24,11 +96,9 @@ const MotionSection = () => {
   }, []);
 
   const sectionRef = useRef(null);
-  const topRef = useRef(null);
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-  const headingRef = useRef(null);
-  const bottomRef = useRef(null);
+
+
+
   const bgRef = useRef(null);
 
   const handleScrollToServices = () => {
@@ -99,293 +169,252 @@ const MotionSection = () => {
     };
   }, []);
 
-
-
-
-
-
-
-
-  useEffect(() => {
-    if (!content) return; // Wait for content
-
-    const ctx = gsap.context(() => {
-      const smoothEase = "cubic-bezier(0.22, 1, 0.36, 1)";
-
-      const animProps = {
-        duration: 1.3,
-        ease: smoothEase,
-        opacity: 0,
-        willChange: "transform, opacity",
-      };
-
-      gsap.from(topRef.current, {
-        y: -20,
-        filter: "blur(6px)",
-        ...animProps,
-        scrollTrigger: {
-          trigger: topRef.current,
-          start: "top 90%",
-        },
-      });
-
-      gsap.from(leftRef.current, {
-        x: -20,
-        filter: "blur(6px)",
-        ...animProps,
-        scrollTrigger: {
-          trigger: leftRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(rightRef.current, {
-        x: 20,
-        filter: "blur(6px)",
-        ...animProps,
-        scrollTrigger: {
-          trigger: rightRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(headingRef.current, {
-        scale: 0.92,
-        y: 15,
-        filter: "blur(10px)",
-        duration: 1.8,
-        ease: smoothEase,
-        opacity: 0,
-        willChange: "transform, opacity",
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(bottomRef.current, {
-        y: 20,
-        filter: "blur(6px)",
-        ...animProps,
-        scrollTrigger: {
-          trigger: bottomRef.current,
-          start: "top 90%",
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [content]); // <-- run GSAP when content loads
-
   return (
     <Box padding={{ xs: "20px", sm: "30px", md: "40px" }} >
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-    <Box
-      ref={sectionRef}
-      onClick={handleScrollToServices}
-      data-clickable="true"
-      borderRadius=".5rem"
-      sx={{
-        backgroundColor: "#1D1D1B",
-        color: "#CAF55E",
-        textAlign: "center",
-        position: "relative",
-        padding: { xs: "20px 16px", sm: "10px 24px", md: 0 },
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        maxWidth: "calc(2250px + 42px)",
-        margin: "0 auto",
-        minHeight: "70vh",
-        overflow: "hidden",
-        isolation: "isolate",
-        contain: "layout style paint",
-        zIndex: 1,
-        clipPath: "inset(0)",
-        cursor: "pointer",
-        transition: "opacity 0.3s ease",
-        "&:hover": {
-          opacity: 0.95,
-        },
-      }}
-    >
-      <Box
-        component="img"
-        ref={bgRef}
-        src={bgMover}
-        alt=""
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: "450vw",    
-          height: "auto",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-          maxWidth: "none",
-          zIndex: 0,
-          willChange: "transform",
-          clipPath: "inset(0)",
-          contain: "layout style paint",
-        }}
-      />
-
-
       <Box
         sx={{
           width: "100%",
-          maxWidth: "100%",
-          margin: "0 auto",
-          paddingTop: {
-            xs: "30px",
-            sm: "40px",
-            md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
-          },
-          paddingLeft: {
-            xs: "16px",
-            sm: "24px",
-            md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
-          },
-          paddingRight: {
-            xs: "16px",
-            sm: "24px",
-            md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
-          },
-          paddingBottom: {
-            xs: "30px",
-            sm: "40px",
-            md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
-          },
-          boxSizing: "border-box",
-          position: "relative",
-          zIndex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {/* Row 1 - Top Small Text */}
         <Box
-          ref={topRef}
+          ref={sectionRef}
+          onClick={handleScrollToServices}
+          data-clickable="true"
+          borderRadius=".5rem"
           sx={{
-            color: "#fff",
-            fontSize: { 
-              xs: "10px",
-              sm: "12px",
-              md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "19px" : "16px" 
-            },
-            fontFamily: "Inter Tight, sans-serif",
-            willChange: "transform, opacity",
+            backgroundColor: "#1D1D1B",
+            color: "#CAF55E",
             textAlign: "center",
-            whiteSpace: "pre",
-            overflow: "visible",
-          }}
-        >
-          {content?.topText}
-        </Box>
-
-        {/* Row 2 - Left, Center, Right */}
-        <Box
-          sx={{
+            position: "relative",
+            padding: { xs: "20px 16px", sm: "10px 24px", md: 0 },
             display: "flex",
-            flexDirection: "row", // Keep row layout on all screens
-            justifyContent: "space-around",
+            justifyContent: "center",
             alignItems: "center",
-            margin: { 
-              xs: "20px 0",
-              sm: "30px 0",
-              md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0" 
+            width: "100%",
+            maxWidth: "calc(2250px + 42px)",
+            margin: "0 auto",
+            minHeight: "70vh",
+            overflow: "hidden",
+            isolation: "isolate",
+            contain: "layout style paint",
+            zIndex: 1,
+            clipPath: "inset(0)",
+            cursor: "pointer",
+            transition: "opacity 0.3s ease",
+            "&:hover": {
+              opacity: 0.95,
             },
-            gap: 0,
           }}
         >
-          {/* LEFT TEXT */}
-          <Box sx={{ flex: 0.5, textAlign: { xs: "center", md: "left" } }}>
-            <Typography
-              ref={leftRef}
+          <Box
+            component="img"
+            ref={bgRef}
+            src={bgMover}
+            alt=""
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: "450vw",
+              height: "auto",
+              transform: "translate(-50%, -50%)",
+              pointerEvents: "none",
+              maxWidth: "none",
+              zIndex: 0,
+              willChange: "transform",
+              clipPath: "inset(0)",
+              contain: "layout style paint",
+            }}
+          />
+
+
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: "100%",
+              margin: "0 auto",
+              paddingTop: {
+                xs: "30px",
+                sm: "40px",
+                md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
+              },
+              paddingLeft: {
+                xs: "16px",
+                sm: "24px",
+                md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
+              },
+              paddingRight: {
+                xs: "16px",
+                sm: "24px",
+                md: isLargeScreen ? "130px" : isXLScreen ? "110px" : isLGScreen ? "80px" : "50px",
+              },
+              paddingBottom: {
+                xs: "30px",
+                sm: "40px",
+                md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "75px" : "60px",
+              },
+              boxSizing: "border-box",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            {/* Row 1 - Top Small Text */}
+            {content && (
+              <motion.div
+                variants={fadeDown}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <Box
+                  sx={{
+                    color: "#fff",
+                    fontSize: {
+                      xs: "10px",
+                      sm: "12px",
+                      md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "19px" : "16px"
+                    },
+                    fontFamily: "Inter Tight, sans-serif",
+                    willChange: "transform, opacity",
+                    textAlign: "center",
+                    whiteSpace: "pre",
+                    overflow: "visible",
+                  }}
+                >
+                  {content?.topText}
+                </Box>
+              </motion.div>
+            )}
+
+            {/* Row 2 - Left, Center, Right */}
+            <Box
               sx={{
-                color: "#fff",
-                fontSize: { 
-                  xs: "9px",
-                  sm: "11px",
-                  md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
+                display: "flex",
+                flexDirection: "row", // Keep row layout on all screens
+                justifyContent: "space-around",
+                alignItems: "center",
+                margin: {
+                  xs: "20px 0",
+                  sm: "30px 0",
+                  md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0"
                 },
-                fontFamily: "Inter Tight, sans-serif",
-                willChange: "transform, opacity",
+                gap: 0,
               }}
             >
-              {content?.leftText}
-            </Typography>
-          </Box>
+              {/* LEFT TEXT */}
+              <Box sx={{ flex: 0.5, textAlign: { xs: "center", md: "left" } }}>
+                {content && (
+                  <motion.div
+                    variants={fadeLeft}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.25 }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#fff",
+                        fontSize: {
+                          xs: "9px",
+                          sm: "11px",
+                          md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px"
+                        },
+                        fontFamily: "Inter Tight, sans-serif",
+                        willChange: "transform, opacity",
+                      }}
+                    >
+                      {content?.leftText}
+                    </Typography>
+                  </motion.div>
+                )}
+              </Box>
 
-          {/* CENTER HEADING */}
-          <Box sx={{ flex: 2 }}>
-            <Typography
-              ref={headingRef}
-              sx={{
-                fontSize: {
-                  xs: "28px",
-                  sm: "36px",
-                  md: isLargeScreen ? "150px" : isXLScreen ? "130px" : isLGScreen ? "110px" : "84px",
-                },
-                fontWeight: 800,
-                lineHeight: 1.05,
-                letterSpacing: "-0.02em",
-                color: "#CAF55E",
-                textAlign: "center",
-                fontFamily: "Inter Tight, sans-serif",
-                whiteSpace: "pre-line", // 👈 KEY LINE
-                willChange: "transform, opacity",
-              }}
-            >
-              {content?.centerHeading}
-            </Typography>
+              {/* CENTER HEADING */}
+              <Box sx={{ flex: 2 }}>
+                <motion.div
+                  variants={headingAnim}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "28px",
+                        sm: "36px",
+                        md: isLargeScreen ? "150px" : isXLScreen ? "130px" : isLGScreen ? "110px" : "84px",
+                      },
+                      fontWeight: 800,
+                      lineHeight: 1.05,
+                      letterSpacing: "-0.02em",
+                      color: "#CAF55E",
+                      textAlign: "center",
+                      fontFamily: "Inter Tight, sans-serif",
+                      whiteSpace: "pre-line", // 👈 KEY LINE
+                      willChange: "transform, opacity",
+                    }}
+                  >
+                    {content?.centerHeading}
+                  </Typography>
+                </motion.div>
+              </Box>
 
-          </Box>
+              {/* RIGHT TEXT */}
+              <Box sx={{ flex: 0.5, textAlign: { xs: "center", md: "right" } }}>
+                {content && (
+                  <motion.div
+                    variants={fadeRight}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.25 }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#fff",
+                        fontSize: {
+                          xs: "9px",
+                          sm: "11px",
+                          md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px"
+                        },
+                        fontFamily: "Inter Tight, sans-serif",
+                        willChange: "transform, opacity",
+                      }}
+                    >
+                      {content?.rightText}
+                    </Typography>
+                  </motion.div>
+                )}
+              </Box>
+            </Box>
 
-          {/* RIGHT TEXT */}
-          <Box sx={{ flex: 0.5, textAlign: { xs: "center", md: "right" } }}>
-            <Typography
-              ref={rightRef}
-              sx={{
-                color: "#fff",
-                fontSize: { 
-                  xs: "9px",
-                  sm: "11px",
-                  md: isLargeScreen ? "26px" : isXLScreen ? "22px" : isLGScreen ? "18px" : "15px" 
-                },
-                fontFamily: "Inter Tight, sans-serif",
-                willChange: "transform, opacity",
-              }}
-            >
-              {content?.rightText}
-            </Typography>
+            {/* Row 3 - Bottom Small Text */}
+            {content && (
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    fontSize: {
+                      xs: "11px",
+                      sm: "13px",
+                      md: isLargeScreen ? "28px" : isXLScreen ? "24px" : isLGScreen ? "21px" : "18px"
+                    },
+                    fontFamily: "Inter Tight, sans-serif",
+                  }}
+                >
+                  {content?.bottomText}
+                </Typography>
+              </motion.div>
+            )}
           </Box>
         </Box>
-
-        {/* Row 3 - Bottom Small Text */}
-        <Typography
-          ref={bottomRef}
-          sx={{
-            color: "#fff",
-            fontSize: { 
-              xs: "11px",
-              sm: "13px",
-              md: isLargeScreen ? "28px" : isXLScreen ? "24px" : isLGScreen ? "21px" : "18px" 
-            },
-            fontFamily: "Inter Tight, sans-serif",
-          }}
-        >
-          {content?.bottomText}
-        </Typography>
       </Box>
-    </Box>
-    </Box>
     </Box>
   );
 };
