@@ -198,7 +198,8 @@ const ServicesStackSection = () => {
                 width: "100%",
                 minWidth: { md: isLGScreen ? "1440px" : "100%" },
                 maxWidth: "134rem",
-                height: "100%",
+                // height: "60vh",
+                height: { xs: "auto", md: "100%" },
                 display: "flex",
                 justifyContent: { xs: "flex-start", md: "space-between" },
                 flexDirection: { xs: "column", md: "row" },
@@ -237,8 +238,13 @@ const ServicesStackSection = () => {
                     : "50px",
                 },
                 paddingBottom: { xs: "30px", sm: "40px", md: 0 },
-                gap: { xs: 3, sm: 4, md: 0 },
-                margin: "0 auto",
+                gap: { xs: 2, sm: 4, md: 0 },
+                margin: {
+                  xs: "15px 0px 15px 0px",
+                  // sm: "10px auto",
+                  sm: "25px 0px 25px 0px",
+                  md: "0 auto",
+                },
                 boxSizing: "border-box",
               }}
             >
@@ -305,9 +311,21 @@ const ServicesStackSection = () => {
                   <Box
                     onClick={handleScrollToContact}
                     sx={{
-                      px: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "18px" },
-                      pt: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "18px" },
-                      pb: { xs: "10px", sm: "12px", md: isLargeScreen ? "20px" : "12px" },
+                      px: {
+                        xs: "10px",
+                        sm: "12px",
+                        md: isLargeScreen ? "27px" : "18px",
+                      },
+                      pt: {
+                        xs: "10px",
+                        sm: "12px",
+                        md: isLargeScreen ? "27px" : "18px",
+                      },
+                      pb: {
+                        xs: "10px",
+                        sm: "12px",
+                        md: isLargeScreen ? "20px" : "12px",
+                      },
                       fontSize: {
                         xs: "10px",
                         sm: "11px",
@@ -403,7 +421,7 @@ const ServicesStackSection = () => {
                   width: { xs: "100%", sm: "100%", md: "auto" },
                   flexShrink: 0,
                   flexDirection: "column",
-                  gap: { xs: 0.75, sm: 1, md: 1 },
+                  gap: { xs: 0, sm: 1, md: 1 },
                   alignItems: "flex-start",
                   justifyContent: { xs: "flex-start", md: "center" },
                   height: { xs: "auto", md: "100%" },
@@ -449,6 +467,8 @@ const ServicesStackSection = () => {
                   position: "relative",
                   zIndex: { xs: 1, md: 1 },
                   order: { xs: 3, md: 0 },
+                  // marginBottom: { xs: "80px", md: 0 },
+                  // paddingBottom: { xs: "20px", md: 0 },
                 }}
               >
                 <Box
@@ -461,6 +481,7 @@ const ServicesStackSection = () => {
                     height: { xs: "250px", sm: "350px", md: "auto" },
                     borderRadius: "8px",
                     objectFit: "cover",
+                    // paddingBottom: { xs: "20px", md: 0 },
                   }}
                 />
               </Box>
