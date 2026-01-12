@@ -270,10 +270,10 @@ export default function FooterSection() {
                                     "&.Mui-focusVisible": { boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
                                 }}
                             >
-                                <Box 
+                                <Box
                                     className="button-text-wrapper"
-                                    sx={{ 
-                                        position: "relative", 
+                                    sx={{
+                                        position: "relative",
                                         zIndex: 2,
                                         color: "#1D1D1B",
                                         transition: "color 0.4s ease",

@@ -9,6 +9,7 @@ import {
     Chip,
     useMediaQuery,
 } from "@mui/material";
+import { client, urlFor } from "../../sanityClient";
 import { useState } from "react";
 import CharacterContact from "../../assets/character-contact.svg";
 import RatingImg from "../../assets/rating.png";
@@ -17,6 +18,18 @@ import DribbbleLogo from "../../assets/dribble.svg";
 import InstagramLogo from "../../assets/dribble.svg";
 
 export default function ContactSection() {
+
+    const [formData, setFormData] = useState({
+        nameCompany: '',
+        email: '',
+        services: [],
+        budget: '',
+        message: '',
+    });
+
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState(false);
+
     const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
     const wiggle = {
@@ -34,12 +47,16 @@ export default function ContactSection() {
 
 
     const toggleService = (service) => {
-        if (selectedServices.includes(service)) {
-            setSelectedServices(selectedServices.filter(s => s !== service));
+        let updatedServices;
+        if (formData.services.includes(service)) {
+            updatedServices = formData.services.filter(s => s !== service);
         } else {
-            setSelectedServices([...selectedServices, service]);
+            updatedServices = [...formData.services, service];
         }
+        setFormData({ ...formData, services: updatedServices });
+        setSelectedServices(updatedServices); // optional for styling
     };
+
 
     const services = [
         "Logo Design",
@@ -58,6 +75,30 @@ export default function ContactSection() {
         "$3,000 - $5,000",
         "$5,000+",
     ];
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const doc = {
+            _type: 'contactSubmission',
+            nameCompany: formData.nameCompany,
+            email: formData.email,
+            services: formData.services,
+            budget: formData.budget,
+            message: formData.message,
+            submittedAt: new Date().toISOString(),
+        }
+
+        try {
+            await client.create(doc)
+            setSubmitted(true)
+            setFormData({ nameCompany: '', email: '', services: [], budget: '', message: '' })
+        } catch (err) {
+            console.error('Sanity submit error FULL:', err);
+            alert(err.message);
+            setError(true);
+        }
+    }
 
     return (
         <Box
@@ -225,6 +266,9 @@ export default function ContactSection() {
                                         placeholder="Enter your name & company"
                                         fullWidth
                                         variant="outlined"
+                                        value={formData.nameCompany}
+                                        onChange={(e) => setFormData({ ...formData, nameCompany: e.target.value })}
+
                                         inputProps={{
                                             style: {
                                                 fontSize: "14px",
@@ -263,6 +307,8 @@ export default function ContactSection() {
                                         placeholder="Enter your email"
                                         fullWidth
                                         variant="outlined"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         InputProps={{
                                             sx: {
                                                 fontSize: "13px",
@@ -347,7 +393,10 @@ export default function ContactSection() {
                                             <Chip
                                                 key={item}
                                                 label={item}
-                                                onClick={() => setSelectedBudget(isSelected ? null : item)}
+                                                onClick={() => {
+                                                    setFormData({ ...formData, budget: item });
+                                                    setSelectedBudget(item); // for styling
+                                                }}
                                                 sx={{
                                                     ...wiggle, // add keyframes
 
@@ -387,7 +436,8 @@ export default function ContactSection() {
                                 <TextField
                                     fullWidth
                                     placeholder="Briefly describe your project"
-
+                                    value={formData.message}
+                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     variant="standard"
                                     InputProps={{ disableUnderline: true }}
                                     sx={{
@@ -409,7 +459,7 @@ export default function ContactSection() {
                             {/* SUBMIT BUTTON */}
                             <Box sx={{ mt: 4 }}>
                                 <Button
-
+                                    onClick={handleSubmit}
                                     variant="contained"
                                     sx={{
                                         py: { xs: 1.3, md: isLargeScreen ? 2.4 : 1.6 },
@@ -446,10 +496,10 @@ export default function ContactSection() {
                                         },
                                     }}
                                 >
-                                    <Box 
+                                    <Box
                                         className="button-text-wrapper"
-                                        sx={{ 
-                                            position: "relative", 
+                                        sx={{
+                                            position: "relative",
                                             zIndex: 2,
                                             color: "white",
                                             transition: "color 0.4s ease",
@@ -458,10 +508,19 @@ export default function ContactSection() {
                                         Submit
                                     </Box>
                                 </Button>
+                                {submitted && (
+                                    <Typography sx={{ mt: 1, color: 'green' }}>
+                                        Your query has been submitted!
+                                    </Typography>
+                                )}
+                                {error && (
+                                    <Typography sx={{ mt: 1, color: 'red' }}>
+                                        Something went wrong. Please try again.
+                                    </Typography>
+                                )}
                             </Box>
                         </Box>
                     </Grid>
-
                 </Grid >
             </Box >
         </Box >
