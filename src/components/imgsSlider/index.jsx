@@ -135,57 +135,57 @@ const SmoothAlternatingSlider1 = () => {
   // Simplified: 2.6*full + 3*gap = containerWidth
   const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
 
-  const calculateItemWidths = () => {
-    // Larger square is always 442px
-    const BIG_SQUARE_SIZE = 442;
-    // Smaller square is 85% of larger square
-    const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
-
-    if (containerWidth === 0 || containerWidth < 200) {
-      // Fallback to original sizes until container width is known
-      return {
-        big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
-        small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
-        partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
-      };
-    }
-
-    // const availableWidth = containerWidth;
-    // Calculate partial width for layout positioning
-    const partialWidth = BIG_SQUARE_SIZE * 0.3;
-
-    return {
-      big: BIG_SQUARE_SIZE,
-      small: SMALL_SQUARE_SIZE,
-      partial: Math.floor(partialWidth),
-    };
-  };
-
   // const calculateItemWidths = () => {
-  //   if (isXs) {
-  //     return {
-  //       big: 300,     // mobile large square
-  //       small: 240,    // mobile small square
-  //       partial: 180,  // mobile partial peek
-  //     };
-  //   } else if (isSm) {
-  //     return {
-  //       big: 250,
-  //       small: 200,
-  //       partial: 75,
-  //     };
-  //   } else {
-  //     const BIG_SQUARE_SIZE = 442;
-  //     const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
-  //     const partialWidth = Math.floor(BIG_SQUARE_SIZE * 0.3);
+  //   // Larger square is always 442px
+  //   const BIG_SQUARE_SIZE = 442;
+  //   // Smaller square is 85% of larger square
+  //   const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
 
+  //   if (containerWidth === 0 || containerWidth < 200) {
+  //     // Fallback to original sizes until container width is known
   //     return {
-  //       big: BIG_SQUARE_SIZE,
-  //       small: SMALL_SQUARE_SIZE,
-  //       partial: partialWidth,
+  //       big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
+  //       small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
+  //       partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
   //     };
   //   }
+
+  //   // const availableWidth = containerWidth;
+  //   // Calculate partial width for layout positioning
+  //   const partialWidth = BIG_SQUARE_SIZE * 0.3;
+
+  //   return {
+  //     big: BIG_SQUARE_SIZE,
+  //     small: SMALL_SQUARE_SIZE,
+  //     partial: Math.floor(partialWidth),
+  //   };
   // };
+
+  const calculateItemWidths = () => {
+    if (isXs) {
+      return {
+        big: 300,     // mobile large square
+        small: 240,    // mobile small square
+        partial: 180,  // mobile partial peek
+      };
+    } else if (isSm) {
+      return {
+        big: 250,
+        small: 200,
+        partial: 75,
+      };
+    } else {
+      const BIG_SQUARE_SIZE = 442;
+      const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+      const partialWidth = Math.floor(BIG_SQUARE_SIZE * 0.3);
+
+      return {
+        big: BIG_SQUARE_SIZE,
+        small: SMALL_SQUARE_SIZE,
+        partial: partialWidth,
+      };
+    }
+  };
 
   const {
     big: ITEM_WIDTH_BIG,
