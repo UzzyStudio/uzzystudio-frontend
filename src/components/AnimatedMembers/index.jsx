@@ -9,6 +9,7 @@ import {
 import { client, urlFor } from "../../sanityClient";
 
 export default function AnimatedMembers() {
+
   const [data, setData] = useState(null);
 
   // 🔹 Sanity fetch
@@ -28,6 +29,7 @@ export default function AnimatedMembers() {
 
   // 🔹 Responsive
   const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const resize = () => setWindowWidth(window.innerWidth);
@@ -37,6 +39,8 @@ export default function AnimatedMembers() {
 
   const isMobile = windowWidth <= 658;
   const isTablet = windowWidth > 768 && windowWidth <= 1024;
+  const isTightMobile = windowWidth >= 350 && windowWidth <= 460;
+
 
   // 🔹 Scroll
   const containerRef = useRef(null);
@@ -91,19 +95,19 @@ export default function AnimatedMembers() {
           fontSize: isMobile
             ? "30px"
             : isTablet
-            ? "48px"
-            : isLargeScreen
-            ? "112px"
-            : "75px",
+              ? "48px"
+              : isLargeScreen
+                ? "112px"
+                : "75px",
           fontWeight: 700,
           textAlign: isMobile ? "center" : "left",
           lineHeight: isMobile
             ? "40px"
             : isTablet
-            ? "52px"
-            : isLargeScreen
-            ? "120px"
-            : "80px",
+              ? "52px"
+              : isLargeScreen
+                ? "120px"
+                : "80px",
           fontFamily: "'Inter Tight', sans-serif",
           color: "#121314",
           letterSpacing: "-2px",
@@ -111,73 +115,84 @@ export default function AnimatedMembers() {
       >
         {data?.lineOne} <br />
         {data?.lineTwo} <br />
-        {/* LEFT WORD */}
-        <motion.span
-          style={{
-            display: "inline-block",
-            marginRight: "6px",
-            x: wordLeftX,
-            letterSpacing: "-2px",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: isTightMobile ? "column" : "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isTightMobile ? "16px" : "0",
           }}
         >
-          {data?.wordBeforeImages}
-        </motion.span>
-        {/* IMAGES */}
-        <span
-          style={{
-            position: "relative",
-            width: "280px",
-            height: "70px",
-            display: "inline-block",
-          }}
-        >
-          {data?.memberImages?.map((img, i) => {
-            const center = (data.memberImages.length - 1) / 2;
-            const direction = i - center;
 
-            return (
-              <motion.img
-                key={i}
-                src={urlFor(img).width(120).url()}
-                style={{
-                  width: isMobile
-                    ? 40
-                    : isTablet
-                    ? 45
-                    : isLargeScreen
-                    ? 102
-                    : 68,
-                  height: isMobile
-                    ? 40
-                    : isTablet
-                    ? 45
-                    : isLargeScreen
-                    ? 102
-                    : 68,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  position: "absolute",
-                  left: "50%",
-                  top: "50%",
-                  y: "-50%",
-                  translateX: "-50%",
-                  x: direction * spread * progress,
-                }}
-              />
-            );
-          })}
-        </span>
-        {/* RIGHT WORD */}
-        <motion.span
-          style={{
-            display: "inline-block",
-            marginLeft: "6px",
-            letterSpacing: "-2px",
-            x: wordRightX,
-          }}
-        >
-          {data?.wordAfterImages}
-        </motion.span>
+          {/* LEFT WORD */}
+          <motion.span
+            style={{
+              display: "inline-block",
+              marginRight: "6px",
+              x: wordLeftX,
+              letterSpacing: "-2px",
+            }}
+          >
+            {data?.wordBeforeImages}
+          </motion.span>
+          {/* IMAGES */}
+          <span
+            style={{
+              position: "relative",
+              width: "280px",
+              height: "70px",
+              display: "inline-block",
+            }}
+          >
+            {data?.memberImages?.map((img, i) => {
+              const center = (data.memberImages.length - 1) / 2;
+              const direction = i - center;
+
+              return (
+                <motion.img
+                  key={i}
+                  src={urlFor(img).width(120).url()}
+                  style={{
+                    width: isMobile
+                      ? 40
+                      : isTablet
+                        ? 45
+                        : isLargeScreen
+                          ? 102
+                          : 68,
+                    height: isMobile
+                      ? 40
+                      : isTablet
+                        ? 45
+                        : isLargeScreen
+                          ? 102
+                          : 68,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    y: "-50%",
+                    translateX: "-50%",
+                    x: direction * spread * progress,
+                  }}
+                />
+              );
+            })}
+          </span>
+          {/* RIGHT WORD */}
+          <motion.span
+            style={{
+              display: "inline-block",
+              marginLeft: "6px",
+              letterSpacing: "-2px",
+              x: wordRightX,
+            }}
+          >
+            {data?.wordAfterImages}
+          </motion.span>
+        </Box>
       </Typography>
     </Box>
   );
