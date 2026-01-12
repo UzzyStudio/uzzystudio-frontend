@@ -135,30 +135,56 @@ const SmoothAlternatingSlider1 = () => {
   // Simplified: 2.6*full + 3*gap = containerWidth
   const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
 
-  const calculateItemWidths = () => {
-    // Larger square is always 442px
-    const BIG_SQUARE_SIZE = 442;
-    // Smaller square is 85% of larger square
-    const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+  // const calculateItemWidths = () => {
+  //   // Larger square is always 442px
+  //   const BIG_SQUARE_SIZE = 442;
+  //   // Smaller square is 85% of larger square
+  //   const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
 
-    if (containerWidth === 0 || containerWidth < 200) {
-      // Fallback to original sizes until container width is known
+  //   if (containerWidth === 0 || containerWidth < 200) {
+  //     // Fallback to original sizes until container width is known
+  //     return {
+  //       big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
+  //       small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
+  //       partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
+  //     };
+  //   }
+
+  //   // const availableWidth = containerWidth;
+  //   // Calculate partial width for layout positioning
+  //   const partialWidth = BIG_SQUARE_SIZE * 0.3;
+
+  //   return {
+  //     big: BIG_SQUARE_SIZE,
+  //     small: SMALL_SQUARE_SIZE,
+  //     partial: Math.floor(partialWidth),
+  //   };
+  // };
+
+  const calculateItemWidths = () => {
+    if (isXs) {
       return {
-        big: isXs ? 180 : isSm ? 250 : BIG_SQUARE_SIZE,
-        small: isXs ? 140 : isSm ? 200 : SMALL_SQUARE_SIZE,
-        partial: isXs ? 54 : isSm ? 75 : Math.floor(BIG_SQUARE_SIZE * 0.3),
+        big: 300,     // mobile large square
+        small: 240,    // mobile small square
+        partial: 180,  // mobile partial peek
+      };
+    } else if (isSm) {
+      return {
+        big: 250,
+        small: 200,
+        partial: 75,
+      };
+    } else {
+      const BIG_SQUARE_SIZE = 442;
+      const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+      const partialWidth = Math.floor(BIG_SQUARE_SIZE * 0.3);
+
+      return {
+        big: BIG_SQUARE_SIZE,
+        small: SMALL_SQUARE_SIZE,
+        partial: partialWidth,
       };
     }
-
-    // const availableWidth = containerWidth;
-    // Calculate partial width for layout positioning
-    const partialWidth = BIG_SQUARE_SIZE * 0.3;
-
-    return {
-      big: BIG_SQUARE_SIZE,
-      small: SMALL_SQUARE_SIZE,
-      partial: Math.floor(partialWidth),
-    };
   };
 
   const {
@@ -459,11 +485,12 @@ const SmoothAlternatingSlider1 = () => {
         width: "100%",
         maxWidth: isLargeScreen ? "100%" : "1600px",
         margin: "auto",
-        pb: "120px",
+        pb: isXs ? "100px" : isSm ? "60px" : "120px",
+
         px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
         position: "relative",
         overflow: "hidden",
-        height: isXs ? 200 : isSm ? 200 : isLargeScreen ? 645 : 460,
+        height: isXs ? 300 : isSm ? 200 : isLargeScreen ? 645 : 460,
         cursor: "none", // 👈 hide default cursor
         userSelect: "none", // Prevent text selection during drag
         WebkitUserSelect: "none",
@@ -475,9 +502,9 @@ const SmoothAlternatingSlider1 = () => {
         src={Smiley}
         sx={{
           position: "absolute",
-          right: isXs ? 20 : isSm ? 40 : isLargeScreen ? 120 : 140,
+          right: isXs ? 30 : isSm ? 40 : isLargeScreen ? 120 : 140,
           bottom: isXs ? 20 : isSm ? 20 : -10,
-          width: isXs ? 80 : isSm ? 120 : isLargeScreen ? 270 : 180,
+          width: isXs ? 100 : isSm ? 120 : isLargeScreen ? 270 : 180,
           zIndex: 0,
         }}
       />

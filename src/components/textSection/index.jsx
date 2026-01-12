@@ -90,7 +90,15 @@ const CreativeTextSection = () => {
     const INDENT_SCALE = isMobile ? 0.3 : isTablet ? 0.6 : 1;
 
     return (
-        <Box id="vision" sx={{ width: "100%", display: "flex", flexDirection: "column", marginTop: "80px" }}>
+        <Box
+            id="vision"
+            sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                marginTop: isMobile ? "20px" : isTablet ? "40px" : "80px", // 👈 responsive marginTop
+            }}
+        >
             <Box
                 ref={containerRef}
                 sx={{
@@ -115,18 +123,18 @@ const CreativeTextSection = () => {
                 <Doodle
                     src={ZigZagDoodle}
                     sx={{
-                        top: isMobile ? "28%" : isTablet ? "35%" : isLargeScreen ? "55%" : isBigScreen ? "55%" : "53.9%",
-                        left: isMobile ? "20%" : isTablet ? "26%" : isLargeScreen ? "49%" : isBigScreen ? "49%" : "49%",
-                        width: isMobile ? "220px" : isTablet ? "380px" : isLargeScreen ? "945px" : isBigScreen ? "630px" : "498px",
+                        top: isMobile ? "50%" : isTablet ? "35%" : isLargeScreen ? "55%" : isBigScreen ? "55%" : "53.9%",
+                        left: isMobile ? "49%" : isTablet ? "26%" : isLargeScreen ? "49%" : isBigScreen ? "49%" : "49%",
+                        width: isMobile ? "183px" : isTablet ? "380px" : isLargeScreen ? "945px" : isBigScreen ? "630px" : "498px",
                     }}
                 />
 
                 <Doodle
                     src={RandomDoodle}
                     sx={{
-                        top: isMobile ? "50%" : isTablet ? "58%" : isLargeScreen ? "78%" : isBigScreen ? "78%" : "75%",
-                        left: isMobile ? "30%" : isTablet ? "36%" : isLargeScreen ? "52%" : isBigScreen ? "52%" : "51%",
-                        width: isMobile ? "150px" : isTablet ? "250px" : isLargeScreen ? "750px" : isBigScreen ? "500px" : "398px",
+                        top: isMobile ? "78%" : isTablet ? "58%" : isLargeScreen ? "78%" : isBigScreen ? "78%" : "75%",
+                        left: isMobile ? "49%" : isTablet ? "36%" : isLargeScreen ? "52%" : isBigScreen ? "52%" : "51%",
+                        width: isMobile ? "135px" : isTablet ? "250px" : isLargeScreen ? "750px" : isBigScreen ? "500px" : "398px",
                     }}
                 />
 

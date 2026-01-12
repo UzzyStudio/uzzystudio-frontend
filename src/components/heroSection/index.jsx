@@ -47,12 +47,12 @@ const Hero = () => {
         px: isSmallScreen
           ? 2
           : isMobile
-          ? 3
-          : isLargeScreen
-          ? { xs: 2, sm: 4, md: 12 }
-          : { xs: 2, sm: 4, md: 6 },
+            ? 3
+            : isLargeScreen
+              ? { xs: 2, sm: 4, md: 12 }
+              : { xs: 2, sm: 4, md: 6 },
         pt: isSmallScreen ? 12 : isMobile ? 14 : 10,
-        pb: isSmallScreen ? 12 : isMobile ? 16 : 20,
+        pb: isSmallScreen ? 6 : isMobile ? 16 : 20,
       }}
     >
       <Grid
@@ -78,20 +78,20 @@ const Hero = () => {
                 width: isSmallScreen
                   ? "100%"
                   : isMobile
-                  ? "90%"
-                  : isLargeScreen
-                  ? "60vw"
-                  : "50.625vw",
+                    ? "90%"
+                    : isLargeScreen
+                      ? "60vw"
+                      : "50.625vw",
                 maxWidth: isSmallScreen ? "80%" : isMobile ? "100%" : "none",
                 height: "auto",
                 position: "relative",
                 top: isSmallScreen
                   ? -20
                   : isMobile
-                  ? -50
-                  : isTablet
-                  ? -100
-                  : -60,
+                    ? -50
+                    : isTablet
+                      ? -100
+                      : -60,
               }}
             />
           </Box>
@@ -108,15 +108,15 @@ const Hero = () => {
               textAlign: isSmallScreen
                 ? "center"
                 : isMobile
-                ? "center"
-                : "right",
+                  ? "center"
+                  : "right",
               display: "flex",
               flexDirection: "column",
               alignItems: isSmallScreen
                 ? "center"
                 : isMobile
-                ? "center"
-                : "flex-start",
+                  ? "center"
+                  : "flex-start",
               width: isSmallScreen ? "100%" : isMobile ? "100%" : "auto",
               mt: isSmallScreen ? 2 : isMobile ? 0 : 0,
               animation: `${slideUp} 1s ease-out`,
@@ -143,10 +143,10 @@ const Hero = () => {
                 fontSize: isSmallScreen
                   ? "10px"
                   : isMobile
-                  ? "12px"
-                  : isLargeScreen
-                  ? "18px"
-                  : "13px",
+                    ? "12px"
+                    : isLargeScreen
+                      ? "18px"
+                      : "13px",
                 fontWeight: 900,
                 letterSpacing: "0.5px",
                 textTransform: "uppercase",
