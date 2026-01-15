@@ -27,8 +27,8 @@ import Logo from "../../assets/logo.svg fill.svg";
 // ];
 
 const slideDownFast = keyframes`
-  0% {
-    transform: translateY(-60px);
+   0% {
+    transform: translateY(-80px);
     opacity: 0;
   }
   100% {
@@ -159,7 +159,7 @@ const Header = () => {
                     display: "flex",
                     justifyContent: "flex-end",
                     maxWidth: isLargeScreen ? "100%" : "1600px",
-                    animation: `${slideDownFast} 0.7s ease-out`,
+                    animation: `${slideDownFast} 1.4s cubic-bezier(0.22, 1, 0.36, 1)`,
                     animationFillMode: "forwards",
                 }}
             >
@@ -217,7 +217,7 @@ const Header = () => {
                                         sx={{
                                             cursor: "pointer",
                                             borderRadius: "12px",
-                                            padding: isLargeScreen ? "8px 12px 8px 12px" : "6px 10px 6px 10px",
+                                            padding: isLargeScreen ? "8px 12px" : "11px 10px",
                                             fontSize: isLargeScreen ? "18px" : "15px",
                                             fontWeight: 900,
                                             fontFamily: "Inter Tight, sans-serif",
@@ -225,24 +225,7 @@ const Header = () => {
                                             position: "relative",
                                             overflow: "hidden",
                                             backgroundColor: "transparent",
-                                            transition: "background-color 0.25s ease",
-
-                                            "&:hover": {
-                                                backgroundColor: "#ffffff",
-
-                                                "& .menu-text-top": {
-                                                    transform: "translateY(-100%)",
-                                                },
-
-                                                "& .menu-text-bottom": {
-                                                    transform: "translateY(-100%)",
-                                                },
-
-                                                "&::before": {
-                                                    opacity: 1,
-                                                    transform: "translateX(200%) rotate(45deg)",
-                                                },
-                                            },
+                                            transition: "background-color 0.6s ease",
 
                                             "&::before": {
                                                 content: '""',
@@ -254,68 +237,74 @@ const Header = () => {
                                                 background:
                                                     "linear-gradient(45deg, transparent 20%, rgba(255,255,255,.6) 45%, rgba(255,255,255,.8) 50%, rgba(255,255,255,.6) 55%, transparent 80%)",
                                                 opacity: 0,
-                                                transition: "opacity 0.3s ease, transform 1.2s ease",
+                                                transition: "opacity 0.99s ease, transform 2s cubic-bezier(0.22,1,0.36,1)",
                                                 pointerEvents: "none",
+                                            },
+
+                                            "&:hover::before": {
+                                                opacity: 1,
+                                                transform: "translateX(200%) rotate(45deg)",
+                                            },
+
+                                            // top and bottom text container
+                                            "& > div": {
+                                                position: "relative",
+                                                overflow: "hidden",
+                                                height: "1.2em", // keeps both texts aligned perfectly
+                                            },
+
+                                            "& .menu-text-top, & .menu-text-bottom": {
+                                                display: "block",
+                                                lineHeight: "1.2em", // match height exactly
+                                                willChange: "transform",
+                                                transition: "transform 0.99s cubic-bezier(0.22,1,0.36,1), color 0.55s ease",
+                                            },
+
+                                            "& .menu-text-bottom": {
+                                                position: "absolute",
+                                                top: "100%", // start right below top text
+                                                left: 0,
+                                                color: "#1D1D1B",
+                                            },
+
+                                            "&:hover .menu-text-top": {
+                                                transform: "translateY(-100%)",
+                                                color: "#1D1D1B",
+                                            },
+
+                                            "&:hover .menu-text-bottom": {
+                                                transform: "translateY(-100%)",
                                             },
                                         }}
                                     >
-                                        <Box
-                                            sx={{
-                                                position: "relative",
-                                                overflow: "hidden",
-                                                height: "auto",
-                                                display: "block",
-                                            }}
-                                        >
-                                            <Box
-                                                className="menu-text-top"
-                                                sx={{
-                                                    display: "block",
-                                                    transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-                                                    willChange: "transform",
-                                                }}
-                                            >
-                                                {item.label}
-                                            </Box>
-
-                                            <Box
-                                                className="menu-text-bottom"
-                                                sx={{
-                                                    position: "absolute",
-                                                    left: 0,
-                                                    top: "100%",
-                                                    transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-                                                    willChange: "transform",
-                                                }}
-                                            >
-                                                {item.label}
-                                            </Box>
+                                        <Box>
+                                            <Box className="menu-text-top">{item.label}</Box>
+                                            <Box className="menu-text-bottom">{item.label}</Box>
                                         </Box>
                                     </Box>
-
                                 ))}
+
                             </Box>
 
                             <Button
-                                variant="contained"
+                                data-clickable
                                 onClick={() => setContactOpen(true)}
+                                disableElevation
                                 sx={{
                                     position: "relative",
-                                    backgroundColor: "#CAF55E",
-                                    color: "#1D1D1B",
-                                    borderRadius: "30px",
-                                    padding: isLargeScreen ? "11px 22px" : "9px 18px",
+                                    overflow: "hidden",
+
+                                    padding: isLargeScreen ? "11px 22px" : "11px 20px",
                                     fontSize: isLargeScreen ? "18px" : "15px",
+                                    borderRadius: "30px",
+                                    backgroundColor: "#CAF55E",
                                     fontWeight: 900,
                                     fontFamily: "Inter Tight, sans-serif",
-                                    boxShadow: "none",
                                     textTransform: "none",
-                                    overflow: "hidden",
-                                    position: "relative",
-                                    transition: "color 0.4s ease",
-                                    cursor: "default",
+                                    boxShadow: "none",
+                                    cursor: "pointer",
 
-                                    /* HOVER BACKGROUND LAYER */
+                                    /* Hover BG animation */
                                     "&::before": {
                                         content: '""',
                                         position: "absolute",
@@ -324,7 +313,7 @@ const Header = () => {
                                         width: "100%",
                                         height: "0%",
                                         backgroundColor: "#000",
-                                        transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                        transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
                                         zIndex: 0,
                                     },
 
@@ -332,73 +321,35 @@ const Header = () => {
                                         height: "100%",
                                     },
 
-                                    /* TEXT ABOVE BG */
-                                    "& > *": {
-                                        position: "relative",
-                                        zIndex: 2,
-                                    },
-
-                                    "&:hover": {
-                                        boxShadow: "none",
-                                        "& .btn-text-top": {
-                                            transform: "translateY(-100%)",
-                                            color: "#fff",
-                                        },
-                                        "& .btn-text-bottom": {
-                                            transform: "translateY(-100%)",
-                                            color: "#fff",
-                                        },
+                                    /* Change TEXT color safely */
+                                    "&:hover .button-text-wrapper": {
+                                        color: "#fff",
                                     },
 
                                     "&:focus": { outline: "none" },
-                                    "&:focus-visible": { outline: "none", boxShadow: "none" },
                                     "&.Mui-focusVisible": { boxShadow: "none" },
                                 }}
                             >
                                 <Box
+                                    className="button-text-wrapper"
                                     sx={{
                                         position: "relative",
-                                        overflow: "hidden",
-                                        display: "inline-block",
-                                        width: "100%",
-                                        zIndex: 1,
+                                        zIndex: 2,
+                                        color: "#1D1D1B",
+                                        transition: "color 0.3s ease",
                                     }}
                                 >
-                                    <Box
-                                        className="btn-text-top"
-                                        sx={{
-                                            display: "block",
-                                            color: "#1D1D1B",
-                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
-                                            position: "relative",
-                                            zIndex: 1,
-                                        }}
-                                    >
-                                        start a project
-                                    </Box>
-
-                                    <Box
-                                        className="btn-text-bottom"
-                                        sx={{
-                                            position: "absolute",
-                                            left: 0,
-                                            top: "100%",
-                                            color: "#1D1D1B",
-                                            transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
-                                            zIndex: 1,
-                                        }}
-                                    >
-                                        start a project
-                                    </Box>
+                                    start a project
                                 </Box>
                             </Button>
+
 
                         </Box>
                     )}
 
                     {/* Mobile Menu Toggle */}
                     {isMobile && (
-                        <IconButton 
+                        <IconButton
                             onClick={() => setDrawerOpen(true)}
                             sx={{
                                 padding: isSmallScreen ? 1 : 1.5,
@@ -461,7 +412,8 @@ const Header = () => {
                                     width: "100%",
                                     height: "0%",
                                     backgroundColor: "#000",
-                                    transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                    transition: "height 0.75s cubic-bezier(0.22, 1, 0.36, 1)",
+
                                     zIndex: 0,
                                 },
                                 "&:hover::before": {

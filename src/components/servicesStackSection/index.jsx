@@ -1,4 +1,4 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Button, Box, Typography, useMediaQuery } from "@mui/material";
 import { useRef, useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../sanityClient";
@@ -307,111 +307,90 @@ const ServicesStackSection = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ mt: { xs: 2, sm: 3, md: 4 } }}>
-                  <Box
-                    onClick={handleScrollToContact}
-                    sx={{
-                      px: {
-                        xs: "10px",
-                        sm: "12px",
-                        md: isLargeScreen ? "27px" : "18px",
-                      },
-                      pt: {
-                        xs: "10px",
-                        sm: "12px",
-                        md: isLargeScreen ? "27px" : "18px",
-                      },
-                      pb: {
-                        xs: "10px",
-                        sm: "12px",
-                        md: isLargeScreen ? "20px" : "12px",
-                      },
-                      fontSize: {
-                        xs: "10px",
-                        sm: "11px",
-                        md: isLargeScreen ? "26px" : "18px",
-                      },
-                      background: "#1D1D1B",
-                      borderRadius: "30px",
-                      display: "inline-block",
-                      fontWeight: 700,
-                      fontFamily: "Inter Tight, sans-serif",
-                      cursor: "default",
-                      overflow: "hidden",
+                <Button
+                  data-clickable
+                  disableRipple
+                  onClick={handleScrollToContact}
+                  variant="contained"
+                  sx={{
+                    px: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "28px" },
+                    py: { xs: "10px", sm: "12px", md: isLargeScreen ? "24px" : "20px" },
+                    fontSize: { xs: "10px", sm: "11px", md: isLargeScreen ? "26px" : "16px" },
+                    backgroundColor: "#1D1D1B",
+                    borderRadius: "70px",
+                    fontWeight: 700,
+                    fontFamily: "Inter Tight, sans-serif",
+                    cursor: "default",
+                    overflow: "hidden",
+                    position: "relative",
+                    textTransform: "none",
+
+                    // Smooth background fill
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      inset: 0,
+                      backgroundColor: "#CAF55E",
+                      transform: "scaleY(0)",
+                      transformOrigin: "bottom",
+                      transition: "transform 0.99s cubic-bezier(0.16,1,0.3,1)",
+                      zIndex: 0,
+                    },
+                    "&:focus": {
+                      outline: "none",
+                      boxShadow: "none",
+                    },
+                    "&:hover::before": {
+                      transform: "scaleY(1)",
+                    },
+
+                    // Smooth text sliding + color change
+                    "& .btn-text-top": {
                       position: "relative",
-                      transition: "color 0.4s ease",
+                      zIndex: 1,
+                      color: "white",
+                      transition: "transform 0.99s cubic-bezier(0.22,1,0.36,1), color 0.4s ease",
+                    },
+                    "& .btn-text-bottom": {
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#1D1D1B",
+                      transform: "translateY(100%)",
+                      transition: "transform 0.99s cubic-bezier(0.22,1,0.36,1), color 0.4s ease",
+                    },
 
-                      "&::before": {
-                        content: '""',
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "0%",
-                        backgroundColor: "#CAF55E",
-                        transition:
-                          "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-                        zIndex: 0,
-                      },
-
-                      "&:hover::before": {
-                        height: "100%",
-                      },
-
-                      "&:hover .btn-text-top": {
-                        transform: "translateY(-100%)",
-                        color: "#1D1D1B",
-                      },
-                      "&:hover .btn-text-bottom": {
-                        transform: "translateY(-100%)",
-                        color: "#1D1D1B",
-                      },
+                    // Hover state applied **directly here**
+                    "&:hover .btn-text-top": {
+                      transform: "translateY(-100%)",
+                      color: "#1D1D1B",
+                    },
+                    "&:hover .btn-text-bottom": {
+                      transform: "translateY(0%)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      display: "inline-block",
+                      width: "100%",
+                      height: "100%",
                     }}
                   >
-                    <Box
-                      sx={{
-                        position: "relative",
-                        overflow: "hidden",
-                        height: "auto",
-                        display: "inline-block",
-                        width: "100%",
-                        zIndex: 1,
-                      }}
-                    >
-                      <Box
-                        className="btn-text-top"
-                        sx={{
-                          display: "block",
-                          color: "white",
-                          transition:
-                            "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
-                          willChange: "transform",
-                          position: "relative",
-                          zIndex: 1,
-                        }}
-                      >
-                        let's work together
-                      </Box>
-
-                      <Box
-                        className="btn-text-bottom"
-                        sx={{
-                          position: "absolute",
-                          left: 0,
-                          top: "100%",
-                          display: "block",
-                          color: "white",
-                          transition:
-                            "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease",
-                          willChange: "transform",
-                          zIndex: 1,
-                        }}
-                      >
-                        let's work together
-                      </Box>
-                    </Box>
+                    <Box className="btn-text-top">let's work together</Box>
+                    <Box className="btn-text-bottom">let's work together</Box>
                   </Box>
-                </Box>
+                </Button>
+
+
+
               </Box>
 
               {/* MIDDLE BULLETS */}

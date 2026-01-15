@@ -339,6 +339,7 @@ const PortfolioSection = () => {
             </Typography>
 
             <Button
+                data-clickable
                 onClick={handleScrollToContact}
                 variant="contained"
                 sx={{
@@ -367,7 +368,7 @@ const PortfolioSection = () => {
                         backgroundColor: "#CAF55E",
                         transform: "scaleY(0)",
                         transformOrigin: "bottom",
-                        transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+                        transition: "transform 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
                         zIndex: 1,
                     },
 

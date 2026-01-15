@@ -194,6 +194,7 @@ export default function FooterSection() {
                                 viewport={{ once: true, amount: 0.3 }}
                             >
                                 <Button
+                                    data-clickable
                                     onClick={handleScrollToContact}
                                     disableElevation
                                     sx={{
@@ -221,7 +222,7 @@ export default function FooterSection() {
                                             width: "100%",
                                             height: "0%",
                                             backgroundColor: "#000",
-                                            transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                            transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
                                             zIndex: 0,
                                         },
                                         "&:hover::before": {

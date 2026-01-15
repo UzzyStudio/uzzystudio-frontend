@@ -459,6 +459,7 @@ export default function ContactSection() {
                             {/* SUBMIT BUTTON */}
                             <Box sx={{ mt: 4 }}>
                                 <Button
+                                    data-clickable
                                     onClick={handleSubmit}
                                     variant="contained"
                                     sx={{
@@ -473,26 +474,31 @@ export default function ContactSection() {
                                         overflow: "hidden",
                                         position: "relative",
                                         cursor: "default",
+
                                         "&::before": {
                                             content: '""',
                                             position: "absolute",
-                                            bottom: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "0%",
+                                            inset: 0,
                                             backgroundColor: "#CAF55E",
-                                            transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                            transform: "scaleY(0)",
+                                            transformOrigin: "bottom",
+                                            transition: "transform 0.99s cubic-bezier(0.16, 1, 0.3, 1)",
                                             zIndex: 0,
                                         },
+
                                         "&:hover::before": {
-                                            height: "100%",
+                                            transform: "scaleY(1)",
                                         },
-                                        "& .MuiButton-label": {
+
+                                        "& .button-text-wrapper": {
                                             position: "relative",
                                             zIndex: 2,
+                                            color: "white",
+                                            transition: "color 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                                         },
+
                                         "&:hover .button-text-wrapper": {
-                                            color: "#1D1D1B !important",
+                                            color: "#1D1D1B",
                                         },
                                     }}
                                 >
