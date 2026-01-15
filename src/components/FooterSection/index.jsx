@@ -44,6 +44,11 @@ const randomAnim = {
 
 export default function FooterSection() {
     const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+    const isXLScreen = useMediaQuery("(min-width: 1920px)");
+    const isLGScreen = useMediaQuery("(min-width: 1440px)");
+    const isMdScreen = useMediaQuery("(min-width: 900px)");
+    const isSmScreen = useMediaQuery("(min-width: 600px)");
+    const [content, setContent] = useState(null);
     const [footerData, setFooterData] = useState(null);
 
     useEffect(() => {
@@ -75,202 +80,289 @@ export default function FooterSection() {
 
 
     return (
-        <Box
-            component="section"
-            sx={{
-                width: "100%",
-                color: "#fff",
-                fontFamily: "Inter Tight, sans-serif",
-            }}
-        >
-            {/* INNER CONTAINER */}
+        <Box component="section" sx={{ width: "100%", background: "white", }}>
+            {/* THE DARK CONTAINER - Now truly Full Width */}
             <Box sx={{
-                maxWidth: isLargeScreen ? "100%" : "1600px", width: "93%", paddingTop: { xs: "20px", md: "35px" },
-                px: isLargeScreen ? { xs: 1, sm: 2, md: 12 } : { xs: 1, sm: 2, md: 4 },
-                mx: "auto", backgroundColor: "#1D1D1B", borderTopLeftRadius: "20px", borderTopRightRadius: "20px"
+                width: "98%", // Changed from 95%
+                backgroundColor: "#1D1D1B",
+                margin: "0 auto",
+                borderTopLeftRadius: "20px",
+                borderTopRightRadius: "20px",
+                pt: { xs: "30px", md: "50px" },
+                // We keep overflow hidden to contain the large logo animations
+                position: "relative",
+                overflow: "hidden"
             }}>
 
-                {/* ========== ROW 1 — MENU ========== */}
-                {footerData && (
-                    <Grid
-                        component={motion.div}
-                        variants={menuAnim}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.2 }}
-                        container
-                        sx={{
-                            mb: { xs: 15, md: 8 },
-                            justifyContent: { xs: "center", md: "space-between" },
-                            alignItems: "center",
-                            textAlign: { xs: "center", md: "left" },
-                            flexDirection: { xs: "column", md: "row" },
-                            gap: { xs: 2, md: 0 },
-                            willChange: 'transform, opacity'
-                        }}>
+                {/* CONTENT WRAPPER - This keeps your text aligned with the rest of the site */}
+                <Box sx={{
+                    mx: "auto",
+                    // px: { xs: 2, md: 6 },
+                    pl: { md: isLargeScreen ? "0px" : isXLScreen ? "8px" : isLGScreen ? "6px" : "20px" },
+                }}>
 
-                        {/* LEFT MENU — 3 ITEMS */}
-                        <Grid item >
-                            <Grid container spacing={4} sx={{ marginLeft: { xs: 0, md: "80px" }, justifyContent: { xs: "center", md: "flex-start" } }}>
-                                {footerData?.menuItems?.map((item, i) => (
-                                    <Grid item key={i} >
+                    {/* ========== ROW 1 — MENU ========== */}
+                    {footerData && (
+                        <Grid
+                            component={motion.div}
+                            variants={menuAnim}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.2 }}
+                            container
+                            sx={{
+                                mb: { xs: 15, md: 8 },
+                                justifyContent: { xs: "center", md: "space-between" },
+                                alignItems: "center",
+                                textAlign: { xs: "center", md: "left" },
+                                flexDirection: { xs: "column", md: "row" },
+                                gap: { xs: 2, md: 0 },
+                                willChange: 'transform, opacity'
+                            }}>
+
+                            {/* LEFT MENU — 3 ITEMS */}
+                            <Grid item >
+                                <Grid container spacing={4} sx={{ marginLeft: { xs: 0, md: "80px" }, justifyContent: { xs: "center", md: "flex-start" } }}>
+                                    {footerData?.menuItems?.map((item, i) => (
+                                        <Grid item key={i} >
+                                            <Typography
+                                                onClick={() => handleScrollToSection(item.scrollId)} sx={{
+                                                    fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
+                                                    fontWeight: 500,
+                                                    cursor: "pointer",
+                                                    fontFamily: "Inter Tight, sans-serif",
+                                                    "&:hover": { opacity: 0.6 },
+                                                    textTransform: "Lowercase",
+                                                    marginLeft: isLargeScreen ? "30px" : "20px",
+                                                    willChange: 'transform',
+                                                }}
+                                            >
+                                                {item.label}
+                                            </Typography>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Grid>
+
+                            {/* RIGHT MENU — 3 ITEMS */}
+                            <Grid item>
+                                <Grid container spacing={4} sx={{ marginRight: { xs: 0, md: "80px" }, justifyContent: { xs: "center", md: "flex-end" } }}>
+                                    {footerData?.socialLinks?.map((item, i) =>
+                                    (<Grid item key={i}>
                                         <Typography
-                                            onClick={() => handleScrollToSection(item.scrollId)} sx={{
-                                                fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
+                                            component="a"
+                                            href={item.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            sx={{
+                                                fontSize: { xs: "10px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
                                                 fontWeight: 500,
-                                                cursor: "pointer",
+                                                color: "#fff",
                                                 fontFamily: "Inter Tight, sans-serif",
+                                                cursor: "pointer",
                                                 "&:hover": { opacity: 0.6 },
-                                                textTransform: "Lowercase",
-                                                marginLeft: isLargeScreen ? "30px" : "20px",
-                                                willChange: 'transform',
+                                                marginRight: isLargeScreen ? "30px" : "20px",
+                                                textDecoration: "none",
                                             }}
                                         >
                                             {item.label}
                                         </Typography>
                                     </Grid>
-                                ))}
-                            </Grid>
-                        </Grid>
-
-                        {/* RIGHT MENU — 2 ITEMS */}
-                        <Grid item>
-                            <Grid container spacing={4} sx={{ marginRight: { xs: 0, md: "80px" }, justifyContent: { xs: "center", md: "flex-end" } }}>
-                                {footerData?.socialLinks?.map((item, i) =>
-                                (<Grid item key={i}>
-                                    <Typography
-                                        component="a"
-                                        href={item.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        sx={{
-                                            fontSize: { xs: "10px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
-                                            fontWeight: 500,
-                                            color: "#fff",
-                                            fontFamily: "Inter Tight, sans-serif",
-                                            cursor: "pointer",
-                                            "&:hover": { opacity: 0.6 },
-                                            textTransform: "uppercase",
-                                            marginRight: isLargeScreen ? "30px" : "20px",
-                                            textDecoration: "none",
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Typography>
+                                    ))}
                                 </Grid>
-                                ))}
                             </Grid>
                         </Grid>
-                    </Grid>
-                )}
+                    )}
 
-                <Grid container alignItems="center" spacing={4} sx={{ width: "100%" }}>
-                    <Grid
-                        item
-                        xs={12}
-                        md={10}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-end",   // flush to bottom
-                            height: "100%",
-                        }}
-                    >
-                        {/* CENTER — BUTTON */}
+                    <Grid container alignItems="center" spacing={4} sx={{ width: "100%" }}>
                         <Grid
+                            item
+                            xs={12}
+                            md={10}
                             sx={{
-                                textAlign: "center", position: "relative", top: { xs: "120px", sm: "140px", md: "160px" },
-                                left: { xs: "210px", sm: "200px", md: "861px" }, zIndex: "2", transform: "translateX(-50%)",
-                                "@media (min-width:1300px)": {
-                                    top: "164px",
-                                    left: "995px",
-                                },
+                                display: "flex",
+                                justifyContent: "flex-end",   // flush to bottom
+                                height: "100%",
                             }}
-
                         >
-                            <motion.div
-                                variants={buttonAnim}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.3 }}
-                            >
-                                <Button
-                                    data-clickable
-                                    onClick={handleScrollToContact}
-                                    disableElevation
-                                    sx={{
-                                        position: "relative",
-                                        overflow: "hidden",
-
-                                        px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },
-                                        py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
-                                        fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
-                                        borderRadius: "40px",
-                                        backgroundColor: "#CAF55E",
-                                        fontWeight: 700,
-                                        fontFamily: "Inter Tight, sans-serif",
-                                        textTransform: "lowercase",
-                                        transform: "rotate(-20deg)",
-                                        boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
-                                        overflow: "hidden",
-                                        position: "relative",
-                                        cursor: "default",
-                                        "&::before": {
-                                            content: '""',
-                                            position: "absolute",
-                                            bottom: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "0%",
-                                            backgroundColor: "#000",
-                                            transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
-                                            zIndex: 0,
-                                        },
-                                        "&:hover::before": {
-                                            height: "100%",
-                                        },
-                                        "&:hover .button-text-wrapper": {
-                                            color: "#fff",
-                                        },
-                                        "& .MuiButton-label": {
-                                            position: "relative",
-                                            zIndex: 2,
-                                        },
-                                        "&:focus": { outline: "none" },
-                                        "&:focus-visible": { outline: "none", boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
-                                        "&.Mui-focusVisible": { boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
-                                    }}
-                                >
-                                    <Box
-                                        className="button-text-wrapper"
-                                        sx={{
-                                            position: "relative",
-                                            zIndex: 2,
-                                            color: "#1D1D1B",
-                                            transition: "color 0.4s ease",
-                                        }}
-                                    >
-                                        Let's Work Together
-                                    </Box>
-                                </Button>
-                            </motion.div>
-                        </Grid>
-
-                        {/* RIGHT — RANDOM IMAGE */}
-                        <motion.div
-                            variants={randomAnim}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.3 }}
-                        >
+                            {/* CENTER — BUTTON */}
                             <Grid
                                 sx={{
-                                    textAlign: "center", position: "relative", top: { xs: "-20px", sm: "80px", md: "214px" },
-                                    left: { xs: "65px", sm: "180px", md: "770px" }, transform: "translateX(-50%)", willChange: 'transform, opacity',
-                                    "@media (min-width:1300px)": {
-                                        top: "232px",
-                                        left: "955px",
-                                    },
+                                    textAlign: "center", position: "relative",
+                                    top: { xs: "90px", sm: "140px", md: "160px" },
+                                    zIndex: "2", transform: "translateX(-50%)",
+                                    left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1405px" : isLGScreen ? "1370px" : "861px" },
+                                    // "@media (min-width:1300px)": {
+                                    //     top: "164px",
+                                    //     left: "995px",
+                                    // },
+                                }}
 
+                            >
+                                <motion.div
+                                    variants={buttonAnim}
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, amount: 0.3 }}
+                                >
+                                    <Button
+                                        onClick={handleScrollToContact}
+                                        disableElevation
+                                        sx={{
+                                            position: "relative",
+                                            overflow: "hidden",
+
+                                            px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },
+                                            py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
+                                            fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
+                                            borderRadius: "40px",
+                                            backgroundColor: "#CAF55E",
+                                            fontWeight: 700,
+                                            fontFamily: "Inter Tight, sans-serif",
+                                            textTransform: "lowercase",
+                                            transform: "rotate(-20deg)",
+                                            boxShadow: "0px 4px 10px rgba(0,0,0,0.12)",
+                                            overflow: "hidden",
+                                            position: "relative",
+                                            cursor: "default",
+                                            "&::before": {
+                                                content: '""',
+                                                position: "absolute",
+                                                bottom: 0,
+                                                left: 0,
+                                                width: "100%",
+                                                height: "0%",
+                                                backgroundColor: "#000",
+                                                transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                                                zIndex: 0,
+                                            },
+                                            "&:hover::before": {
+                                                height: "100%",
+                                            },
+                                            "&:hover .button-text-wrapper": {
+                                                color: "#fff",
+                                            },
+                                            "& .MuiButton-label": {
+                                                position: "relative",
+                                                zIndex: 2,
+                                            },
+                                            "&:focus": { outline: "none" },
+                                            "&:focus-visible": { outline: "none", boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
+                                            "&.Mui-focusVisible": { boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
+                                        }}
+                                    >
+                                        <Box
+                                            className="button-text-wrapper"
+                                            sx={{
+                                                position: "relative",
+                                                zIndex: 2,
+                                                color: "#1D1D1B",
+                                                transition: "color 0.4s ease",
+                                            }}
+                                        >
+                                            Let's Work Together
+                                        </Box>
+                                    </Button>
+                                </motion.div>
+                            </Grid>
+
+                            {/* RIGHT — RANDOM IMAGE */}
+                            <motion.div
+                                variants={randomAnim}
+                                initial="hidden"
+                                whileInView="visible"
+
+                                viewport={{ once: true, amount: 0.3 }}
+                            >
+                                <Grid
+                                    sx={{
+                                        textAlign: "center", position: "relative", top: { xs: "-20px", sm: "80px", md: "214px" },
+
+                                        left: { xs: "65px", sm: "180px", md: isLargeScreen ? "1600px" : isXLScreen ? "1360px" : isLGScreen ? "1370px" : "770px" },
+                                        transform: "translateX(-50%)", willChange: 'transform, opacity',
+                                        // "@media (min-width:1300px)": {
+                                        //     top: "232px",
+                                        //     left: "955px",
+                                        // },
+
+                                    }}
+                                >
+                                    <motion.div
+                                        variants={logoAnim}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, amount: 0.3 }}
+                                        style={{
+                                            pointerEvents: "none",   // 🔑 allow clicks to pass through
+                                            zIndex: 1,
+                                        }}
+                                    >
+                                        <img
+                                            src={RandomImg}
+                                            alt="random"
+                                            style={{
+                                                width: isLargeScreen ? "112px" : { xs: "5px", md: "75px" }, height: "auto", maxWidth: isLargeScreen ? "112px" : { xs: "20px", sm: "55px", md: "75px" }
+                                            }}
+                                        />
+                                    </motion.div>
+                                    <Typography
+                                        component="a"
+                                        href={`mailto:${footerData?.footerEmail}`}
+                                        sx={{
+                                            position: "relative",
+                                            zIndex: 5,                // 🔑 higher than image
+                                            display: "inline-block",
+                                            pointerEvents: "auto",
+
+                                            fontSize: { xs: "10px", sm: "12px", md: isLargeScreen ? "22px" : "15px" },
+                                            fontFamily: "Inter Tight, sans-serif",
+                                            marginTop: { xs: "10px", sm: "20px", md: isLargeScreen ? "45px" : "30px" },
+
+                                            color: "#fff",
+                                            textDecoration: "none",
+                                            cursor: "pointer",
+
+                                            "&:hover": {
+                                                textDecoration: "underline",
+                                                opacity: 0.85,
+                                            },
+                                        }}
+                                    >
+                                        {footerData?.footerEmail}
+                                    </Typography>
+
+
+                                </Grid>
+                            </motion.div>
+                        </Grid>
+                    </Grid>
+
+                    {/* ========== ROW 2 — MAIN CONTENT ========== */}
+                    <Grid container alignItems="center" spacing={4}>
+                        {/* LEFT — BIG LOGO ONLY */}
+                        <Grid
+                            item
+                            xs={12}
+                            md={12}
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-end",   // flush to bottom
+                                height: "100%",
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    // width: "100%", // 5. Force the box to viewport width
+                                    width: { md: isLargeScreen ? "80vw" : isXLScreen ? "80vw" : isLGScreen ? "80vw" : "100%" },
+                                    position: "relative",
+
+
+                                    marginLeft: {
+                                        xs: "-10px", // mobile 
+                                        sm: "-35px",
+                                        //  tablet & desktop 
+                                    },
                                 }}
                             >
                                 <motion.div
@@ -280,68 +372,22 @@ export default function FooterSection() {
                                     viewport={{ once: true, amount: 0.3 }}
                                 >
                                     <img
-                                        src={RandomImg}
-                                        alt="random"
+                                        src={footerData?.footerLogo ? urlFor(footerData.footerLogo).width(2000).url() : ""}
+                                        alt="footer logo"
                                         style={{
-                                            width: isLargeScreen ? "112px" : { xs: "5px", md: "75px" }, height: "auto", maxWidth: isLargeScreen ? "112px" : { xs: "20px", sm: "55px", md: "75px" }
+                                            width: "100%", // makes image fill container width
+                                            height: "auto", // maintain aspect ratio
+                                            display: "block", // remove default inline spacing
+                                            willChange: 'transform, opacity',
+                                            objectFit: "cover",
+
                                         }}
                                     />
                                 </motion.div>
-                                <Typography sx={{
-                                    fontSize: { xs: "10px", sm: "12px", md: isLargeScreen ? "22px" : "15px" }, fontFamily: "Inter Tight, sans-serif", marginTop: { xs: "10px", sm: "20px", md: isLargeScreen ? "45px" : "30px" },
-                                }}>
-                                    {footerData?.footerEmail}
-                                </Typography>
-                            </Grid>
-                        </motion.div>
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-
-                {/* ========== ROW 2 — MAIN CONTENT ========== */}
-                <Grid container alignItems="center" spacing={4}>
-                    {/* LEFT — BIG LOGO ONLY */}
-                    <Grid
-                        item
-                        xs={12}
-                        md={12}
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "flex-end",   // flush to bottom
-                            height: "100%",
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: "100%",
-                                overflow: "hidden", // optional: avoids scrollbars if image is slightly larger
-                                marginLeft: {
-                                    xs: "-10px", // mobile 
-                                    sm: "-35px",
-                                    //  tablet & desktop 
-                                },
-                            }}
-                        >
-                            <motion.div
-                                variants={logoAnim}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.3 }}
-                            >
-                                <img
-                                    src={footerData?.footerLogo ? urlFor(footerData.footerLogo).width(2000).url() : ""}
-                                    alt="footer logo"
-                                    style={{
-                                        width: "100%", // makes image fill container width
-                                        height: "auto", // maintain aspect ratio
-                                        display: "block", // remove default inline spacing
-                                        willChange: 'transform, opacity'
-                                    }}
-                                />
-                            </motion.div>
-                        </Box>
-                    </Grid>
-                </Grid>
+                </Box>
             </Box>
         </Box >
     );

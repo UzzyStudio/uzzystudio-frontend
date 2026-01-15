@@ -196,7 +196,9 @@ const MotionSection = () => {
             width: "100%",
             maxWidth: "calc(2250px + 42px)",
             margin: "0 auto",
-            minHeight: "70vh",
+            // minHeight: "100vh",
+            minHeight: { sm: "90vh", xs: "70vh", md: isLargeScreen ? "90vh" : isXLScreen ? "90vh" : isLGScreen ? "100vh" : "100vh" },
+
             overflow: "hidden",
             isolation: "isolate",
             contain: "layout style paint",
@@ -204,9 +206,7 @@ const MotionSection = () => {
             clipPath: "inset(0)",
             cursor: "pointer",
             transition: "opacity 0.3s ease",
-            "&:hover": {
-              opacity: 0.95,
-            },
+
           }}
         >
           <Box
@@ -218,7 +218,7 @@ const MotionSection = () => {
               position: "absolute",
               top: "50%",
               left: "50%",
-              width: "450vw",
+              width: "350vw",
               height: "auto",
               transform: "translate(-50%, -50%)",
               pointerEvents: "none",
@@ -293,7 +293,8 @@ const MotionSection = () => {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "row", // Keep row layout on all screens
+
+                flexDirection: { xs: "column", sm: "column", md: "row", },  // Keep row layout on all screens
                 justifyContent: "space-around",
                 alignItems: "center",
                 margin: {
@@ -301,7 +302,7 @@ const MotionSection = () => {
                   sm: "30px 0",
                   md: isLargeScreen ? "90px 0" : isXLScreen ? "75px 0" : isLGScreen ? "60px 0" : "50px 0"
                 },
-                gap: 0,
+                gap: { xs: "25px", sm: "25px", md: 0 },
               }}
             >
               {/* LEFT TEXT */}
@@ -343,11 +344,12 @@ const MotionSection = () => {
                     sx={{
                       fontSize: {
                         xs: "28px",
-                        sm: "36px",
-                        md: isLargeScreen ? "150px" : isXLScreen ? "130px" : isLGScreen ? "110px" : "84px",
+                        sm: "40px",
+                        md: isLargeScreen ? "80px" : isXLScreen ? "70px" : isLGScreen ? "70px" : "50px",
                       },
                       fontWeight: 800,
-                      lineHeight: 1.05,
+                      lineHeight: { xs: "1.1", sm: "1.1", md: "1.4" },
+
                       letterSpacing: "-0.02em",
                       color: "#CAF55E",
                       textAlign: "center",

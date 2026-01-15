@@ -29,8 +29,8 @@ export default function ContactDrawer({ open, onClose }) {
 
                     /* ✅ REAL GLASS EFFECT */
                     backgroundColor: "rgba(255, 255, 255, 0.75)",
-                    backdropFilter: "blur(40px)",
-                    WebkitBackdropFilter: "blur(40px)",
+                    backdropFilter: "blur(50px)",
+                    WebkitBackdropFilter: "blur(50px)",
 
                     /* Optional polish */
                     borderLeft: "1px solid rgba(255,255,255,0.35)",

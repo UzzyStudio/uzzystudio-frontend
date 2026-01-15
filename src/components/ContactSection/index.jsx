@@ -15,7 +15,7 @@ import CharacterContact from "../../assets/character-contact.svg";
 import RatingImg from "../../assets/rating.png";
 import BehanceLogo from "../../assets/Behance.svg";
 import DribbbleLogo from "../../assets/dribble.svg";
-import InstagramLogo from "../../assets/dribble.svg";
+import InstagramLogo from "../../assets/insta.png";
 
 export default function ContactSection() {
 
@@ -163,27 +163,10 @@ export default function ContactSection() {
                                 Tell us about it
                             </Typography>
 
-                            {/* RATING */}
-                            <Box
-                                component="img"
-                                src={RatingImg}
-                                alt="rating"
-                                sx={{ width: isLargeScreen ? "270px" : "180px", mt: 3 }}
-                            />
-
-                            {/* CLIENT TRUST US */}
-                            <Typography
-                                sx={{
-                                    mt: 0, mb: 8, fontWeight: 600, color: "black", fontFamily: "Inter Tight, sans-serif",
-                                    fontSize: isLargeScreen ? "24px" : undefined,
-                                }}
-                            >
-                                Client trust us
-                            </Typography>
 
                             <Typography
                                 sx={{
-                                    mt: 0, mb: 1, fontWeight: 500, color: "black", fontFamily: "Inter Tight, sans-serif",
+                                    mt: 3, mb: 1, fontWeight: 500, color: "black", fontFamily: "Inter Tight, sans-serif",
                                     fontSize: isLargeScreen ? "22px" : undefined,
                                 }}
                             >
@@ -283,12 +266,20 @@ export default function ContactSection() {
                                         }}
                                         sx={{
                                             "& .MuiOutlinedInput-root": {
-                                                borderRadius: "0px",
+                                                borderRadius: "80px",
+                                                border: "1px solid #e0e0e0",
                                                 "& input::placeholder": {
                                                     fontSize: "14px",
                                                     fontFamily: "Inter Tight, sans-serif",
                                                     opacity: 0.5,  // important for Chrome!
                                                 },
+                                                "& .MuiOutlinedInput-input": {
+                                                    padding: "14px 20px", // ⬅️ vertical | horizontal spacing
+                                                    fontSize: "14px",
+                                                    fontFamily: "Inter Tight, sans-serif",
+                                                },
+
+
                                             },
                                         }}
                                     />
@@ -314,6 +305,7 @@ export default function ContactSection() {
                                                 fontSize: "13px",
                                                 "&::placeholder": {
                                                     fontSize: "13px",
+
                                                     fontFamily: "Inter Tight, sans-serif",
 
                                                 },
@@ -322,12 +314,20 @@ export default function ContactSection() {
 
                                         sx={{
                                             "& .MuiOutlinedInput-root": {
-                                                borderRadius: "0px",
+                                                borderRadius: "80px",
+                                                border: "1px solid #e0e0e0",
                                                 "& input::placeholder": {
                                                     fontSize: "14px",
                                                     fontFamily: "Inter Tight, sans-serif",
                                                     opacity: 0.5,
                                                 },
+                                                "& .MuiOutlinedInput-input": {
+                                                    padding: "14px 20px", // ⬅️ vertical | horizontal spacing
+                                                    fontSize: "14px",
+                                                    fontFamily: "Inter Tight, sans-serif",
+                                                },
+
+
                                             },
                                         }}
                                     />
