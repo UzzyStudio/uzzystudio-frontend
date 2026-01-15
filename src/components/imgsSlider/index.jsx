@@ -578,8 +578,8 @@ const SmoothAlternatingSlider1 = () => {
             ? "translate(-50%, -50%) scale(1)"
             : "translate(-50%, -50%) scale(0.6)",
           background: "black",
-          width: 58,
-          height: 58,
+          width: 66,
+          height: 66,
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
@@ -597,7 +597,7 @@ const SmoothAlternatingSlider1 = () => {
         <img
           src={ArrowBackIosNewIcon}
           style={{
-            width: 20,
+            width: 25,
             position: "absolute",
             left: 8,
             opacity: 0.9,
@@ -606,7 +606,7 @@ const SmoothAlternatingSlider1 = () => {
         <img
           src={ArrowForwardIosIcon}
           style={{
-            width: 20,
+            width: 25,
             position: "absolute",
             right: 8,
             opacity: 0.9,

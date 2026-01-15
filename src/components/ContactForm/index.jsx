@@ -84,7 +84,9 @@ export default function ContactForm({ variant = "Drawer" }) {
             }}
         >
             {/* NAME + EMAIL */}
-            <Grid container spacing={isDrawer ? 2 : 8}>
+            <Grid container
+                rowSpacing={{ xs: 1.5, sm: 2 }}
+                columnSpacing={{ xs: 2, md: 4 }} spacing={isDrawer ? 2 : 8}>
                 {[
                     { label: "Name & Company", key: "nameCompany" },
                     { label: "Email", key: "email" },
@@ -191,41 +193,65 @@ export default function ContactForm({ variant = "Drawer" }) {
 }
 
 const labelStyle = (isDrawer) => ({
-    mb: 1,
+    mb: 0.5,
     fontWeight: 500,
-    fontSize: isDrawer ? "11px" : "13px",
+    fontSize: {
+        xs: "10px",
+        sm: isDrawer ? "11px" : "13px",
+    },
     fontFamily: "Inter Tight, sans-serif",
     color: "#000",
 });
 
+
 const inputStyle = (isDrawer) => ({
     "& .MuiInputBase-input": {
-        fontSize: isDrawer ? "11px" : "14px",
+        fontSize: {
+            xs: "10px",
+            sm: isDrawer ? "11px" : "14px",
+        },
         fontFamily: "Inter Tight, sans-serif",
-        padding: "6px 0",
+        padding: "4px 0",
         "&::placeholder": {
-            opacity: 0.5,
+            opacity: 0.45,
+            fontSize: {
+                xs: "9px",
+                sm: "11px",
+            },
         },
     },
     borderBottom: "1px solid #000",
 });
 
+
 const chipStyle = (isDrawer, active) => ({
     borderRadius: "80px",
-    px: isDrawer ? 1.5 : 2.5,
-    py: isDrawer ? 1 : 2,
-    fontSize: isDrawer ? "10px" : "14px",
+    px: {
+        xs: 1.2,
+        sm: isDrawer ? 1.5 : 2.5,
+    },
+    py: {
+        xs: 0.6,
+        sm: isDrawer ? 1 : 2,
+    },
+    fontSize: {
+        xs: "9px",
+        sm: isDrawer ? "10px" : "14px",
+    },
     cursor: "pointer",
     border: "1px solid #e0e0e0",
     backgroundColor: active ? "#000" : "transparent",
     color: active ? "#fff" : "#000",
+    transition: "all 0.2s ease",
 });
+
 
 const submitStyle = {
     backgroundColor: "#000",
     borderRadius: "80px",
-    px: 7,
-    py: 1.1,
+    px: { xs: 4, sm: 6 },
+    py: { xs: 0.9, sm: 1.1 },
+    fontSize: { xs: "10px", sm: "12px" },
     textTransform: "none",
     overflow: "hidden",
     position: "relative",
