@@ -8,10 +8,14 @@ export default function ContactDrawer({ open, onClose }) {
             anchor="right"
             open={open}
             onClose={onClose}
-            transitionDuration={700} // 🔥 slow smooth slide
+            transitionDuration={700}
+
+            /* 🔥 REMOVE OVERLAY COMPLETELY */
             ModalProps={{
                 keepMounted: true,
+                hideBackdrop: true, // ✅ THIS IS THE KEY
             }}
+
             PaperProps={{
                 sx: {
                     width: {
@@ -21,11 +25,18 @@ export default function ContactDrawer({ open, onClose }) {
                     },
                     maxWidth: "100%",
                     minHeight: "100vh",
-                    height: "auto",          // content-based
-                    padding: "5px 40px",
-                    backgroundColor: "rgba(255, 255, 255, 0.75)", // 🔹 more transparent
-                    backdropFilter: "blur(10px)",             // optional: adds blur effect
-                    overflowY: "visible",
+                    padding: "12px 40px",
+
+                    /* ✅ REAL GLASS EFFECT */
+                    backgroundColor: "rgba(255, 255, 255, 0.75)",
+                    backdropFilter: "blur(40px)",
+                    WebkitBackdropFilter: "blur(40px)",
+
+                    /* Optional polish */
+                    borderLeft: "1px solid rgba(255,255,255,0.35)",
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+
+                    overflowY: "auto",
                 },
             }}
         >

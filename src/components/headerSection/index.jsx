@@ -217,7 +217,7 @@ const Header = () => {
                                         sx={{
                                             cursor: "pointer",
                                             borderRadius: "12px",
-                                            padding: isLargeScreen ? "8px 12px" : "11px 10px",
+                                            padding: isLargeScreen ? "8px 12px" : "9px 10px",
                                             fontSize: isLargeScreen ? "18px" : "15px",
                                             fontWeight: 900,
                                             fontFamily: "Inter Tight, sans-serif",

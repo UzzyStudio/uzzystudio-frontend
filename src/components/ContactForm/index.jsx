@@ -7,6 +7,7 @@ import {
     Button,
     Chip,
 } from "@mui/material";
+import { client } from "../../sanityClient";
 
 const services = [
     "Logo Design",
@@ -26,192 +27,227 @@ const budgets = [
     "$5,000+",
 ];
 
-export default function ContactForm() {
-    const [selectedServices, setSelectedServices] = useState([]);
-    const [selectedBudget, setSelectedBudget] = useState(null);
+export default function ContactForm({ variant = "Drawer" }) {
+    const isDrawer = variant === "drawer";
+
+    const [formData, setFormData] = useState({
+        nameCompany: "",
+        email: "",
+        services: [],
+        budget: "",
+        message: "",
+    });
+
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState(false);
 
     const toggleService = (service) => {
-        setSelectedServices((prev) =>
-            prev.includes(service)
-                ? prev.filter((s) => s !== service)
-                : [...prev, service]
-        );
+        setFormData((prev) => ({
+            ...prev,
+            services: prev.services.includes(service)
+                ? prev.services.filter((s) => s !== service)
+                : [...prev.services, service],
+        }));
     };
+
+    const handleSubmit = async () => {
+        try {
+            await client.create({
+                _type: "contactSubmission",
+                ...formData,
+                submittedAt: new Date().toISOString(),
+            });
+
+            setSubmitted(true);
+            setFormData({
+                nameCompany: "",
+                email: "",
+                services: [],
+                budget: "",
+                message: "",
+            });
+        } catch (err) {
+            console.error(err);
+            setError(true);
+        }
+    };
+
+    /* 🔽 SCALE VALUES */
+    const scale = isDrawer ? 0.85 : 1;
 
     return (
         <Box
             sx={{
+                transform: `scale(${scale})`,
+                transformOrigin: "top center",
                 width: "100%",
-                maxWidth: { xs: "320px", sm: "420px", md: "780px" },
-                mx: "auto",
             }}
         >
             {/* NAME + EMAIL */}
-            <Grid container spacing={3}>
+            <Grid container spacing={isDrawer ? 2 : 8}>
                 {[
-                    { label: "Name & Company", placeholder: "Enter your name & company" },
-                    { label: "Email", placeholder: "Enter your email" },
+                    { label: "Name & Company", key: "nameCompany" },
+                    { label: "Email", key: "email" },
                 ].map((field) => (
-                    <Grid item xs={12} md={6} key={field.label}>
-                        <Typography sx={labelStyle}>{field.label}</Typography>
+                    <Grid item xs={12} md={6} key={field.key}>
+                        <Typography sx={labelStyle(isDrawer)}>
+                            {field.label}
+                        </Typography>
                         <TextField
                             fullWidth
-                            placeholder={field.placeholder}
                             variant="standard"
+                            placeholder={field.label}
                             InputProps={{ disableUnderline: true }}
-                            sx={singleLineInputStyle}
+                            value={formData[field.key]}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    [field.key]: e.target.value,
+                                })
+                            }
+                            sx={inputStyle(isDrawer)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
             {/* SERVICES */}
-            <Box sx={{ mt: 4 }}>
-                <Typography sx={labelStyle}>I'm interested in...</Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+            <Box sx={{ mt: isDrawer ? 3 : 2 }}>
+                <Typography sx={labelStyle(isDrawer)}>
+                    I'm interested in...
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                     {services.map((item) => (
                         <Chip
                             key={item}
                             label={item}
                             onClick={() => toggleService(item)}
-                            sx={{
-                                ...chipStyle,
-                                backgroundColor: selectedServices.includes(item)
-                                    ? "#000"
-                                    : "transparent",
-                                color: selectedServices.includes(item) ? "#fff" : "#000",
-                            }}
+                            sx={chipStyle(isDrawer, formData.services.includes(item))}
                         />
                     ))}
                 </Box>
             </Box>
 
             {/* BUDGET */}
-            <Box sx={{ mt: 4 }}>
-                <Typography sx={labelStyle}>Project budget (USD)</Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-                    {budgets.map((item) => {
-                        const isSelected = selectedBudget === item;
-                        return (
-                            <Chip
-                                key={item}
-                                label={item}
-                                onClick={() =>
-                                    setSelectedBudget(isSelected ? null : item)
-                                }
-                                sx={{
-                                    ...chipStyle,
-                                    backgroundColor: selectedServices.includes(item)
-                                        ? "#000"
-                                        : "transparent",
-                                    color: selectedServices.includes(item) ? "#fff" : "#000",
-                                }}
-                            />
-                        );
-                    })}
+            <Box sx={{ mt: isDrawer ? 3 : 2 }}>
+                <Typography sx={labelStyle(isDrawer)}>
+                    Project budget (USD)
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {budgets.map((item) => (
+                        <Chip
+                            key={item}
+                            label={item}
+                            onClick={() =>
+                                setFormData({ ...formData, budget: item })
+                            }
+                            sx={chipStyle(isDrawer, formData.budget === item)}
+                        />
+                    ))}
                 </Box>
             </Box>
 
             {/* MESSAGE */}
-            <Box sx={{ mt: 4 }}>
-                <Typography sx={labelStyle}>Write us a message</Typography>
+            <Box sx={{ mt: isDrawer ? 3 : 2 }}>
+                <Typography sx={labelStyle(isDrawer)}>
+                    Write us a message
+                </Typography>
                 <TextField
                     fullWidth
-                    placeholder="Briefly describe your project"
-
                     variant="standard"
+                    placeholder="Briefly describe your project"
                     InputProps={{ disableUnderline: true }}
-                    sx={singleLineInputStyle}
+                    value={formData.message}
+                    onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                    }
+                    sx={inputStyle(isDrawer)}
                 />
             </Box>
 
             {/* SUBMIT */}
-            <Box sx={{ mt: 4 }}>
+            <Box sx={{ mt: isDrawer ? 3 : 4 }}>
                 <Button
+                    onClick={handleSubmit}
                     variant="contained"
-                    sx={{
-                        backgroundColor: "#000",
-                        px: { xs: 4, md: 7 },
-                        py: { xs: 1.3, md: 1.6 },
-                        borderRadius: "80px",
-                        fontFamily: "Inter Tight, sans-serif",
-                        textTransform: "none",
-                        overflow: "hidden",
-                        position: "relative",
-                        cursor: "default",
-                        "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "0%",
-                            backgroundColor: "#CAF55E",
-                            transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-                            zIndex: 0,
-                        },
-                        "&:hover::before": {
-                            height: "100%",
-                        },
-                        "& .MuiButton-label": {
-                            position: "relative",
-                            zIndex: 2,
-                        },
-                        "&:hover .button-text-wrapper": {
-                            color: "#1D1D1B !important",
-                        },
-                    }}
+                    sx={submitStyle}
                 >
-                    <Box 
-                        className="button-text-wrapper"
-                        sx={{ 
-                            position: "relative", 
-                            zIndex: 2,
-                            color: "white",
-                            transition: "color 0.4s ease",
-                        }}
-                    >
-                        Submit
-                    </Box>
+                    <Box className="button-text-wrapper">Submit</Box>
                 </Button>
+
+                {submitted && (
+                    <Typography sx={{ mt: 1, color: "green" }}>
+                        Submitted successfully!
+                    </Typography>
+                )}
+                {error && (
+                    <Typography sx={{ mt: 1, color: "red" }}>
+                        Something went wrong
+                    </Typography>
+                )}
             </Box>
         </Box>
     );
 }
 
-/* ---------------- STYLES ---------------- */
-
-const labelStyle = {
+const labelStyle = (isDrawer) => ({
     mb: 1,
     fontWeight: 500,
-    fontSize: { xs: "10px", md: "13px" },
+    fontSize: isDrawer ? "11px" : "13px",
     fontFamily: "Inter Tight, sans-serif",
     color: "#000",
-};
+});
 
-const singleLineInputStyle = {
+const inputStyle = (isDrawer) => ({
     "& .MuiInputBase-input": {
+        fontSize: isDrawer ? "11px" : "14px",
         fontFamily: "Inter Tight, sans-serif",
-        fontSize: { xs: "10px", md: "13px" },
-        padding: "8px 0",
+        padding: "6px 0",
         "&::placeholder": {
-            fontSize: { xs: "9px", md: "10px" },
             opacity: 0.5,
-            fontFamily: "Inter Tight, sans-serif",
         },
     },
     borderBottom: "1px solid #000",
-};
+});
 
-
-const chipStyle = {
+const chipStyle = (isDrawer, active) => ({
     borderRadius: "80px",
-    px: { xs: 1.5, sm: 2, md: 1.5 },
-    py: { xs: 1.5, sm: 2, md: 2.3 },
-    fontSize: { xs: "8px", sm: "11px", md: "12px" },
+    px: isDrawer ? 1.5 : 2.5,
+    py: isDrawer ? 1 : 2,
+    fontSize: isDrawer ? "10px" : "14px",
     cursor: "pointer",
-    border: "1px solid #040404ff",
-    "&:hover": {
-        backgroundColor: "#f4f4f4",
+    border: "1px solid #e0e0e0",
+    backgroundColor: active ? "#000" : "transparent",
+    color: active ? "#fff" : "#000",
+});
+
+const submitStyle = {
+    backgroundColor: "#000",
+    borderRadius: "80px",
+    px: 7,
+    py: 1.1,
+    textTransform: "none",
+    overflow: "hidden",
+    position: "relative",
+    "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        backgroundColor: "#CAF55E",
+        transform: "scaleY(0)",
+        transformOrigin: "bottom",
+        transition: "transform 0.6s ease",
+        zIndex: 0,
+    },
+    "&:hover::before": {
+        transform: "scaleY(1)",
+    },
+    "& .button-text-wrapper": {
+        position: "relative",
+        zIndex: 1,
+        color: "#fff",
+    },
+    "&:hover .button-text-wrapper": {
+        color: "#1D1D1B",
     },
 };
