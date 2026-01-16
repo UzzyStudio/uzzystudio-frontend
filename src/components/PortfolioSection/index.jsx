@@ -341,86 +341,57 @@ const PortfolioSection = () => {
             <Button
                 data-clickable
                 onClick={handleScrollToContact}
-                variant="contained"
+                disableElevation
                 sx={{
                     position: "relative",
-                    backgroundColor: "#1D1D1B",
-                    color: "#fff",
-                    px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 3 },
-                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
-                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "13px" },
-                    borderRadius: "40px",
                     overflow: "hidden",
-                    textTransform: "uppercase",
+                    px: { xs: 2, sm: 3, md: isLargeScreen ? 4.5 : 4 },
+                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
+                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "15px" },
+                    borderRadius: "40px",
+                    backgroundColor: "#CAF55E",
+                    fontWeight: 900,
+                    fontFamily: "Inter Tight, sans-serif",
+                    textTransform: "none",
                     boxShadow: "none",
+                    cursor: "pointer",
 
-                    /* keep text above background */
-                    "& > *": {
-                        position: "relative",
-                        zIndex: 2,
-                    },
-
-                    /* hover bg layer */
+                    /* Hover BG animation */
                     "&::before": {
                         content: '""',
                         position: "absolute",
-                        inset: 0,
-                        backgroundColor: "#CAF55E",
-                        transform: "scaleY(0)",
-                        transformOrigin: "bottom",
-                        transition: "transform 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
-                        zIndex: 1,
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "0%",
+                        backgroundColor: "#000",
+                        transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
+                        zIndex: 0,
                     },
 
-                    "&:hover": {
-                        color: "#1D1D1B",
-                        boxShadow: "none",
+                    "&:hover::before": {
+                        height: "100%",
+                    },
 
-                        "&::before": {
-                            transform: "scaleY(1)",
-                        },
-
-                        "& .btn-text-top": {
-                            transform: "translateY(-100%)",
-                        },
-
-                        "& .btn-text-bottom": {
-                            transform: "translateY(-100%)",
-                        },
+                    /* Change TEXT color safely */
+                    "&:hover .button-text-wrapper": {
+                        color: "#fff",
                     },
 
                     "&:focus": { outline: "none" },
-                    "&:focus-visible": { outline: "none", boxShadow: "none" },
+                    "&.Mui-focusVisible": { boxShadow: "none" },
                 }}
             >
                 <Box
+                    className="button-text-wrapper"
                     sx={{
                         position: "relative",
-                        overflow: "hidden",
-                        display: "inline-block",
+                        zIndex: 2,
+                        color: "#1D1D1B",
+                        transition: "color 0.3s ease",
                     }}
                 >
-                    <Box
-                        className="btn-text-top"
-                        sx={{
-                            display: "block",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
-                        }}
-                    >
-                        Let's Work Together
-                    </Box>
-
-                    <Box
-                        className="btn-text-bottom"
-                        sx={{
-                            position: "absolute",
-                            left: 0,
-                            top: "100%",
-                            transition: "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
-                        }}
-                    >
-                        Let's Work Together
-                    </Box>
+                    Let's Work Together
                 </Box>
             </Button>
 
@@ -432,7 +403,7 @@ const PortfolioSection = () => {
     // 🔥 RETURN
     // ************************************
     return (
-        <Box id="cases" ref={sectionRef} sx={{ width: "100%" }}>
+        <Box id="cases" ref={sectionRef} sx={{ width: "100%", mt: { xs: 8, md: 16 } }}>
             <Box sx={{ maxWidth: isLargeScreen ? "100%" : "1600px", mx: "auto", px: isLargeScreen ? 12 : 2, display: "flex", flexDirection: "column", gap: "10px" }}>
 
                 {items.length === 5 && (

@@ -309,83 +309,59 @@ const ServicesStackSection = () => {
 
                 <Button
                   data-clickable
-                  disableRipple
                   onClick={handleScrollToContact}
-                  variant="contained"
+                  disableElevation
                   sx={{
-                    px: { xs: "10px", sm: "12px", md: isLargeScreen ? "27px" : "28px" },
-                    py: { xs: "10px", sm: "12px", md: isLargeScreen ? "24px" : "20px" },
-                    fontSize: { xs: "10px", sm: "11px", md: isLargeScreen ? "26px" : "16px" },
-                    backgroundColor: "#1D1D1B",
-                    borderRadius: "70px",
-                    fontWeight: 700,
-                    fontFamily: "Inter Tight, sans-serif",
-                    cursor: "default",
-                    overflow: "hidden",
                     position: "relative",
+                    overflow: "hidden",
+                    px: { xs: 2, sm: 3, md: isLargeScreen ? 4.2 : 2.9 },
+                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 2.3 },
+                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "15px" },
+                    borderRadius: "40px",
+                    backgroundColor: "black",
+                    color: "white",
+                    fontWeight: 900,
+                    fontFamily: "Inter Tight, sans-serif",
                     textTransform: "none",
+                    boxShadow: "none",
+                    cursor: "pointer",
 
-                    // Smooth background fill
+                    /* Hover BG animation */
                     "&::before": {
                       content: '""',
                       position: "absolute",
-                      inset: 0,
-                      backgroundColor: "#CAF55E",
-                      transform: "scaleY(0)",
-                      transformOrigin: "bottom",
-                      transition: "transform 0.99s cubic-bezier(0.16,1,0.3,1)",
-                      zIndex: 0,
-                    },
-                    "&:focus": {
-                      outline: "none",
-                      boxShadow: "none",
-                    },
-                    "&:hover::before": {
-                      transform: "scaleY(1)",
-                    },
-
-                    // Smooth text sliding + color change
-                    "& .btn-text-top": {
-                      position: "relative",
-                      zIndex: 1,
-                      color: "white",
-                      transition: "transform 0.99s cubic-bezier(0.22,1,0.36,1), color 0.4s ease",
-                    },
-                    "& .btn-text-bottom": {
-                      position: "absolute",
-                      top: 0,
+                      bottom: 0,
                       left: 0,
                       width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#1D1D1B",
-                      transform: "translateY(100%)",
-                      transition: "transform 0.99s cubic-bezier(0.22,1,0.36,1), color 0.4s ease",
+                      height: "0%",
+                      backgroundColor: "#CAF55E",
+                      transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
+                      zIndex: 0,
                     },
 
-                    // Hover state applied **directly here**
-                    "&:hover .btn-text-top": {
-                      transform: "translateY(-100%)",
-                      color: "#1D1D1B",
+                    "&:hover::before": {
+                      height: "100%",
                     },
-                    "&:hover .btn-text-bottom": {
-                      transform: "translateY(0%)",
+
+                    /* Change TEXT color safely */
+                    "&:hover .button-text-wrapper": {
+                      color: "#000",
                     },
+
+                    "&:focus": { outline: "none" },
+                    "&.Mui-focusVisible": { boxShadow: "none" },
                   }}
                 >
                   <Box
+                    className="button-text-wrapper"
                     sx={{
                       position: "relative",
-                      overflow: "hidden",
-                      display: "inline-block",
-                      width: "100%",
-                      height: "100%",
+                      zIndex: 2,
+                      color: "white",
+                      transition: "color 0.3s ease",
                     }}
                   >
-                    <Box className="btn-text-top">let's work together</Box>
-                    <Box className="btn-text-bottom">let's work together</Box>
+                    Let's Work Together
                   </Box>
                 </Button>
 

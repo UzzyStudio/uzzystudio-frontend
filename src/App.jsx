@@ -12,6 +12,8 @@ import CursorFollower from "./components/CursorFollower";
 import AnimatedMembers from "./components/AnimatedMembers";
 import ContactSection from "./components/ContactSection";
 import SmoothAlternatingSlider1 from "./components/imgsSlider";
+// import VideoScrollSection from "./components/VideoSection";
+import ScrollingVideoHero from "./components/ScrollingVideoHero";
 import { useEffect } from "react";
 import Lenis from "@studio-freight/lenis";
 function App() {
@@ -82,6 +84,8 @@ function App() {
       <ManifestoSection />
       <ServicesStackSection />
       <MotionSection />
+      {/* <ScrollingVideoHero /> */}
+      {/* <VideoScrollSection /> */}
       <VideoSection />
       <PortfolioSection />
       <AnimatedMembers />

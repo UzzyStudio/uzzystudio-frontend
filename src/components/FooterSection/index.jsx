@@ -5,6 +5,44 @@ import { client, urlFor } from "../../sanityClient";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+
+const footerMenuItemSx = {
+    cursor: "pointer",
+    fontFamily: "Inter Tight, sans-serif",
+    fontWeight: 500,
+    position: "relative",
+    overflow: "hidden",
+    color: "#fff",
+
+    "& > div": {
+        position: "relative",
+        overflow: "hidden",
+        height: "1.2em",
+    },
+
+    "& .menu-text-top, & .menu-text-bottom": {
+        display: "block",
+        lineHeight: "1.2em",
+        willChange: "transform",
+        transition: "transform 0.9s cubic-bezier(0.22,1,0.36,1), color 0.4s ease",
+    },
+
+    "& .menu-text-bottom": {
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        color: "#CAF55E", // hover color
+    },
+
+    "&:hover .menu-text-top": {
+        transform: "translateY(-100%)",
+    },
+
+    "&:hover .menu-text-bottom": {
+        transform: "translateY(-100%)",
+    },
+};
+
 const menuAnim = {
     hidden: { y: -60, opacity: 0 },
     visible: {
@@ -126,18 +164,16 @@ export default function FooterSection() {
                                     {footerData?.menuItems?.map((item, i) => (
                                         <Grid item key={i} >
                                             <Typography
-                                                onClick={() => handleScrollToSection(item.scrollId)} sx={{
+                                                onClick={() => handleScrollToSection(item.scrollId)}
+                                                sx={{
+                                                    ...footerMenuItemSx,
                                                     fontSize: { xs: "12px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
-                                                    fontWeight: 500,
-                                                    cursor: "pointer",
-                                                    fontFamily: "Inter Tight, sans-serif",
-                                                    "&:hover": { opacity: 0.6 },
-                                                    textTransform: "Lowercase",
-                                                    marginLeft: isLargeScreen ? "30px" : "20px",
-                                                    willChange: 'transform',
                                                 }}
                                             >
-                                                {item.label}
+                                                <Box>
+                                                    <Box className="menu-text-top">{item.label}</Box>
+                                                    <Box className="menu-text-bottom">{item.label}</Box>
+                                                </Box>
                                             </Typography>
                                         </Grid>
                                     ))}
@@ -155,18 +191,17 @@ export default function FooterSection() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             sx={{
-                                                fontSize: { xs: "10px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
-                                                fontWeight: 500,
-                                                color: "#fff",
-                                                fontFamily: "Inter Tight, sans-serif",
-                                                cursor: "pointer",
-                                                "&:hover": { opacity: 0.6 },
-                                                marginRight: isLargeScreen ? "30px" : "20px",
+                                                ...footerMenuItemSx,
                                                 textDecoration: "none",
+                                                fontSize: { xs: "10px", sm: "13px", md: isLargeScreen ? "22px" : "15px" },
                                             }}
                                         >
-                                            {item.label}
+                                            <Box>
+                                                <Box className="menu-text-top">{item.label}</Box>
+                                                <Box className="menu-text-bottom">{item.label}</Box>
+                                            </Box>
                                         </Typography>
+
                                     </Grid>
                                     ))}
                                 </Grid>

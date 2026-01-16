@@ -1,0 +1,19 @@
+.video-section {
+  height: 200vh;
+  position: relative;
+}
+
+.video-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video-box {
+  will-change: transform, width;
+  transition: none;
+}
