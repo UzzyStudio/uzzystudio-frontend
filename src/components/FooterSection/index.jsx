@@ -191,7 +191,7 @@ export default function FooterSection() {
                                     textAlign: "center", position: "relative",
                                     top: { xs: "90px", sm: "140px", md: "160px" },
                                     zIndex: "2", transform: "translateX(-50%)",
-                                    left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1405px" : isLGScreen ? "1370px" : "861px" },
+                                    left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1389px" : isLGScreen ? "900px" : "861px" },
                                     // "@media (min-width:1300px)": {
                                     //     top: "164px",
                                     //     left: "995px",
@@ -211,7 +211,6 @@ export default function FooterSection() {
                                         sx={{
                                             position: "relative",
                                             overflow: "hidden",
-
                                             px: { xs: 1.8, sm: 3, md: isLargeScreen ? 6 : 4 },
                                             py: { xs: 1.4, sm: 2.5, md: isLargeScreen ? 4.5 : 3 },
                                             fontSize: { xs: "10px", sm: "14px", md: isLargeScreen ? "22px" : "15px" },
@@ -277,8 +276,8 @@ export default function FooterSection() {
                                 <Grid
                                     sx={{
                                         textAlign: "center", position: "relative", top: { xs: "-20px", sm: "80px", md: "214px" },
-
-                                        left: { xs: "65px", sm: "180px", md: isLargeScreen ? "1600px" : isXLScreen ? "1360px" : isLGScreen ? "1370px" : "770px" },
+                                        zIndex: "2",
+                                        left: { xs: "65px", sm: "180px", md: isLargeScreen ? "1600px" : isXLScreen ? "1460px" : isLGScreen ? "900px" : "820px" },
                                         transform: "translateX(-50%)", willChange: 'transform, opacity',
                                         // "@media (min-width:1300px)": {
                                         //     top: "232px",
@@ -309,12 +308,13 @@ export default function FooterSection() {
                                         component="a"
                                         href={`mailto:${footerData?.footerEmail}`}
                                         sx={{
+                                            zIndex: "5",
                                             position: "relative",
-                                            zIndex: 5,                // 🔑 higher than image
+                                            // 🔑 higher than image
                                             display: "inline-block",
                                             pointerEvents: "auto",
 
-                                            fontSize: { xs: "10px", sm: "12px", md: isLargeScreen ? "22px" : "15px" },
+                                            fontSize: { xs: "1-=0px", sm: "12px", md: isLargeScreen ? "22px" : "15px" },
                                             fontFamily: "Inter Tight, sans-serif",
                                             marginTop: { xs: "10px", sm: "20px", md: isLargeScreen ? "45px" : "30px" },
 
