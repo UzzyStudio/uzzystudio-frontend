@@ -32,10 +32,10 @@ const SmoothAlternatingSlider1 = () => {
     client
       .fetch(
         `
-      *[_type == "smoothSliderSection"][0]{
-        images
-      }
-    `
+        *[_type == "smoothSliderSection"][0]{
+          images
+        }
+      `
       )
       .then((data) => {
         if (data?.images?.length) {
@@ -101,8 +101,20 @@ const SmoothAlternatingSlider1 = () => {
 
   /** ---------------- RESPONSIVE ---------------- */
   const isXs = useMediaQuery("(max-width:600px)");
-  const isSm = useMediaQuery("(max-width:900px)");
-  const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+  const isSm = useMediaQuery("(min-width:601px) and (max-width:900px)");
+  const isMd = useMediaQuery("(min-width:901px) and (max-width:1350px)");
+  const isLg = useMediaQuery("(min-width:1201px) and (max-width:1999px)");
+  const isUltraWide = useMediaQuery("(min-width:2000px)");
+  const VISIBLE_IMAGES = isUltraWide ? 3 : 3;
+  const IMAGE_RADIUS = isUltraWide
+    ? 15  // very smooth on big screens
+    : isMd
+      ? 8   // desktop
+      : isSm
+        ? 8   // tablet
+        : 8;  // mobile
+
+  // const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
   // Calculate container width (accounting for padding)
   useEffect(() => {
@@ -129,11 +141,22 @@ const SmoothAlternatingSlider1 = () => {
     };
   }, [images.length]);
 
+
+
   // Calculate item widths to show 2 full images + 2 partial images
   // Layout: [partial left ~30%] [gap] [full 1] [gap] [full 2] [gap] [partial right ~30%]
   // Formula: 0.3*full + gap + full + gap + full + gap + 0.3*full = containerWidth
   // Simplified: 2.6*full + 3*gap = containerWidth
-  const GAP = isXs ? 20 : isSm ? 35 : isLargeScreen ? 75 : 50;
+  const GAP = isXs
+    ? 40    // mobile
+    : isSm
+      ? 40      // small tablets
+      : isMd
+        ? 67       // laptops
+        : isUltraWide
+          ? 120        // ultra-wide / 4K
+          : 64;       // large desktop
+
 
   // const calculateItemWidths = () => {
   //   // Larger square is always 442px
@@ -161,37 +184,91 @@ const SmoothAlternatingSlider1 = () => {
   //   };
   // };
 
-  const calculateItemWidths = () => {
-    if (isXs) {
-      return {
-        big: 300,     // mobile large square
-        small: 240,    // mobile small square
-        partial: 180,  // mobile partial peek
-      };
-    } else if (isSm) {
-      return {
-        big: 250,
-        small: 200,
-        partial: 75,
-      };
-    } else {
-      const BIG_SQUARE_SIZE = 442;
-      const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
-      const partialWidth = Math.floor(BIG_SQUARE_SIZE * 0.3);
+  // const calculateItemWidths = () => {
+  //   if (isXs) {
+  //     return {
+  //       big: 300,     // mobile large square
+  //       small: 240,    // mobile small square
+  //       partial: 180,  // mobile partial peek
+  //     };
+  //   } else if (isSm) {
+  //     return {
+  //       big: 250,
+  //       small: 200,
+  //       partial: 75,
+  //     };
+  //   } else {
+  //     const BIG_SQUARE_SIZE = 442;
+  //     const SMALL_SQUARE_SIZE = Math.floor(BIG_SQUARE_SIZE * 0.85);
+  //     const partialWidth = Math.floor(BIG_SQUARE_SIZE * 0.3);
 
+  //     return {
+  //       big: BIG_SQUARE_SIZE,
+  //       small: SMALL_SQUARE_SIZE,
+  //       partial: partialWidth,
+  //     };
+  //   }
+  // };
+
+
+  const getImageRules = () => {
+    if (isUltraWide) {
       return {
-        big: BIG_SQUARE_SIZE,
-        small: SMALL_SQUARE_SIZE,
-        partial: partialWidth,
+        max: 880,        // 🔥 bigger hero images
+        smallRatio: 0.75 // 🔥 closer in size
       };
     }
+
+    if (isMd) {
+      return {
+        max: 500,
+        smallRatio: 0.75,
+      };
+    }
+
+    return {
+      max: 520,
+      smallRatio: 0.75,
+    };
   };
 
-  const {
-    big: ITEM_WIDTH_BIG,
-    small: ITEM_WIDTH_SMALL,
-    partial: PARTIAL_WIDTH,
-  } = calculateItemWidths();
+  const calculateItemWidths = () => {
+    if (!containerWidth) return { big: 360, small: 300 };
+
+    const { max, smallRatio } = getImageRules();
+
+    // Mobile: only 1 image visible at a time, but keep big/small sizes
+    if (isXs) {
+      // make sure biggest image fits nicely in viewport
+      const big = Math.min(containerWidth * 0.7, max); // 70% of container width
+      const small = Math.floor(big * smallRatio);
+      return { big, small };
+    }
+
+    // Regular desktop logic
+    const totalGaps = VISIBLE_IMAGES;
+    const usableWidth = containerWidth - GAP * totalGaps;
+    const fullImageWidth = usableWidth / VISIBLE_IMAGES;
+
+    const finalWidth = Math.min(fullImageWidth, max);
+
+    return {
+      big: Math.floor(finalWidth),
+      small: Math.floor(finalWidth * smallRatio),
+    };
+  };
+
+
+
+
+
+  // const {
+  //   big: ITEM_WIDTH_BIG,
+  //   small: ITEM_WIDTH_SMALL,
+  //   partial: PARTIAL_WIDTH,
+  // } = calculateItemWidths();
+  const { big: ITEM_WIDTH_BIG, small: ITEM_WIDTH_SMALL } =
+    calculateItemWidths();
 
   const getItemWidth = (i) => (i % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL);
 
@@ -205,35 +282,48 @@ const SmoothAlternatingSlider1 = () => {
   // On larger screens: center 2 full images with partial images entering from sides
   const [offset, setOffset] = useState(0);
 
+  // useEffect(() => {
+  //   if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
+  //     // Calculate layout: [partial left] [gap] [full 1] [gap] [full 2] [gap] [partial right]
+  //     // On larger screens: center 2 full images with partial images entering from sides
+  //     const firstImageWidth = 0 % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+  //     const secondImageWidth = 1 % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+
+  //     // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
+  //     const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
+
+  //     // Calculate remaining space for partial images on both sides
+  //     const remainingSpace = containerWidth - twoFullImagesWidth;
+  //     const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
+
+  //     // Position so we show partial left (~30% of first image), then 2 full images, then partial right
+  //     // Offset should position first image so only the partial amount is visible on left
+  //     const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
+  //     //   const initialOffset = firstImageWidth - visiblePartialLeft;
+  //     setOffset(-10);
+  //   }
+  // }, [
+  //   totalWidth,
+  //   containerWidth,
+  //   images.length,
+  //   PARTIAL_WIDTH,
+  //   ITEM_WIDTH_BIG,
+  //   ITEM_WIDTH_SMALL,
+  //   GAP,
+  // ]);
+
+  // 👇 ADD THIS HERE
   useEffect(() => {
-    if (containerWidth > 0 && images.length > 0 && totalWidth > 0) {
-      // Calculate layout: [partial left] [gap] [full 1] [gap] [full 2] [gap] [partial right]
-      // On larger screens: center 2 full images with partial images entering from sides
-      const firstImageWidth = 0 % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
-      const secondImageWidth = 1 % 2 === 0 ? ITEM_WIDTH_BIG : ITEM_WIDTH_SMALL;
+    if (!containerWidth || images.length === 0) return;
 
-      // Calculate how much space the 2 full images + 2 gaps take (between the 2 full images)
-      const twoFullImagesWidth = firstImageWidth + GAP + secondImageWidth;
-
-      // Calculate remaining space for partial images on both sides
-      const remainingSpace = containerWidth - twoFullImagesWidth;
-      const partialSpacePerSide = Math.max(PARTIAL_WIDTH, remainingSpace / 2);
-
-      // Position so we show partial left (~30% of first image), then 2 full images, then partial right
-      // Offset should position first image so only the partial amount is visible on left
-      const visiblePartialLeft = Math.min(PARTIAL_WIDTH, partialSpacePerSide);
-      //   const initialOffset = firstImageWidth - visiblePartialLeft;
-      setOffset(-10);
+    if (isXs) {
+      setOffset(0); // first image fully visible
+    } else {
+      setOffset(-ITEM_WIDTH_BIG * 0.5);
     }
-  }, [
-    totalWidth,
-    containerWidth,
-    images.length,
-    PARTIAL_WIDTH,
-    ITEM_WIDTH_BIG,
-    ITEM_WIDTH_SMALL,
-    GAP,
-  ]);
+  }, [containerWidth, ITEM_WIDTH_BIG, images.length, isXs]);
+
+
 
   /** ---------------- AUTO SCROLL ---------------- */
   const speed = useRef(0.7);
@@ -483,14 +573,20 @@ const SmoothAlternatingSlider1 = () => {
       onMouseMove={isDesktop ? handleMouseMove : undefined}
       sx={{
         width: "100%",
-        maxWidth: isLargeScreen ? "100%" : "1600px",
+        // maxWidth: isLargeScreen ? "100%" : "1600px",
+        maxWidth: "100%",
+
         margin: "auto",
         pb: isXs ? "100px" : isSm ? "60px" : "120px",
 
-        px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
+        // px: isLargeScreen ? { xs: 2, sm: 4, md: 12 } : { xs: 2, sm: 4, md: 6 },
         position: "relative",
         overflow: "hidden",
-        height: isXs ? 300 : isSm ? 200 : isLargeScreen ? 645 : 460,
+        // height: isXs ? 300 : isSm ? 200 : 460,
+
+        height: ITEM_WIDTH_BIG + 40,
+        // minHeight: isXs ? 300 : 420,
+        minHeight: isXs ? ITEM_WIDTH_BIG : 420,
         cursor: "none", // 👈 hide default cursor
         userSelect: "none", // Prevent text selection during drag
         WebkitUserSelect: "none",
@@ -502,9 +598,10 @@ const SmoothAlternatingSlider1 = () => {
         src={Smiley}
         sx={{
           position: "absolute",
-          right: isXs ? 30 : isSm ? 40 : isLargeScreen ? 120 : 140,
+          right: isXs ? 30 : isSm ? 40 : 140,
           bottom: isXs ? 20 : isSm ? 20 : -10,
-          width: isXs ? 100 : isSm ? 120 : isLargeScreen ? 270 : 180,
+          width: isXs ? 100 : isSm ? 120 : isUltraWide ? 260 : 180,
+
           zIndex: 0,
         }}
       />
@@ -539,12 +636,12 @@ const SmoothAlternatingSlider1 = () => {
                 width: squareSize,
                 height: squareSize, // Make it a perfect square
                 overflow: "hidden",
-                borderRadius: "14px",
+                borderRadius: `${IMAGE_RADIUS}px`,
                 position: "relative",
                 display: "block",
                 marginTop: `${marginTop}px`,
                 "& img": {
-                  borderRadius: "14px",
+                  borderRadius: `${IMAGE_RADIUS}px`,
                 },
               }}
             >
@@ -555,7 +652,7 @@ const SmoothAlternatingSlider1 = () => {
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
-                  borderRadius: "14px",
+                  // borderRadius: "2px",
                   display: "block",
                   margin: 0,
                   padding: 0,
