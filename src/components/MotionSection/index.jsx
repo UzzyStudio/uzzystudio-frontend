@@ -345,7 +345,7 @@ const MotionSection = () => {
                       fontSize: {
                         xs: "28px",
                         sm: "40px",
-                        md: isLargeScreen ? "80px" : isXLScreen ? "70px" : isLGScreen ? "70px" : "50px",
+                        md: isLargeScreen ? "100px" : isXLScreen ? "90px" : isLGScreen ? "70px" : "50px",
                       },
                       fontWeight: 800,
                       lineHeight: { xs: "1.1", sm: "1.1", md: "1.4" },
