@@ -36,38 +36,42 @@ const VideoSection = () => {
     useLayoutEffect(() => {
         if (!data?.videoUrl) return;
 
-        let tl;
-
         const ctx = gsap.context(() => {
-            gsap.set(videoWrapperRef.current, {
-                scale: 0.6,
+            const videoEl = videoWrapperRef.current;
+
+            // initial state
+            gsap.set(videoEl, {
+                scale: 0.4,
+                y: 0,
                 transformOrigin: "center center",
             });
 
-            tl = gsap.timeline({
+            // compute max Y movement based on section height
+            const sectionHeight = sectionRef.current.offsetHeight;
+            const maxScrollY = sectionHeight * 2; // trigger over twice the section size
+            const maxScale = 1.7; // max scale
+            const maxTranslateY = sectionHeight * 0.6; // adjust how far video moves down
+
+            gsap.to(videoEl, {
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top top",
-                    end: "+=180%",
-                    scrub: true,
-                    pin: true,
-                    pinSpacing: true,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true, // ✅ recalc on resize / layout change
-                },
-            });
+                    start: "top+=25% center",
 
-            tl.to(videoWrapperRef.current, {
-                scale: 1.2,
+                    end: "bottom-=25% center",
+                    scrub: 0.05,
+                    markers: true,
+
+                    invalidateOnRefresh: true,
+                },
+                scale: maxScale,
+                y: maxTranslateY,
                 ease: "none",
             });
         }, sectionRef);
 
-        return () => {
-            // tl?.scrollTrigger?.kill();
-            ctx.revert();
-        };
+        return () => ctx.revert();
     }, [data]);
+
 
 
     if (!data) return null;
@@ -78,6 +82,7 @@ const VideoSection = () => {
             sx={{
                 position: "relative",
                 width: "100%",
+                height: "1000px",
                 // minHeight: "100vh",
                 overflow: "hidden",
                 py: 20,
@@ -119,12 +124,12 @@ const VideoSection = () => {
 
                 sx={{
                     position: "absolute",
-                    top: "50%",
+                    top: "0%",
                     left: "50%",
-                    transform: "translate(-50%, -50%)",
                     width: { xs: "80%", md: isLargeScreen ? "1125px" : "750px" },
+                    height: "420px",
+                    transform: "translateX(-50%)",
                     zIndex: 3,
-                    borderRadius: "0px",
                     overflow: "hidden",
                     boxShadow: "0 20px 80px rgba(0,0,0,0.4)",
                 }}
