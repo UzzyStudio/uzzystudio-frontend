@@ -100,7 +100,7 @@ export default function AnimatedMembers() {
                 ? "112px"
                 : "75px",
           fontWeight: 700,
-          textAlign: isMobile ? "center" : "left",
+          textAlign: isMobile ? "center" : "center",
           lineHeight: isMobile
             ? "40px"
             : isTablet
