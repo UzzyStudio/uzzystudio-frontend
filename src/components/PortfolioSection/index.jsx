@@ -10,9 +10,31 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const PortfolioSection = () => {
-    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+    const isLargeScreen = useMediaQuery("(min-width: 2600px)");
+    const isXLScreen = useMediaQuery("(min-width: 1920px)");
+    const isLGScreen = useMediaQuery("(min-width: 1440px)");
+    const isMobileSmall = useMediaQuery("(max-width: 779px)");  // Small mobile devices
+
+
+    const maxWidthBox = isLargeScreen
+        ? "100vw"      // Ultra large screens
+        : isXLScreen
+            ? "100vw"    // XL screens
+            : isLGScreen
+                ? "1600px"    // LG screens
+                : "100%";     // Smaller screens, full width
     const [items, setItems] = useState([]);
 
+    const getCardHeight = (type) => {
+        // type: "full", "half", "cta"
+        if (isLargeScreen) return type === "full" ? 900 : type === "half" ? 800 : 600;
+        if (isXLScreen) return type === "full" ? 750 : type === "half" ? 650 : 500;
+        if (isLGScreen) return type === "full" ? 750 : type === "half" ? 650 : 600;
+        // fallback for smaller screens
+        if (isMobileSmall) return type === "full" ? 300 : type === "half" ? 300 : 250;
+
+        return type === "full" ? 500 : type === "half" ? 500 : 280;
+    };
 
     const query = `
 *[_type == "portfolioSection"][0]{
@@ -87,10 +109,14 @@ const PortfolioSection = () => {
             sx={{
                 position: "relative",
                 width: "100%",
-                maxWidth: isLargeScreen ? "100%" : "1600px",
+                // maxWidth: isLargeScreen ? "100%" : "100vw",
+                maxWidth: maxWidthBox,
                 margin: "auto",
-                height: { xs: "300px", md: isLargeScreen ? "750px" : "500px" },
+                // height: { xs: "300px", md: isLargeScreen ? "750px" : "500px" },
+                height: getCardHeight("full"),  // <-- dynamic height
+
                 overflow: "hidden",        // IMPORTANT
+
                 borderRadius: 2,
             }}
         >
@@ -199,9 +225,12 @@ const PortfolioSection = () => {
                 px: { xs: 0, md: isLargeScreen ? 12 : 6 },
                 width: "100%",
                 position: "relative",
-                maxWidth: isLargeScreen ? "100%" : "1600px",
+                // maxWidth: isLargeScreen ? "100%" : "1600px",
+                maxWidth: maxWidthBox,
                 margin: "auto",
-                height: { xs: "380px", md: isLargeScreen ? "750px" : "500px" },
+                // height: { xs: "380px", md: isLargeScreen ? "750px" : "500px" },
+                height: getCardHeight("full"),  // <-- dynamic height
+
                 overflow: "hidden",
                 borderRadius: 2,
             }}
@@ -305,7 +334,9 @@ const PortfolioSection = () => {
                 flex: { xs: "unset", md: 1 },   // FIX FOR MOBILE
                 width: { xs: "auto", md: "auto" },  // FULL WIDTH ON MOBILE
                 position: "relative",
-                height: { xs: "280px", md: "500px" }, // MORE HEIGHT FOR MOBILE TEXT
+                // height: { xs: "280px", md: "500px" }, // MORE HEIGHT FOR MOBILE TEXT
+                height: getCardHeight("cta"),  // <-- dynamic height
+
                 borderRadius: 2,
                 display: "flex",
                 flexDirection: "column",
@@ -404,7 +435,7 @@ const PortfolioSection = () => {
     // ************************************
     return (
         <Box id="cases" ref={sectionRef} sx={{ width: "100%", mt: { xs: 8, md: 16 } }}>
-            <Box sx={{ maxWidth: isLargeScreen ? "100%" : "1600px", mx: "auto", px: isLargeScreen ? 12 : 2, display: "flex", flexDirection: "column", gap: "10px" }}>
+            <Box sx={{ maxWidth: isLargeScreen ? "100%" : "100%", mx: "auto", px: isLargeScreen ? 12 : 2, display: "flex", flexDirection: "column", gap: "10px" }}>
 
                 {items.length === 5 && (
                     <>
