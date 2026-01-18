@@ -12,7 +12,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const VideoSection = () => {
-    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+
+    const isLargeScreen = useMediaQuery("(min-width: 2600px)");
+    const isXLScreen = useMediaQuery("(min-width: 1920px)");
+    const isLGScreen = useMediaQuery("(min-width: 1440px)");
+    const isMDScreen = useMediaQuery("(min-width: 1000px) and (max-width: 1439px)"); // 1000–1439
+    const isSmallScreen = useMediaQuery("(min-width: 690px) and (max-width: 999px)");
+    const isMobile = useMediaQuery("(max-width: 689px)");                          // 0–789
+
+
     const [data, setData] = useState(null);
 
 
@@ -50,13 +58,24 @@ const VideoSection = () => {
             const sectionHeight = sectionRef.current.offsetHeight;
             const maxScrollY = sectionHeight * 2; // trigger over twice the section size
             const maxScale = 1.7; // max scale
-            const maxTranslateY = sectionHeight * 0.6; // adjust how far video moves down
+            // const maxTranslateY = sectionHeight * 0.6; // adjust how far video moves down
+            const maxTranslateY = isLargeScreen
+                ? sectionHeight * 0.6
+                : isXLScreen
+                    ? sectionHeight * 0.7
+                    : isLGScreen
+                        ? sectionHeight * 0.6
+                        : isMDScreen
+                            ? sectionHeight * 0.5
+                            : isSmallScreen
+                                ? sectionHeight * 0.4
+                                : sectionHeight * 0.4; // mobile <790
+
 
             gsap.to(videoEl, {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top+=25% center",
-
                     end: "bottom-=25% center",
                     scrub: 0.05,
                     markers: true,
@@ -82,7 +101,17 @@ const VideoSection = () => {
             sx={{
                 position: "relative",
                 width: "100%",
-                height: "1000px",
+                height: isLargeScreen
+                    ? "70vw"     // 🔥 very large screens (2560+)
+                    : isXLScreen
+                        ? "1900px"     // 1920–2559
+                        : isLGScreen
+                            ? "1400px"   // 1440–1919
+                            : isMDScreen
+                                ? "900px"
+                                : isSmallScreen
+                                    ? "500px"
+                                    : "300px", // mobile
                 // minHeight: "100vh",
                 overflow: "hidden",
                 py: 20,
@@ -124,14 +153,44 @@ const VideoSection = () => {
 
                 sx={{
                     position: "absolute",
-                    top: "0%",
+                    top: isLargeScreen
+                        ? "0%"      // ultra-wide screens 2560+
+                        : isXLScreen
+                            ? "15%"       // 1920–2559
+                            : isLGScreen
+                                ? "15%" // 1440–1919
+                                : isMDScreen
+                                    ? "20%"
+                                    : isSmallScreen
+                                        ? "30%"
+                                        : "30%", // mobile
                     left: "50%",
-                    width: { xs: "80%", md: isLargeScreen ? "1125px" : "750px" },
-                    height: "420px",
-                    transform: "translateX(-50%)",
+                    width: isLargeScreen
+                        ? "100vw"     // full width on ultra-wide
+                        : isXLScreen
+                            ? "70vw"      // nearly full width
+                            : isLGScreen
+                                ? "65vw"
+                                : isMDScreen
+                                    ? "60vw"
+                                    : isSmallScreen
+                                        ? "70vw"
+                                        : "60vw", // mobile
+                    height: isLargeScreen
+                        ? "100vw"     // keep it square-ish for scaling
+                        : isXLScreen
+                            ? "50vw"
+                            : isLGScreen
+                                ? "40vw"
+                                : isMDScreen
+                                    ? "35vw"
+                                    : isSmallScreen
+                                        ? "50vw"
+                                        : "30vw", // mobile
+                    transform: "translate(-50%, -50%)",
                     zIndex: 3,
                     overflow: "hidden",
-                    boxShadow: "0 20px 80px rgba(0,0,0,0.4)",
+                    // boxShadow: "0 20px 80px rgba(0,0,0,0.4)",
                 }}
             >
 
