@@ -269,13 +269,22 @@ export default function ContactSection() {
                                                 borderRadius: "80px",
                                                 border: "1px solid #e0e0e0",
                                                 "& input::placeholder": {
-                                                    fontSize: "14px",
+                                                    fontSize: {
+                                                        xs: "11px",
+                                                        md: "14px",
+                                                    },
                                                     fontFamily: "Inter Tight, sans-serif",
                                                     opacity: 0.5,  // important for Chrome!
                                                 },
                                                 "& .MuiOutlinedInput-input": {
-                                                    padding: "14px 20px", // ⬅️ vertical | horizontal spacing
-                                                    fontSize: "14px",
+                                                    padding: {
+                                                        xs: "10px 12px",   // ✅ MOBILE (more breathing room)
+                                                        sm: "12px 15px",   // tablet
+                                                        md: "18px 22px",   // desktop
+                                                    }, fontSize: {
+                                                        xs: "14px",
+                                                        md: "14px",
+                                                    },
                                                     fontFamily: "Inter Tight, sans-serif",
                                                 },
 
@@ -317,13 +326,19 @@ export default function ContactSection() {
                                                 borderRadius: "80px",
                                                 border: "1px solid #e0e0e0",
                                                 "& input::placeholder": {
-                                                    fontSize: "14px",
+                                                    fontSize: {
+                                                        xs: "11px",
+                                                        md: "14px",
+                                                    },
                                                     fontFamily: "Inter Tight, sans-serif",
                                                     opacity: 0.5,
                                                 },
                                                 "& .MuiOutlinedInput-input": {
-                                                    padding: "14px 20px", // ⬅️ vertical | horizontal spacing
-                                                    fontSize: "14px",
+                                                    padding: {
+                                                        xs: "10px 12px",   // ✅ MOBILE (more breathing room)
+                                                        sm: "12px 15px",   // tablet
+                                                        md: "18px 22px",   // desktop
+                                                    }, fontSize: "14px",
                                                     fontFamily: "Inter Tight, sans-serif",
                                                 },
 

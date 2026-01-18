@@ -28,7 +28,7 @@ export default function AnimatedMembers() {
   }, []);
 
   // 🔹 Responsive
-  const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+  const isLargeScreen = useMediaQuery("(min-width: 1660px)");
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function AnimatedMembers() {
       ref={containerRef}
       sx={{
         width: "100%",
-        maxWidth: isLargeScreen ? "100%" : "1600px",
+        maxWidth: isLargeScreen ? "100%" : "100%",
         mx: "auto",
         height: isMobile ? "600px" : "100vh",
         background: "#F8F8F8",
@@ -87,7 +87,7 @@ export default function AnimatedMembers() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: isLargeScreen ? "0 120px" : "0 0px !important",
+        padding: isLargeScreen ? "0 0px" : "0 0px !important",
       }}
     >
       <Typography

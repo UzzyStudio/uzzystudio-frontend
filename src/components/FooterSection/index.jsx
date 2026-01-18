@@ -226,7 +226,7 @@ export default function FooterSection() {
                                     textAlign: "center", position: "relative",
                                     top: { xs: "90px", sm: "140px", md: "160px" },
                                     zIndex: "2", transform: "translateX(-50%)",
-                                    left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1389px" : isLGScreen ? "900px" : "861px" },
+                                    left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1129px" : isLGScreen ? "900px" : "861px" },
                                     // "@media (min-width:1300px)": {
                                     //     top: "164px",
                                     //     left: "995px",
@@ -312,7 +312,7 @@ export default function FooterSection() {
                                     sx={{
                                         textAlign: "center", position: "relative", top: { xs: "-20px", sm: "80px", md: "214px" },
                                         zIndex: "2",
-                                        left: { xs: "65px", sm: "180px", md: isLargeScreen ? "1600px" : isXLScreen ? "1460px" : isLGScreen ? "900px" : "820px" },
+                                        left: { xs: "65px", sm: "180px", md: isLargeScreen ? "1600px" : isXLScreen ? "1160px" : isLGScreen ? "900px" : "820px" },
                                         transform: "translateX(-50%)", willChange: 'transform, opacity',
                                         // "@media (min-width:1300px)": {
                                         //     top: "232px",

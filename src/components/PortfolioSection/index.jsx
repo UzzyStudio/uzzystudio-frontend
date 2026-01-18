@@ -21,7 +21,7 @@ const PortfolioSection = () => {
         : isXLScreen
             ? "100vw"    // XL screens
             : isLGScreen
-                ? "1600px"    // LG screens
+                ? "100%"    // LG screens
                 : "100%";     // Smaller screens, full width
     const [items, setItems] = useState([]);
 
@@ -31,7 +31,7 @@ const PortfolioSection = () => {
         if (isXLScreen) return type === "full" ? 750 : type === "half" ? 650 : 500;
         if (isLGScreen) return type === "full" ? 750 : type === "half" ? 650 : 600;
         // fallback for smaller screens
-        if (isMobileSmall) return type === "full" ? 300 : type === "half" ? 300 : 250;
+        if (isMobileSmall) return type === "full" ? 300 : type === "half" ? 300 : 300;
 
         return type === "full" ? 500 : type === "half" ? 500 : 280;
     };
