@@ -61,7 +61,7 @@ const ServicesStackSection = () => {
           y: i === 0 ? 0 : "100%",
           opacity: i === 0 ? 1 : 0,
           filter: i === 0 ? "brightness(1)" : "brightness(1)",
-          backgroundColor: i === 0 ? "#ffffff" : "#E7E7E7",
+          backgroundColor: i % 2 === 0 ? "#ffffff" : "#E7E7E7",
           force3D: true,
           willChange: "transform, opacity, filter",
         });
@@ -381,7 +381,7 @@ const ServicesStackSection = () => {
                   justifyContent: { xs: "flex-start", md: "center" },
                   height: { xs: "auto", md: "100%" },
                   margin: { xs: 0, md: "0 auto" },
-                  mt: { xs: 2, sm: 3, md: 0 },
+                  mt: { xs: 2, sm: 3, md: 35 || isLargeScreen ? "250px" : 0 },
                   mb: { xs: 2, sm: 3, md: 0 },
                   position: "relative",
                   zIndex: { xs: 2, md: 1 },
