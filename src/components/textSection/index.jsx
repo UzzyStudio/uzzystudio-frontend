@@ -40,11 +40,23 @@ LINES_CHARS.forEach((chars, idx) => {
    MAIN COMPONENT
 --------------------------------*/
 const CreativeTextSection = () => {
-    const isTablet = useMediaQuery("(max-width: 1024px)");
-    const isMobile = useMediaQuery("(max-width: 600px)");
-    const isBigScreen = useMediaQuery("(min-width: 1300px)");
-    const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+    const isMobile = useMediaQuery("(max-width:699px)");
 
+    const isTablet = useMediaQuery(
+        "(min-width:700px) and (max-width:1024px)"
+    );
+
+    const isSmallDesktop = useMediaQuery(
+        "(min-width:1025px) and (max-width:1299px)"
+    );
+
+    const isBigScreen = useMediaQuery(
+        "(min-width:1300px) and (max-width:1999px)"
+    );
+
+    const isLargeScreen = useMediaQuery(
+        "(min-width:2000px) and (max-width:2560px)"
+    );
 
     const containerRef = useRef(null);
     const [progress, setProgress] = useState(0);
@@ -79,11 +91,13 @@ const CreativeTextSection = () => {
         ? "38px"
         : isTablet
             ? "70px"
-            : isLargeScreen
-                ? "180px"
+            : isSmallDesktop
+                ? "110px"
                 : isBigScreen
-                    ? "130px"
-                    : "100px";
+                    ? "140px"
+                    : isLargeScreen
+                        ? "180px"
+                        : "100px";
     const lineSpacingFix = isMobile ? "-5px" : isTablet ? "-10px" : isLargeScreen ? "-35px" : "-25px";
 
     /** Responsive indent scale */
