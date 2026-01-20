@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Lenis from "@studio-freight/lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import gsap from "gsap";
+
 import Header from "./components/headerSection";
 import Hero from "./components/heroSection";
 import CreativeTextSection from "./components/textSection";
@@ -12,21 +16,42 @@ import CursorFollower from "./components/CursorFollower";
 import AnimatedMembers from "./components/AnimatedMembers";
 import ContactSection from "./components/ContactSection";
 import SmoothAlternatingSlider1 from "./components/imgsSlider";
-// import VideoScrollSection from "./components/VideoSection";
-import ScrollingVideoHero from "./components/ScrollingVideoHero";
-import { useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
-function App() {
-  useEffect(() => {
-    if (!window.lenis) return;
+import Loader from "./loader.jsx";
+gsap.registerPlugin(ScrollTrigger);
 
-    window.lenis.on("scroll", ScrollTrigger.update);
+function App() {
+  const [loading, setLoading] = useState(true);
+
+  /* -------------------------------
+     INIT LENIS + SCROLLTRIGGER
+     ONLY AFTER LOADER FINISHES
+  -------------------------------- */
+  useEffect(() => {
+    if (loading) return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      smoothWheel: true,
+      smoothTouch: true,
+    });
+
+    window.lenis = lenis;
+
+    const raf = (time) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    // 🔗 connect Lenis with ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
 
     ScrollTrigger.scrollerProxy(document.body, {
       scrollTop(value) {
         return arguments.length
-          ? window.lenis.scrollTo(value)
-          : window.lenis.scroll;
+          ? lenis.scrollTo(value, { immediate: true })
+          : lenis.scroll;
       },
       getBoundingClientRect() {
         return {
@@ -38,59 +63,36 @@ function App() {
       },
     });
 
-    ScrollTrigger.defaults({
-      scroller: document.body,
-    });
-
+    ScrollTrigger.defaults({ scroller: document.body });
     ScrollTrigger.refresh();
-  }, []);
-
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-      smoothWheel: true,
-      smoothTouch: true,
-    });
-
-    // ✅ expose globally (for header / other components)
-    window.lenis = lenis;
-    let rafId;
-
-    const raf = (time) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-
-    rafId = requestAnimationFrame(raf);
 
     return () => {
-      // ✅ STOP RAF LOOP
-      cancelAnimationFrame(rafId);
-
-      // ✅ REMOVE ALL LENIS LISTENERS
       lenis.destroy();
-      // ✅ remove global reference
       delete window.lenis;
     };
-  }, []);
+  }, [loading]);
+
   return (
     <>
-      <CursorFollower />
-      <Header />
-      <Hero />
-      <SmoothAlternatingSlider1 />
-      <CreativeTextSection />
-      <ManifestoSection />
-      <ServicesStackSection />
-      <MotionSection />
-      {/* <ScrollingVideoHero /> */}
-      {/* <VideoScrollSection /> */}
-      <VideoSection />
-      <PortfolioSection />
-      <AnimatedMembers />
-      <ContactSection />
-      <FooterSection />
+      {loading && <Loader onComplete={() => setLoading(false)} />}
+
+      {!loading && (
+        <>
+          <CursorFollower />
+          <Header />
+          <Hero />
+          <SmoothAlternatingSlider1 />
+          <CreativeTextSection />
+          <ManifestoSection />
+          <ServicesStackSection />
+          <MotionSection />
+          <VideoSection />
+          <PortfolioSection />
+          <AnimatedMembers />
+          <ContactSection />
+          <FooterSection />
+        </>
+      )}
     </>
   );
 }
