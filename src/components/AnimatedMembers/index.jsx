@@ -28,7 +28,11 @@ export default function AnimatedMembers() {
   }, []);
 
   // 🔹 Responsive
-  const isLargeScreen = useMediaQuery("(min-width: 1660px)");
+  const isLargeScreen = useMediaQuery(
+    "(min-width: 1660px) and (max-width: 1999px)"
+  );
+
+  const isUltraWide = useMediaQuery("(min-width: 2000px)");
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
@@ -71,14 +75,16 @@ export default function AnimatedMembers() {
   );
 
   // 🔹 Spread distance
-  const spread = isMobile ? 20 : isTablet ? 30 : 40;
+  const spread = isMobile ? 20 : isTablet ? 30 : isLargeScreen ? 60 : isUltraWide ? 65 : 30;
 
   return (
     <Box
       ref={containerRef}
       sx={{
         width: "100%",
-        maxWidth: isLargeScreen ? "100%" : "100%",
+        maxWidth: isUltraWide
+          ? "100%"
+          : isLargeScreen ? "100%" : "100%",
         mx: "auto",
         height: isMobile ? "600px" : "100vh",
         background: "#F8F8F8",
@@ -87,7 +93,9 @@ export default function AnimatedMembers() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: isLargeScreen ? "0 0px" : "0 0px !important",
+        padding: isUltraWide
+          ? "0 0px"
+          : isLargeScreen ? "0 0px" : "0 0px !important",
       }}
     >
       <Typography
@@ -98,7 +106,9 @@ export default function AnimatedMembers() {
               ? "48px"
               : isLargeScreen
                 ? "112px"
-                : "75px",
+                : isUltraWide
+                  ? "120px"
+                  : "75px",
           fontWeight: 700,
           textAlign: isMobile ? "center" : "center",
           lineHeight: isMobile
@@ -107,7 +117,9 @@ export default function AnimatedMembers() {
               ? "52px"
               : isLargeScreen
                 ? "120px"
-                : "80px",
+                : isUltraWide
+                  ? "120px"
+                  : "80px",
           fontFamily: "'Inter Tight', sans-serif",
           color: "#121314",
           letterSpacing: "-2px",
@@ -129,7 +141,13 @@ export default function AnimatedMembers() {
           <motion.span
             style={{
               display: "inline-block",
-              marginRight: "6px",
+              marginRight: isMobile
+                ? "10px"
+                : isTablet
+                  ? "18px"
+                  : isLargeScreen
+                    ? "70px"
+                    : "0px",
               x: wordLeftX,
               letterSpacing: "-2px",
             }}
@@ -160,14 +178,18 @@ export default function AnimatedMembers() {
                         ? 45
                         : isLargeScreen
                           ? 102
-                          : 68,
+                          : isUltraWide
+                            ? 110
+                            : 68,
                     height: isMobile
                       ? 40
                       : isTablet
                         ? 45
                         : isLargeScreen
                           ? 102
-                          : 68,
+                          : isUltraWide
+                            ? 110
+                            : 68,
                     borderRadius: "50%",
                     objectFit: "cover",
                     position: "absolute",
@@ -185,7 +207,13 @@ export default function AnimatedMembers() {
           <motion.span
             style={{
               display: "inline-block",
-              marginLeft: "6px",
+              marginLeft: isMobile
+                ? "10px"
+                : isTablet
+                  ? "18px"
+                  : isLargeScreen
+                    ? "70px"
+                    : "0px",
               letterSpacing: "-2px",
               x: wordRightX,
             }}
