@@ -446,12 +446,21 @@ const cardsData = [
       "Team Training",
       "Change Management",
       "Performance Metrics",
+      "Business Strategy",
+      "Market Research",
+      "Competitive Analysis",
+      "Growth Planning",
+      "Process Optimization",
+      "Team Training",
+      "Change Management",
+      "Performance Metrics",
     ],
   },
 ];
 
 // Reusable Card Component
-const ServiceCard = ({ card, isLargeScreen, index }) => {
+const ServiceCard = ({ card, screen, index }) => {
+
   const handleScrollToContact = () => {
     const contact = document.getElementById("contact");
     if (!contact || !window.lenis) return;
@@ -464,173 +473,373 @@ const ServiceCard = ({ card, isLargeScreen, index }) => {
     });
   };
 
-  const backgroundColor = index % 2 === 0 ? "#ffffff" : "#D8D8D8";
+  const backgroundColor = index % 2 === 0 ? "#ffffff" : "#ffffff";
+
+
+  const titleSize = screen.isXXL
+    ? "64px"
+    : screen.isXL
+      ? "56px"
+      : screen.isLarge
+        ? "50px"
+        : screen.isMedium
+          ? "30px"
+          : screen.isSmall
+            ? "20px"
+            : "20px";
+
+  const descSize = screen.isXXL
+    ? "20px"
+    : screen.isXL
+      ? "18px"
+      : screen.isLarge
+        ? "18px"
+        : screen.isMedium
+          ? "15px"
+          : screen.isSmall
+            ? "13px"
+            : "11px";
+
+  const buttonSize = screen.isXXL
+    ? "20px"
+    : screen.isXL
+      ? "20px"
+      : screen.isLarge
+        ? "15px"
+        : screen.isMedium
+          ? "14px"
+          : screen.isSmall
+            ? "11px"
+            : "11px";
+
+  const bulletSize = screen.isXXL
+    ? "17px"
+    : screen.isXL
+      ? "18px"
+      : "15px";
+
+  const contentMaxWidth = screen.isXXL
+    ? "1400px"
+    : screen.isXL
+      ? "1400px"
+      : screen.isLarge
+        ? "1400px"
+        : screen.isMedium
+          ? "1600px"
+          : screen.isSmall
+            ? "1000px"
+            : "100%"; // mobile
+
 
   return (
     <Box
       sx={{
         backgroundColor,
-        padding: { xs: "20px", md: "30px" },
+        width: "100vw",        // ✅ full viewport width
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",   // ✅ break out of layout container
+        marginRight: "-50vw",
+        borderBottom: index === cardsData.length - 1 ? "none" : "2px solid #E0E0E0", // ✅ remove for last card
+
       }}
     >
-      <Grid container spacing={6} alignItems="stretch">
-        {/* COLUMN 1: Text and Button */}
-        <Grid
-          size={{ xs: 12, md: 4 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Stack spacing={3}>
-            <Typography
+      <Box
+        className="card-overlay"
+        sx={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0,0,0,0.45)", // 🔥 darkness level
+          opacity: 0,
+          pointerEvents: "none",
+          zIndex: 2,
+          transition: "opacity 0.2s linear",
+        }}
+      />
+
+      <Container maxWidth={false}>
+        <Box sx={{
+          maxWidth: contentMaxWidth,  // ✅ control content width
+          margin: "0 auto",     // ✅ center content
+          padding: { xs: "40px 20px", md: "57px 40px" }
+        }}>
+          < Grid container spacing={{ xs: 3, sm: 6, md: 16 }} // smaller spacing on mobile
+            alignItems="stretch">
+            {/* COLUMN 1: Text and Button */}
+            <Grid
+              size={{ xs: 12, md: 5 }}
               sx={{
-                fontWeight: 800,
-                fontSize: {
-                  xs: "32px",
-                  sm: "38px",
-                  md: isLargeScreen ? "55px" : "42px",
-                },
-                fontFamily: "Inter Tight, sans-serif",
-                letterSpacing: "-1.1px",
-                textTransform: "lowercase",
-                color: "#1D1D1B",
-                lineHeight: 1.1,
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              {card.title}
-            </Typography>
+              <Stack spacing={{ xs: 1, sm: 3, md: 3 }} // smaller spacing on mobile
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: titleSize,
+                    fontFamily: "Inter Tight, sans-serif",
+                    letterSpacing: "-1.1px",
+                    textTransform: "lowercase",
+                    color: "#1D1D1B",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {card.title}
+                </Typography>
 
-            <Typography
-              sx={{
-                fontSize: "16px",
-                lineHeight: 1.6,
-                color: "#000",
-                fontFamily: "Inter Tight, sans-serif",
-              }}
-            >
-              {card.description}
-            </Typography>
-          </Stack>
+                <Typography
+                  sx={{
+                    fontSize: descSize,
 
-          <Box sx={{ flexGrow: 1 }} />
+                    lineHeight: 1.4,
+                    color: "#000",
+                    fontFamily: "Inter Tight, sans-serif",
+                  }}
+                >
+                  {card.description}
+                </Typography>
+              </Stack>
 
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={handleScrollToContact}
-            sx={{
-              alignSelf: "flex-start",
-              borderRadius: "999px",
-              px: 4,
-              py: 1.5,
-              backgroundColor: "#f3f3f3",
-              color: "#000",
-              textTransform: "lowercase",
-              fontWeight: 600,
-              fontFamily: "Inter Tight, sans-serif",
-              fontSize: "15px",
-              mt: { xs: 1, md: 2 },
-              "&:hover": {
-                backgroundColor: "#e8e8e8",
-              },
-            }}
-          >
-            let's work together
-          </Button>
-        </Grid>
-
-        {/* COLUMN 2: Services List */}
-        <Grid
-          size={{ xs: 12, md: 4 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <Stack spacing={1}>
-            {card.services.map((item, index) => (
-              <Typography
-                key={`${card.id}-${index}`}
+              <Box sx={{ flexGrow: 1 }} />
+              <Button
+                data-clickable
+                onClick={handleScrollToContact}
+                disableElevation
                 sx={{
-                  fontSize: "15px",
+                  mt: { xs: 2 },
+                  position: "relative",
+                  overflow: "hidden",
+                  alignSelf: "flex-start",
+                  padding:
+                    screen.isXXL
+                      ? "25px 32px"
+                      : screen.isXL
+                        ? "25px 32px"
+                        : screen.isLarge
+                          ? "25px 32px"
+                          : screen.isMedium
+                            ? "20px 28px"
+                            : screen.isSmall
+                              ? "12px 15px"
+                              : "12px 15px",
+                  fontSize: buttonSize,
+                  borderRadius: "50px",
+                  backgroundColor: "#f3f3f3",
+                  fontWeight: 900,
                   fontFamily: "Inter Tight, sans-serif",
-                  fontWeight: 400,
-                  lineHeight: 1.5,
-                  color: "#000",
-                  display: "flex",
-                  alignItems: "center",
-                  whiteSpace: "nowrap",
+                  textTransform: "none",
+                  boxShadow: "none",
+                  cursor: "pointer",
+
+                  /* Hover BG animation */
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "0%",
+                    backgroundColor: "#000",
+                    transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
+                    zIndex: 0,
+                  },
+
+                  "&:hover::before": {
+                    height: "100%",
+                  },
+
+                  /* Change TEXT color safely */
+                  "&:hover .button-text-wrapper": {
+                    color: "#fff",
+                  },
+
+                  "&:focus": { outline: "none" },
+                  "&.Mui-focusVisible": { boxShadow: "none" },
                 }}
               >
-                → {item}
-              </Typography>
-            ))}
-          </Stack>
-        </Grid>
+                <Box
+                  className="button-text-wrapper"
+                  sx={{
+                    position: "relative",
+                    zIndex: 2,
+                    color: "#1D1D1B",
+                    transition: "color 0.3s ease",
+                  }}
+                >
+                  let's work together
+                </Box>
+              </Button>
 
-        {/* COLUMN 3: Image */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              height: { xs: "400px", md: "500px" },
-              borderRadius: "24px",
-              overflow: "hidden",
-            }}
-          >
-            <Box
-              component="img"
-              src={card.image}
-              alt={card.title}
+            </Grid>
+
+            {/* COLUMN 2: Services List */}
+            <Grid
+              size={{ xs: 12, md: 2 }}
               sx={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                alignItems: { xs: "flex-start", md: "center" }, // ✅ left on mobile, center on desktop
+
               }}
-            />
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+            >
+              <Stack spacing={1}>
+                {card.services.map((item, index) => (
+                  <Typography
+                    key={`${card.id}-${index}`}
+                    sx={{
+                      fontSize: descSize,
+
+                      fontFamily: "Inter Tight, sans-serif",
+                      fontWeight: 400,
+                      lineHeight: 1.2,
+                      color: "#000",
+                      display: "flex",
+                      alignItems: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    → {item}
+                  </Typography>
+                ))}
+              </Stack>
+            </Grid>
+
+            {/* COLUMN 3: Image */}
+            <Grid size={{ xs: 12, md: 5 }}>
+              <Box
+                className="service-card"
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  height: screen.isXXL
+                    ? "520px"
+                    : screen.isXL
+                      ? "500px"
+                      : screen.isLarge
+                        ? "470px"
+                        : screen.isMedium
+                          ? "450px"
+                          : screen.isSmall
+                            ? "250px"
+                            : "230px",
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                }}
+              >
+                {/* IMAGE */}
+                <Box
+                  component="img"
+                  src={card.image}
+                  alt={card.title}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+
+                {/* 🔥 DARK OVERLAY */}
+                <Box
+                  className="card-overlay"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(0,0,0,1)", // 👈 darkness level
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                />
+              </Box>
+
+            </Grid>
+          </Grid>
+        </Box>
+      </Container >
+    </Box >
   );
 };
 
 const ServicesStackSection = () => {
-  const isLargeScreen = useMediaQuery("(min-width: 2000px)");
+  const isMobileScreen = useMediaQuery("(max-width: 779px)");
+
+  const isSmallScreen = useMediaQuery("(min-width: 780px) and (max-width: 899px)");
+  const isMediumScreen = useMediaQuery("(min-width: 900px) and (max-width: 1439px)");
+  const isLargeScreen = useMediaQuery("(min-width: 1440px) and (max-width: 1919px)");
+  const isXLargeScreen = useMediaQuery("(min-width: 1920px) and (max-width: 2559px)");
+  const isXXLargeScreen = useMediaQuery("(min-width: 2560px)");
   const stackRef = useRef();
 
+  const screen = {
+    isMobile: isMobileScreen,
+    isSmall: isSmallScreen,
+    isMedium: isMediumScreen,
+    isLarge: isLargeScreen,
+    isXL: isXLargeScreen,
+    isXXL: isXXLargeScreen,
+  };
+
   const setupAnimation = () => {
+    const overlays = gsap.utils.toArray(
+      stackRef.current.querySelectorAll(".card-overlay")
+    );
+
     const cards = gsap.utils.toArray(stackRef.current.children);
     if (cards.length < 2) return;
 
     const cardHeight = cards[0].offsetHeight;
-    const totalOffset = (cards.length - 1) * cardHeight; // Stack by cardHeight only for full overlap
+    const totalScroll = cardHeight * (cards.length - 1);
 
-    // Set stack height to exactly the scroll distance needed, eliminating extra whitespace
-    gsap.set(stackRef.current, {
-      height: totalOffset,
-    });
+    gsap.set(cards, { y: 0 });
 
-    // Create a timeline with staggered animations for overlapping effect
     const tl = gsap.timeline();
+
     cards.forEach((card, index) => {
+
       if (index === 0) return;
-      // Stagger start times for overlapping (adjust 0.3 for more/less overlap)
-      tl.to(card, { y: -index * cardHeight, ease: "none" }, (index - 1) * 0.3);
+
+      const overlay = card.querySelector(".card-overlay");
+
+      tl.to(
+        cards.slice(index),
+        {
+          y: -index * cardHeight,
+          ease: "none",
+        },
+        index - 1
+      );
+
+      // 🔥 darken previous card when new card stacks
+      if (overlay) {
+        tl.to(
+          cards[index - 1].querySelector(".card-overlay"),
+          {
+            opacity: 2,
+            ease: "none",
+            duration: 0.5,
+          },
+          index - 1
+        );
+      }
     });
 
-    // Pin and scrub the timeline
     ScrollTrigger.create({
       trigger: stackRef.current,
       start: "top top",
-      end: "+=" + totalOffset,
+      end: () => "+=" + totalScroll,
       pin: true,
-      scrub: 0.5,
+      pinSpacing: false, // ✅ removes huge gap
+      scrub: true,
       animation: tl,
+      invalidateOnRefresh: true,
     });
   };
 
@@ -672,7 +881,7 @@ const ServicesStackSection = () => {
               key={card.id}
               card={card}
               index={index}
-              isLargeScreen={isLargeScreen}
+              screen={screen}
             />
           ))}
         </Box>
