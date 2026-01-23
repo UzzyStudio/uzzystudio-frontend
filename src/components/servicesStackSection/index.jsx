@@ -1,26 +1,30 @@
-import { Button, Box, Typography, useMediaQuery } from "@mui/material";
-import { useRef, useLayoutEffect } from "react";
-import { useEffect, useState } from "react";
-import { client, urlFor } from "../../sanityClient";
-import gsap from "gsap";
-import "./style.css";
-
+import {
+  Button,
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-// import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { client, urlFor } from "../../sanityClient";
+
+import img1 from "../../assets/img1.png";
+import img2 from "../../assets/img2.png";
+import img3 from "../../assets/img3.png";
+import img4 from "../../assets/img4.png";
+import img5 from "../../assets/img5.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
-const ServicesStackSection = () => {
-  const isLargeScreen = useMediaQuery("(min-width: 2560px)");
-  const isXLScreen = useMediaQuery("(min-width: 1920px)");
-  const isLGScreen = useMediaQuery("(min-width: 1440px)");
-  const isSmScreen = useMediaQuery("(min-width: 600px)");
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    client
-      .fetch(`*[_type == "servicesStackSection"][0]{ services }`)
-      .then((res) => setData(res));
-  }, []);
+
+
+
+// Reusable Card Component
+const ServiceCard = ({ card, screen, index, totalCards }) => {
 
   const handleScrollToContact = () => {
     const contact = document.getElementById("contact");
@@ -34,416 +38,471 @@ const ServicesStackSection = () => {
     });
   };
 
-  const containerRef = useRef(null);
-  const cardRefs = useRef([]);
+  const backgroundColor = index % 2 === 0 ? "#ffffff" : "#ffffff";
 
-  cardRefs.current = [];
 
-  useLayoutEffect(() => {
-    if (!data?.services?.length) return;
+  const titleSize = screen.isXXL
+    ? "64px"
+    : screen.isXL
+      ? "56px"
+      : screen.isLarge
+        ? "50px"
+        : screen.isMedium
+          ? "30px"
+          : screen.isSmall
+            ? "20px"
+            : "20px";
 
-    const ctx = gsap.context(() => {
-      const cards = cardRefs.current;
+  const descSize = screen.isXXL
+    ? "20px"
+    : screen.isXL
+      ? "18px"
+      : screen.isLarge
+        ? "18px"
+        : screen.isMedium
+          ? "15px"
+          : screen.isSmall
+            ? "13px"
+            : "11px";
 
-      // 🔹 Base card setup
-      gsap.set(cards, {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        overflow: "hidden",
-      });
+  const buttonSize = screen.isXXL
+    ? "20px"
+    : screen.isXL
+      ? "20px"
+      : screen.isLarge
+        ? "15px"
+        : screen.isMedium
+          ? "14px"
+          : screen.isSmall
+            ? "11px"
+            : "11px";
 
-      // 🔹 Initial states with smooth setup
-      cards.forEach((card, i) => {
-        gsap.set(card, {
-          y: i === 0 ? 0 : "100%",
-          opacity: i === 0 ? 1 : 0,
-          filter: i === 0 ? "brightness(1)" : "brightness(1)",
-          backgroundColor: i === 0 ? "#ffffff" : "#E7E7E7",
-          force3D: true,
-          willChange: "transform, opacity, filter",
-        });
-      });
+  const bulletSize = screen.isXXL
+    ? "17px"
+    : screen.isXL
+      ? "18px"
+      : "15px";
 
-      // 🔹 Smooth pinned timeline with better easing
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: `+=${cards.length * window.innerHeight * 1.0}`,
-          scrub: 1.2, // Smoother scrub (higher = smoother, less jittery)
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          pinReparent: false,
-        },
-      });
+  const contentMaxWidth = screen.isXXL
+    ? "1400px"
+    : screen.isXL
+      ? "1400px"
+      : screen.isLarge
+        ? "1400px"
+        : screen.isMedium
+          ? "1600px"
+          : screen.isSmall
+            ? "1000px"
+            : "100%"; // mobile
 
-      // 🔹 Card transitions with smooth easing
-      cards.forEach((card, i) => {
-        if (i === 0) return;
-
-        // Enable hardware acceleration for smoother performance
-        gsap.set(card, {
-          force3D: true,
-          willChange: "transform, opacity, filter",
-        });
-
-        // Custom smooth easing function
-        const smoothEase = "power3.out";
-
-        // Incoming card with smooth easing and fade
-        tl.fromTo(
-          card,
-          { y: "100%", opacity: 0, filter: "brightness(1)" },
-          {
-            y: "0%",
-            opacity: 1,
-            filter: "brightness(1)",
-            ease: smoothEase,
-            duration: 1.2,
-          }
-        );
-
-        // Previous card fades + dims with smooth easing
-        tl.to(
-          cards[i - 1],
-          {
-            opacity: 0.25,
-            filter: "brightness(0.25)",
-            backgroundColor: "#F0F0F0",
-            ease: smoothEase,
-            duration: 1.2,
-          },
-          "<0.15" // Slight overlap for smoother transition
-        );
-      });
-    }, containerRef);
-
-    return () => {
-      ctx.revert(); // ✅ kills ScrollTrigger + timeline cleanly
-    };
-  }, [data]);
-  ScrollTrigger.matchMedia({
-    "(max-width: 768px)": () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    },
-  });
 
   return (
     <Box
-      id="services"
       sx={{
-        width: "100%",
+        backgroundColor,
+        width: "100vw",        // ✅ full viewport width
         position: "relative",
-        overflow: "visible",
-        isolation: "isolate",
-        zIndex: 1,
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",   // ✅ break out of layout container
+        marginRight: "-50vw",
+        borderBottom: index === totalCards - 1 ? "none" : "2px solid #E0E0E0"
+
       }}
     >
       <Box
-        ref={containerRef}
+        className="card-overlay"
         sx={{
-          width: "100%",
-          height: { xs: "100vh", md: "100vh" },
-          position: "relative",
-          overflow: "hidden",
-          borderTop: "2px solid #E7E7E7",
-          margin: 0,
-          padding: 0,
-          isolation: "isolate",
-          contain: "layout style paint",
-          zIndex: 1,
-          willChange: "transform",
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0,0,0,0.45)", // 🔥 darkness level
+          opacity: 0,
+          pointerEvents: "none",
+          zIndex: 2,
+          transition: "opacity 0.2s linear",
         }}
-      >
-        {data?.services?.map((service, index) => (
-          <Box
-            key={index}
-            ref={(el) => (cardRefs.current[index] = el)}
-            sx={{
-              width: "100%",
-              height: "100%",
-              maxWidth: "100%", // Always full width for background
-              margin: 0,
-              display: "flex",
-              justifyContent: "center", // Center the content wrapper
-              alignItems: "center",
-              padding: {
-                xs: "30px 0",
-                sm: "40px 0",
-                md: 0,
-              },
-              color: "#1D1D1B",
-              boxSizing: "border-box",
-              willChange: "transform, opacity, filter",
-              backfaceVisibility: "hidden",
-              WebkitBackfaceVisibility: "hidden",
-              transform: "translateZ(0)",
-              overflow: "hidden",
-              contain: "layout style paint",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-          >
-            {/* Content wrapper with max-width constraint */}
-            <Box
+      />
+
+      <Container maxWidth={false}>
+        <Box sx={{
+          maxWidth: contentMaxWidth,  // ✅ control content width
+          margin: "0 auto",     // ✅ center content
+          padding: { xs: "40px 20px", md: "57px 40px" }
+        }}>
+          < Grid container spacing={{ xs: 3, sm: 6, md: 16 }} // smaller spacing on mobile
+            alignItems="stretch">
+            {/* COLUMN 1: Text and Button */}
+            <Grid
+              size={{ xs: 12, md: 5 }}
               sx={{
-                width: "100%",
-                minWidth: { md: isLGScreen ? "1440px" : "100%" },
-                maxWidth: "100rem",
-                // height: "60vh",
-                height: { xs: "auto", md: "100%" },
                 display: "flex",
-                justifyContent: { xs: "flex-start", md: "space-between" },
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: "center",
-                paddingTop: {
-                  xs: "20px",
-                  sm: "30px",
-                  md: isLargeScreen
-                    ? "80px"
-                    : isXLScreen
-                      ? "70px"
-                      : isLGScreen
-                        ? "57px"
-                        : "50px",
-                },
-                paddingLeft: {
-                  xs: "20px",
-                  sm: "30px",
-                  md: isLargeScreen
-                    ? "100px"
-                    : isXLScreen
-                      ? "80px"
-                      : isLGScreen
-                        ? "67px"
-                        : "50px",
-                },
-                paddingRight: {
-                  xs: "20px",
-                  sm: "30px",
-                  md: isLargeScreen
-                    ? "120px"
-                    : isXLScreen
-                      ? "100px"
-                      : isLGScreen
-                        ? "80px"
-                        : "50px",
-                },
-                paddingBottom: { xs: "30px", sm: "40px", md: 0 },
-                gap: { xs: 2, sm: 4, md: 0 },
-                margin: {
-                  xs: "15px 0px 15px 0px",
-                  // sm: "10px auto",
-                  sm: "25px 0px 25px 0px",
-                  md: "0 auto",
-                },
-                boxSizing: "border-box",
+                flexDirection: "column",
               }}
             >
-              {/* LEFT COLUMN */}
-              <Box
+              <Stack spacing={{ xs: 1, sm: 3, md: 3 }} // smaller spacing on mobile
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: titleSize,
+                    fontFamily: "Inter Tight, sans-serif",
+                    letterSpacing: "-1.1px",
+                    textTransform: "lowercase",
+                    color: "#1D1D1B",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {card.title}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: descSize,
+
+                    lineHeight: 1.4,
+                    color: "#000",
+                    fontFamily: "Inter Tight, sans-serif",
+                  }}
+                >
+                  {card.description}
+                </Typography>
+              </Stack>
+
+              <Box sx={{ flexGrow: 1 }} />
+              <Button
+                data-clickable
+                onClick={handleScrollToContact}
+                disableElevation
                 sx={{
-                  width: { xs: "100%", sm: "100%", md: "33.33%" },
-                  flexShrink: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: { xs: "flex-start", md: "space-around" },
-                  height: "100%",
-                  alignItems: { xs: "flex-start", md: "flex-start" },
+                  mt: { xs: 2 },
                   position: "relative",
-                  zIndex: { xs: 2, md: 1 },
-                  order: { xs: 1, md: 0 },
+                  overflow: "hidden",
+                  alignSelf: "flex-start",
+                  padding:
+                    screen.isXXL
+                      ? "25px 32px"
+                      : screen.isXL
+                        ? "25px 32px"
+                        : screen.isLarge
+                          ? "25px 32px"
+                          : screen.isMedium
+                            ? "20px 28px"
+                            : screen.isSmall
+                              ? "12px 15px"
+                              : "12px 15px",
+                  fontSize: buttonSize,
+                  borderRadius: "50px",
+                  backgroundColor: "#f3f3f3",
+                  fontWeight: 900,
+                  fontFamily: "Inter Tight, sans-serif",
+                  textTransform: "none",
+                  boxShadow: "none",
+                  cursor: "pointer",
+
+                  /* Hover BG animation */
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "0%",
+                    backgroundColor: "#000",
+                    transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
+                    zIndex: 0,
+                  },
+
+                  "&:hover::before": {
+                    height: "100%",
+                  },
+
+                  /* Change TEXT color safely */
+                  "&:hover .button-text-wrapper": {
+                    color: "#fff",
+                  },
+
+                  "&:focus": { outline: "none" },
+                  "&.Mui-focusVisible": { boxShadow: "none" },
                 }}
               >
                 <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: {
-                        xs: "20px",
-                        sm: "23px",
-                        md: isLargeScreen ? "55px" : "38px",
-                      },
-                      fontFamily: "Inter Tight, sans-serif",
-                      letterSpacing: "-1.1px",
-                      fontWeight: 800,
-                      textTransform: "lowercase",
-                      mb: { xs: 0.5, md: 1 },
-                    }}
-                  >
-                    {service.title}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: {
-                        xs: "10px",
-                        sm: "11px",
-                        md: isLargeScreen ? "26px" : "18px",
-                      },
-                      fontFamily: "Inter Tight, sans-serif",
-                      mb: { xs: 2, md: 3 },
-                      maxWidth: {
-                        xs: "100%",
-                        sm: "86%",
-                        md: isLargeScreen ? "675px" : "450px",
-                      },
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {service.description}
-                  </Typography>
-                </Box>
-
-                <Button
-                  data-clickable
-                  onClick={handleScrollToContact}
-                  disableElevation
+                  className="button-text-wrapper"
                   sx={{
                     position: "relative",
-                    overflow: "hidden",
-                    px: { xs: 2, sm: 3, md: isLargeScreen ? 4.2 : 2.9 },
-                    py: { xs: 2, sm: 2.5, md: isLargeScreen ? 4.5 : 2.3 },
-                    fontSize: { xs: "11px", sm: "14px", md: isLargeScreen ? "19px" : "15px" },
-                    borderRadius: "40px",
-                    backgroundColor: "black",
-                    color: "white",
-                    fontWeight: 900,
-                    fontFamily: "Inter Tight, sans-serif",
-                    textTransform: "none",
-                    boxShadow: "none",
-                    cursor: "pointer",
-
-                    /* Hover BG animation */
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "0%",
-                      backgroundColor: "#CAF55E",
-                      transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
-                      zIndex: 0,
-                    },
-
-                    "&:hover::before": {
-                      height: "100%",
-                    },
-
-                    /* Change TEXT color safely */
-                    "&:hover .button-text-wrapper": {
-                      color: "#000",
-                    },
-
-                    "&:focus": { outline: "none" },
-                    "&.Mui-focusVisible": { boxShadow: "none" },
+                    zIndex: 2,
+                    color: "#1D1D1B",
+                    transition: "color 0.3s ease",
                   }}
                 >
-                  <Box
-                    className="button-text-wrapper"
-                    sx={{
-                      position: "relative",
-                      zIndex: 2,
-                      color: "white",
-                      transition: "color 0.3s ease",
-                    }}
-                  >
-                    Let's Work Together
-                  </Box>
-                </Button>
+                  let's work together
+                </Box>
+              </Button>
 
+            </Grid>
 
+            {/* COLUMN 2: Services List */}
+            <Grid
+              size={{ xs: 12, md: 2 }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                alignItems: { xs: "flex-start", md: "center" }, // ✅ left on mobile, center on desktop
 
-              </Box>
-
-              {/* MIDDLE BULLETS */}
-              <Box
-                sx={{
-                  display: "flex",
-                  width: { xs: "100%", sm: "100%", md: "auto" },
-                  flexShrink: 0,
-                  flexDirection: "column",
-                  gap: { xs: 0, sm: 1, md: 1 },
-                  alignItems: "flex-start",
-                  justifyContent: { xs: "flex-start", md: "center" },
-                  height: { xs: "auto", md: "100%" },
-                  margin: { xs: 0, md: "0 auto" },
-                  mt: { xs: 2, sm: 3, md: 0 },
-                  mb: { xs: 2, sm: 3, md: 0 },
-                  position: "relative",
-                  zIndex: { xs: 2, md: 1 },
-                  order: { xs: 2, md: 0 },
-                }}
-              >
-                {service.points?.map((p, i) => (
+              }}
+            >
+              <Stack spacing={1}>
+                {card.services.map((item, index) => (
                   <Typography
-                    key={i}
+                    key={`${card.id}-${index}`}
                     sx={{
-                      fontSize: {
-                        xs: "10px",
-                        sm: "11px",
-                        md: isLargeScreen ? "26px" : "18px",
-                      },
-                      fontWeight: 400,
+                      fontSize: descSize,
+
                       fontFamily: "Inter Tight, sans-serif",
-                      lineHeight: 1.5,
+                      fontWeight: 400,
+                      lineHeight: 1.2,
+                      color: "#000",
                       display: "flex",
                       alignItems: "center",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    → {p}
+                    → {item}
                   </Typography>
                 ))}
-              </Box>
+              </Stack>
+            </Grid>
 
-              {/* RIGHT IMAGE */}
+            {/* COLUMN 3: Image */}
+            <Grid size={{ xs: 12, md: 5 }}>
               <Box
+                className="service-card"
                 sx={{
-                  width: { xs: "100%", md: "33.33%" },
-                  flexShrink: 0,
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  paddingRight: { xs: 0, md: "35px" },
-                  marginLeft: "auto",
                   position: "relative",
-                  zIndex: { xs: 1, md: 1 },
-                  order: { xs: 3, md: 0 },
-                  // marginBottom: { xs: "80px", md: 0 },
-                  // paddingBottom: { xs: "20px", md: 0 },
+                  width: "100%",
+                  height: screen.isXXL
+                    ? "520px"
+                    : screen.isXL
+                      ? "550px"
+                      : screen.isLarge
+                        ? "470px"
+                        : screen.isMedium
+                          ? "450px"
+                          : screen.isSmall
+                            ? "250px"
+                            : "230px",
+                  borderRadius: "10px",
+                  overflow: "hidden",
                 }}
               >
+                {/* IMAGE */}
                 <Box
                   component="img"
-                  src={urlFor(service.image).width(800).url()}
-                  alt={service.title}
+                  src={card.image}
+                  alt={card.title}
                   sx={{
                     width: "100%",
-                    maxWidth: "100%",
-                    height: { xs: "250px", sm: "350px", md: "auto" },
-                    borderRadius: "8px",
+                    height: "100%",
                     objectFit: "cover",
-                    // paddingBottom: { xs: "20px", md: 0 },
+                  }}
+                />
+
+                {/* 🔥 DARK OVERLAY */}
+                <Box
+                  className="card-overlay"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(0,0,0,1)", // 👈 darkness level
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                    pointerEvents: "none",
+                    zIndex: 2,
                   }}
                 />
               </Box>
-            </Box>
-          </Box>
-        ))}
-      </Box>
+
+            </Grid>
+          </Grid>
+        </Box>
+      </Container >
+    </Box >
+  );
+};
+
+const ServicesStackSection = () => {
+  const isMobileScreen = useMediaQuery("(max-width: 779px)");
+
+  const isSmallScreen = useMediaQuery("(min-width: 780px) and (max-width: 899px)");
+  const isMediumScreen = useMediaQuery("(min-width: 900px) and (max-width: 1439px)");
+  const isLargeScreen = useMediaQuery("(min-width: 1440px) and (max-width: 1919px)");
+  const isXLargeScreen = useMediaQuery("(min-width: 1920px) and (max-width: 2559px)");
+  const isXXLargeScreen = useMediaQuery("(min-width: 2560px)");
+  const stackRef = useRef();
+
+  const screen = {
+    isMobile: isMobileScreen,
+    isSmall: isSmallScreen,
+    isMedium: isMediumScreen,
+    isLarge: isLargeScreen,
+    isXL: isXLargeScreen,
+    isXXL: isXXLargeScreen,
+  };
+  // Card data structure
+  const [cardsData, setCardsData] = useState([]);
+
+  const query = `
+*[_type == "servicesStackSection"][0]{
+  services[]{
+    _key,
+    title,
+    description,
+    points,
+    image{
+      asset->{
+        _id,
+        url
+      }
+    }
+  }
+}
+`;
+  useEffect(() => {
+    client.fetch(query).then((data) => {
+      if (!data?.services) return;
+
+      const formattedData = data.services.map((item, index) => ({
+        id: item._key || index,
+        title: item.title,
+        description: item.description,
+        services: item.points || [],
+        image: item.image ? urlFor(item.image).url() : "",
+      }));
+
+      setCardsData(formattedData);
+    });
+  }, []);
+
+  const setupAnimation = () => {
+    const overlays = gsap.utils.toArray(
+      stackRef.current.querySelectorAll(".card-overlay")
+    );
+
+    const cards = gsap.utils.toArray(stackRef.current.children);
+    if (cards.length < 2) return;
+
+    const cardHeight = cards[0].offsetHeight;
+    const totalScroll = cardHeight * (cards.length - 1);
+
+    gsap.set(cards, { y: 0 });
+
+    const tl = gsap.timeline();
+
+    cards.forEach((card, index) => {
+
+      if (index === 0) return;
+
+      const overlay = card.querySelector(".card-overlay");
+
+      tl.to(
+        cards.slice(index),
+        {
+          y: -index * cardHeight,
+          ease: "none",
+        },
+        index - 1
+      );
+
+      // 🔥 darken previous card when new card stacks
+      if (overlay) {
+        tl.to(
+          cards[index - 1].querySelector(".card-overlay"),
+          {
+            opacity: 2,
+            ease: "none",
+            duration: 0.5,
+          },
+          index - 1
+        );
+      }
+    });
+
+    ScrollTrigger.create({
+      trigger: stackRef.current,
+      start: "top top",
+      end: () => "+=" + totalScroll,
+      pin: true,
+      pinSpacing: false, // ✅ removes huge gap
+      scrub: true,
+      animation: tl,
+      invalidateOnRefresh: true,
+    });
+  };
+
+  useEffect(() => {
+    if (!cardsData.length) return;
+
+    let ctx;
+
+    const init = () => {
+      ctx = gsap.context(() => {
+        setupAnimation();
+      }, stackRef);
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    };
+
+    init();
+
+    const handleResize = () => {
+      if (ctx) ctx.revert();   // ✅ only kill THIS section’s triggers
+      init();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (ctx) ctx.revert();   // ✅ scoped cleanup
+    };
+  }, [cardsData]);
+
+
+
+  return (
+    <Box
+      component="section"
+      sx={{
+        padding: { xs: "40px 20px", md: "57px 67px" },
+        backgroundColor: "#ffffff",
+        position: "relative",
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box
+          ref={stackRef}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {cardsData.map((card, index) => (
+            <ServiceCard
+              key={card.id}
+              card={card}
+              index={index}
+              screen={screen}
+              totalCards={cardsData.length}
+
+            />
+          ))}
+        </Box>
+      </Container>
     </Box>
   );
 };

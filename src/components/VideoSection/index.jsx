@@ -197,8 +197,11 @@ const VideoSection = () => {
                 {data?.videoUrl && (
                     <video
                         onLoadedData={() => {
-                            ScrollTrigger.update();
+                            setTimeout(() => {
+                                ScrollTrigger.refresh();
+                            }, 100);
                         }}
+
                         src={data.videoUrl}
                         autoPlay
                         muted
