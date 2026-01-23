@@ -73,7 +73,7 @@ const Loader = ({ onComplete }) => {
                 initial={{ color: "#000" }}
                 sx={{
                     fontFamily: "Inter Tight, sans-serif",
-                    fontSize: { xs: "20px", md: "50px" },
+                    fontSize: { xs: "13px", md: "25px" },
                     fontWeight: 500,
                     letterSpacing: "-0.04em",
                     zIndex: 3,

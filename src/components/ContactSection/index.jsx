@@ -29,6 +29,8 @@ export default function ContactSection() {
 
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState(false);
+    const [nameError, setNameError] = useState(false);
+
 
     const isLargeScreen = useMediaQuery("(min-width: 2560px)");
 
@@ -76,29 +78,65 @@ export default function ContactSection() {
         "$5,000+",
     ];
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault()
+
+    //     const doc = {
+    //         _type: 'contactSubmission',
+    //         nameCompany: formData.nameCompany,
+    //         email: formData.email,
+    //         services: formData.services,
+    //         budget: formData.budget,
+    //         message: formData.message,
+    //         submittedAt: new Date().toISOString(),
+    //     }
+
+    //     try {
+    //         await client.create(doc)
+    //         setSubmitted(true)
+    //         setFormData({ nameCompany: '', email: '', services: [], budget: '', message: '' })
+    //     } catch (err) {
+    //         console.error('Sanity submit error FULL:', err);
+    //         alert(err.message);
+    //         setError(true);
+    //     }
+    // }
+
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        // ✅ validation
+        if (!formData.nameCompany.trim()) {
+            alert("Please enter your name & company.");
+            return;
+        }
 
         const doc = {
-            _type: 'contactSubmission',
+            _type: "contactSubmission",
             nameCompany: formData.nameCompany,
             email: formData.email,
             services: formData.services,
             budget: formData.budget,
             message: formData.message,
             submittedAt: new Date().toISOString(),
-        }
+        };
 
         try {
-            await client.create(doc)
-            setSubmitted(true)
-            setFormData({ nameCompany: '', email: '', services: [], budget: '', message: '' })
+            await client.create(doc);
+            setSubmitted(true);
+            setError(false);
+            setFormData({
+                nameCompany: "",
+                email: "",
+                services: [],
+                budget: "",
+                message: "",
+            });
         } catch (err) {
-            console.error('Sanity submit error FULL:', err);
-            alert(err.message);
+            console.error("Sanity submit error FULL:", err);
             setError(true);
         }
-    }
+    };
 
     return (
         <Box
@@ -118,7 +156,6 @@ export default function ContactSection() {
             }}>
                 <Grid container spacing={{ xs: 0, md: 15 }} alignItems="flex-start" justifyContent="space-between" flexWrap={{ xs: "wrap", sm: "wrap", md: "nowrap" }}
                 >
-
                     {/* LEFT COLUMN */}
                     <Grid item xs={12} md={4} sx={{ minWidth: 0, mb: { xs: 6, md: 0 } }}>
                         <Box>
@@ -205,7 +242,20 @@ export default function ContactSection() {
                                     cursor: "pointer",
                                 }}
                             >
-                                info@uzzy.design
+                                uzzystudios@gmail.com
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: 2,
+                                    fontSize: isLargeScreen ? "30px" : "20px",
+                                    fontWeight: 500,
+                                    color: "black",
+                                    textDecoration: "underline",
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => window.open("https://wa.me/447592131117", "_blank")}
+                            >
+                                +44 7592 131117
                             </Typography>
                         </Box>
                     </Grid>
@@ -250,7 +300,14 @@ export default function ContactSection() {
                                         fullWidth
                                         variant="outlined"
                                         value={formData.nameCompany}
-                                        onChange={(e) => setFormData({ ...formData, nameCompany: e.target.value })}
+                                        // onChange={(e) => setFormData({ ...formData, nameCompany: e.target.value })}
+                                        onChange={(e) => {
+                                            setFormData({ ...formData, nameCompany: e.target.value });
+                                            setNameError(false);
+                                        }}
+                                        helperText={nameError ? "Name & Company is required" : ""}
+                                        error={nameError}
+
 
                                         inputProps={{
                                             style: {
@@ -475,6 +532,8 @@ export default function ContactSection() {
                             <Box sx={{ mt: 4 }}>
                                 <Button
                                     data-clickable
+
+                                    // disabled={!formData.nameCompany.trim()}
                                     onClick={handleSubmit}
                                     variant="contained"
                                     sx={{
@@ -515,6 +574,20 @@ export default function ContactSection() {
                                         "&:hover .button-text-wrapper": {
                                             color: "#1D1D1B",
                                         },
+                                        "&:focus": {
+                                            outline: "none",
+                                            boxShadow: "none",
+                                        },
+                                        "&.Mui-focusVisible": {
+                                            boxShadow: "none",
+                                        },
+                                        "&:active": {
+                                            boxShadow: "none",
+                                        },
+                                        "& .MuiTouchRipple-root": {
+                                            display: "none",
+                                        },
+
                                     }}
                                 >
                                     <Box

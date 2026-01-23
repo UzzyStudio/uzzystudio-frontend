@@ -16,6 +16,7 @@ import CursorFollower from "./components/CursorFollower";
 import AnimatedMembers from "./components/AnimatedMembers";
 import ContactSection from "./components/ContactSection";
 import SmoothAlternatingSlider1 from "./components/imgsSlider";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 import Loader from "./loader.jsx";
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,6 +92,7 @@ function App() {
           <AnimatedMembers />
           <ContactSection />
           <FooterSection />
+          <ScrollToTop />
         </>
       )}
     </>

@@ -276,4 +276,17 @@ const submitStyle = {
     "&:hover .button-text-wrapper": {
         color: "#1D1D1B",
     },
+    "&:focus": {
+        outline: "none",
+        boxShadow: "none",
+    },
+    "&.Mui-focusVisible": {
+        boxShadow: "none",
+    },
+    "&:active": {
+        boxShadow: "none",
+    },
+    "& .MuiTouchRipple-root": {
+        display: "none",
+    },
 };

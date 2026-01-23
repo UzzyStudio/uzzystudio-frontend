@@ -42,6 +42,7 @@ const PortfolioSection = () => {
     title,
     subtitle,
     tags,
+    link, // ✅ ADD THIS
     "image": image.asset->url
   }
 }
@@ -56,6 +57,24 @@ const PortfolioSection = () => {
     }, []);
 
 
+    const ClickableBox = ({ link, children }) => {
+        if (!link) return children;
+
+        return (
+            <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    display: "block",
+                }}
+            >
+                {children}
+            </a>
+        );
+    };
 
 
     const handleScrollToContact = () => {
@@ -103,226 +122,230 @@ const PortfolioSection = () => {
     // ************************************
     // 🔥 FULL WIDTH BOX
     // ************************************
-    const FullBox = ({ img, tags, title, subtitle }) => (
-        <Box
-            className="portfolio-card"
-            sx={{
-                position: "relative",
-                width: "100%",
-                // maxWidth: isLargeScreen ? "100%" : "100vw",
-                maxWidth: maxWidthBox,
-                margin: "auto",
-                // height: { xs: "300px", md: isLargeScreen ? "750px" : "500px" },
-                height: getCardHeight("full"),  // <-- dynamic height
-
-                overflow: "hidden",        // IMPORTANT
-
-                borderRadius: 2,
-            }}
-        >
-            <img
-                src={img}
-                onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
-                className="zoom-img"
-                style={{
-                    willChange: "transform",
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    transformOrigin: "center center", // smooth scaling
-                }}
-            />
-
+    const FullBox = ({ img, tags, title, subtitle, link }) => (
+        <ClickableBox link={link}>
             <Box
+                className="portfolio-card"
                 sx={{
-                    display: "flex",
-                    gap: "8px",
-                    position: "absolute",
-                    top: 16,
-                    left: 16,
-                    ml: "30px",
+                    position: "relative",
+                    width: "100%",
+                    // maxWidth: isLargeScreen ? "100%" : "100vw",
+                    maxWidth: maxWidthBox,
+                    margin: "auto",
+                    // height: { xs: "300px", md: isLargeScreen ? "750px" : "500px" },
+                    height: getCardHeight("full"),  // <-- dynamic height
 
-                    // flexWrap: "wrap",   // 💥 allows 3–4 tags without breaking layout
+                    overflow: "hidden",        // IMPORTANT
+
+                    borderRadius: 2,
                 }}
             >
-                {tags?.map((t, i) => (
+                <img
+                    src={img}
+                    onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
+                    className="zoom-img"
+                    style={{
+                        willChange: "transform",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        transformOrigin: "center center", // smooth scaling
+                    }}
+                />
 
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: "8px",
+                        position: "absolute",
+                        top: 16,
+                        left: 16,
+                        ml: "30px",
+
+                        // flexWrap: "wrap",   // 💥 allows 3–4 tags without breaking layout
+                    }}
+                >
+                    {tags?.map((t, i) => (
+
+                        <Typography
+                            key={i}
+                            sx={{
+                                px: 1.2,
+                                py: 0.8,
+                                border: "1px solid white",
+                                borderRadius: "20px",
+                                color: "#fff",
+                                fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
+                                fontFamily: "Inter Tight, sans-serif",
+                                textTransform: "uppercase",
+                            }}
+                        >
+                            {t}
+                        </Typography>
+                    ))}
+                </Box>
+
+                <Box
+                    sx={{
+                        position: "absolute",
+                        bottom: 16,
+                        left: 0,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        px: 4,
+                        alignItems: "center",
+                    }}
+                >
                     <Typography
-                        key={i}
                         sx={{
-                            px: 1.2,
-                            py: 0.8,
-                            border: "1px solid white",
-                            borderRadius: "20px",
-                            color: "#fff",
-                            fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
+                            fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
                             fontFamily: "Inter Tight, sans-serif",
-                            textTransform: "uppercase",
+                            letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
+                            lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
+                            fontWeight: 400,
+                            color: "#fff",
                         }}
                     >
-                        {t}
+                        {title}
                     </Typography>
-                ))}
+
+                    <Typography
+                        sx={{
+                            fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
+                            fontWeight: 300,
+                            color: "#fff",
+                            textAlign: "right",
+                            fontFamily: "Inter Tight, sans-serif",
+                            marginRight: isLargeScreen ? "112px" : "75px",
+                            opacity: 1,
+                            width: "27%",
+                            letterSpacing: "0.01px"
+                        }}
+                    >
+                        {subtitle}
+                    </Typography>
+                </Box>
+
             </Box>
-
-            <Box
-                sx={{
-                    position: "absolute",
-                    bottom: 16,
-                    left: 0,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    px: 4,
-                    alignItems: "center",
-                }}
-            >
-                <Typography
-                    sx={{
-                        fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
-                        fontFamily: "Inter Tight, sans-serif",
-                        letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
-                        lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
-                        fontWeight: 400,
-                        color: "#fff",
-                    }}
-                >
-                    {title}
-                </Typography>
-
-                <Typography
-                    sx={{
-                        fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
-                        fontWeight: 300,
-                        color: "#fff",
-                        textAlign: "right",
-                        fontFamily: "Inter Tight, sans-serif",
-                        marginRight: isLargeScreen ? "112px" : "75px",
-                        opacity: 1,
-                        width: "27%",
-                        letterSpacing: "0.01px"
-                    }}
-                >
-                    {subtitle}
-                </Typography>
-            </Box>
-
-        </Box>
+        </ClickableBox>
     );
 
     // ************************************
     // 🔥 HALF WIDTH BOX (Correct layout)
     // ************************************
-    const HalfBox = ({ img, tags, title, subtitle }) => (
-        <Box
-            className="portfolio-card"
-            onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
-            sx={{
-                flex: { xs: "unset", md: 1.1 },
-                px: { xs: 0, md: isLargeScreen ? 12 : 6 },
-                width: "100%",
-                position: "relative",
-                // maxWidth: isLargeScreen ? "100%" : "1600px",
-                maxWidth: maxWidthBox,
-                margin: "auto",
-                // height: { xs: "380px", md: isLargeScreen ? "750px" : "500px" },
-                height: getCardHeight("full"),  // <-- dynamic height
-
-                overflow: "hidden",
-                borderRadius: 2,
-            }}
-        >
-            <img
-                src={img}
-                className="zoom-img"
-                style={{
-                    willChange: "transform",
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    transformOrigin: "center center",
-                }}
-            />
-
+    const HalfBox = ({ img, tags, title, subtitle, link }) => (
+        <ClickableBox link={link}>
             <Box
+                className="portfolio-card"
+                onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
                 sx={{
-                    display: "flex",
-                    gap: "8px",
-                    position: "absolute",
-                    top: 16,
-                    left: 16,
-                    ml: "30px",
-                    flexWrap: "wrap",
+                    flex: { xs: "unset", md: 1.1 },
+                    px: { xs: 0, md: isLargeScreen ? 12 : 6 },
+                    width: "100%",
+                    position: "relative",
+                    // maxWidth: isLargeScreen ? "100%" : "1600px",
+                    maxWidth: maxWidthBox,
+                    margin: "auto",
+                    // height: { xs: "380px", md: isLargeScreen ? "750px" : "500px" },
+                    height: getCardHeight("full"),  // <-- dynamic height
+
+                    overflow: "hidden",
+                    borderRadius: 2,
                 }}
             >
-                {tags?.map((t, i) => (
+                <img
+                    src={img}
+                    className="zoom-img"
+                    style={{
+                        willChange: "transform",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        transformOrigin: "center center",
+                    }}
+                />
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: "8px",
+                        position: "absolute",
+                        top: 16,
+                        left: 16,
+                        ml: "30px",
+                        flexWrap: "wrap",
+                    }}
+                >
+                    {tags?.map((t, i) => (
+                        <Typography
+                            key={i}
+                            sx={{
+                                px: 1.2,
+                                py: 0.8,
+                                border: "1px solid white",
+                                borderRadius: "20px",
+                                color: "#fff",
+                                fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
+                                fontFamily: "Inter Tight, sans-serif",
+                                textTransform: "uppercase",
+                            }}
+                        >
+                            {t}
+                        </Typography>
+                    ))}
+                </Box>
+
+                <Box
+                    sx={{
+                        position: "absolute",
+                        bottom: 16,
+                        left: 0,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        px: 4,
+                        alignItems: "center",
+                    }}
+                >
                     <Typography
-                        key={i}
                         sx={{
-                            px: 1.2,
-                            py: 0.8,
-                            border: "1px solid white",
-                            borderRadius: "20px",
-                            color: "#fff",
-                            fontSize: { xs: "8px", md: isLargeScreen ? "15px" : "10px" },
+                            fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
                             fontFamily: "Inter Tight, sans-serif",
-                            textTransform: "uppercase",
+                            letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
+                            lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
+                            fontWeight: 400,
+                            color: "#fff",
+                            width: "50%"
                         }}
                     >
-                        {t}
+                        {title}
                     </Typography>
-                ))}
-            </Box>
 
-            <Box
-                sx={{
-                    position: "absolute",
-                    bottom: 16,
-                    left: 0,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    px: 4,
-                    alignItems: "center",
-                }}
-            >
-                <Typography
-                    sx={{
-                        fontSize: { xs: "30px", md: isLargeScreen ? "82px" : "55px" },
-                        fontFamily: "Inter Tight, sans-serif",
-                        letterSpacing: { xs: "-1.1px", md: isLargeScreen ? "-5.8px" : "-3.9px" },
-                        lineHeight: { xs: "27px", md: isLargeScreen ? "78px" : "52px" },
-                        fontWeight: 400,
-                        color: "#fff",
-                        width: "50%"
-                    }}
-                >
-                    {title}
-                </Typography>
-
-                <Typography
-                    sx={{
-                        fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
-                        fontWeight: 400,
-                        color: "#fff",
-                        textAlign: "right",
-                        marginRight: isLargeScreen ? "112px" : "75px",
-                        opacity: 1,
-                        width: "37%",
-                        fontFamily: "Inter Tight",
-                        letterSpacing: "0.01px"
-                    }}
-                >
-                    {subtitle}
-                </Typography>
+                    <Typography
+                        sx={{
+                            fontSize: { xs: "10px", md: isLargeScreen ? "18px" : "12px" },
+                            fontWeight: 400,
+                            color: "#fff",
+                            textAlign: "right",
+                            marginRight: isLargeScreen ? "112px" : "75px",
+                            opacity: 1,
+                            width: "37%",
+                            fontFamily: "Inter Tight",
+                            letterSpacing: "0.01px"
+                        }}
+                    >
+                        {subtitle}
+                    </Typography>
+                </Box>
             </Box>
-        </Box>
+        </ClickableBox>
     );
 
     // ************************************
@@ -335,8 +358,7 @@ const PortfolioSection = () => {
                 width: { xs: "auto", md: "auto" },  // FULL WIDTH ON MOBILE
                 position: "relative",
                 // height: { xs: "280px", md: "500px" }, // MORE HEIGHT FOR MOBILE TEXT
-                height: getCardHeight("cta"),  // <-- dynamic height
-
+                height: "auto",
                 borderRadius: 2,
                 display: "flex",
                 flexDirection: "column",
@@ -347,11 +369,11 @@ const PortfolioSection = () => {
             }}
         >
             {/* Doodles */}
-            <Box sx={{ position: "absolute", top: { xs: "73px", md: "100px" }, right: { xs: "255px", md: "411px" } }}>
+            <Box sx={{ position: "absolute", top: { xs: "73px", md: "230px" }, right: { xs: "255px", md: "531px" } }}>
                 <img src={ThreeLines} alt="" width={70} height={70} />
             </Box>
 
-            <Box sx={{ position: "absolute", top: { xs: "190px", md: "350px" }, left: { xs: "193px", md: "482px" } }}>
+            <Box sx={{ position: "absolute", top: { xs: "190px", md: "550px" }, left: { xs: "193px", md: "682px" } }}>
                 <img src={EyeHeart} alt="" width={150} height={150} />
             </Box>
 
@@ -445,6 +467,7 @@ const PortfolioSection = () => {
                             tags={items[0].tags}
                             title={items[0].title}
                             subtitle={items[0].subtitle}
+                            link={items[0].link} // ✅ ADD
                         />
 
                         {/* 2️⃣ HALF + HALF */}
@@ -453,12 +476,17 @@ const PortfolioSection = () => {
                                 img={items[1].image}
                                 tags={items[1].tags}
                                 title={items[1].title}
-                                subtitle={items[1].subtitle} />
+                                subtitle={items[1].subtitle}
+                                link={items[1].link} // ✅ ADD
+                            />
+
                             <HalfBox key="half-2"
                                 img={items[2].image}
                                 tags={items[2].tags}
                                 title={items[2].title}
-                                subtitle={items[2].subtitle} />
+                                subtitle={items[2].subtitle}
+                                link={items[2].link} // ✅ ADD
+                            />
                         </Box>
 
                         {/* 3️⃣ FULL */}
@@ -467,6 +495,7 @@ const PortfolioSection = () => {
                             tags={items[3].tags}
                             title={items[3].title}
                             subtitle={items[3].subtitle}
+                            link={items[3].link} // ✅ ADD
                         />
 
                         {/* 4️⃣ HALF + CTA */}
@@ -474,12 +503,13 @@ const PortfolioSection = () => {
                             <HalfBox img={items[4].image}
                                 tags={items[4].tags}
                                 title={items[4].title}
-                                subtitle={items[4].subtitle} />
+                                subtitle={items[4].subtitle}
+                                link={items[4].link}
+                            />
                             <CTABox />
                         </Box>
                     </>
                 )}
-
             </Box>
         </Box>
     );
