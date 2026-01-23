@@ -8,9 +8,12 @@ import {
 } from "framer-motion";
 import { client, urlFor } from "../../sanityClient";
 
+
 export default function AnimatedMembers() {
 
+
   const [data, setData] = useState(null);
+
 
   // 🔹 Sanity fetch
   const query = `
@@ -23,16 +26,20 @@ export default function AnimatedMembers() {
     }
   `;
 
+
   useEffect(() => {
     client.fetch(query).then(setData);
   }, []);
+
 
   // 🔹 Responsive
   const isLargeScreen = useMediaQuery(
     "(min-width: 1660px) and (max-width: 1999px)"
   );
 
-  const isUltraWide = useMediaQuery("(min-width: 2000px)");
+
+  const isUltraWide = useMediaQuery("(min-width: 2000px) and (max-width: 2599px)");
+
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
@@ -41,25 +48,32 @@ export default function AnimatedMembers() {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
+
   const isMobile = windowWidth <= 658;
   const isTablet = windowWidth > 768 && windowWidth <= 1024;
   const isTightMobile = windowWidth >= 350 && windowWidth <= 460;
 
 
+
+
   // 🔹 Scroll
   const containerRef = useRef(null);
+
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 20%", "center center"],
   });
 
+
   // 🔹 Convert MotionValue → number (SAFE)
   const [progress, setProgress] = useState(0);
+
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setProgress(v);
   });
+
 
   // 🔹 Text animations
   const wordLeftX = useTransform(
@@ -68,14 +82,17 @@ export default function AnimatedMembers() {
     [isMobile ? 110 : isTablet ? 80 : 110, 0]
   );
 
+
   const wordRightX = useTransform(
     scrollYProgress,
     [0, 1],
     [isMobile ? -110 : isTablet ? -80 : -110, 0]
   );
 
+
   // 🔹 Spread distance
   const spread = isMobile ? 20 : isTablet ? 30 : isLargeScreen ? 60 : isUltraWide ? 65 : 30;
+
 
   return (
     <Box
@@ -107,7 +124,7 @@ export default function AnimatedMembers() {
               : isLargeScreen
                 ? "112px"
                 : isUltraWide
-                  ? "120px"
+                  ? "130px"
                   : "75px",
           fontWeight: 700,
           textAlign: isMobile ? "center" : "center",
@@ -137,6 +154,7 @@ export default function AnimatedMembers() {
           }}
         >
 
+
           {/* LEFT WORD */}
           <motion.span
             style={{
@@ -147,7 +165,9 @@ export default function AnimatedMembers() {
                   ? "18px"
                   : isLargeScreen
                     ? "70px"
-                    : "0px",
+                    : isUltraWide
+                      ? "90px"
+                      : "0px",
               x: wordLeftX,
               letterSpacing: "-2px",
             }}
@@ -166,6 +186,7 @@ export default function AnimatedMembers() {
             {data?.memberImages?.map((img, i) => {
               const center = (data.memberImages.length - 1) / 2;
               const direction = i - center;
+
 
               return (
                 <motion.img
@@ -213,7 +234,9 @@ export default function AnimatedMembers() {
                   ? "18px"
                   : isLargeScreen
                     ? "70px"
-                    : "0px",
+                    : isUltraWide
+                      ? "90px"
+                      : "0px",
               letterSpacing: "-2px",
               x: wordRightX,
             }}
@@ -225,3 +248,6 @@ export default function AnimatedMembers() {
     </Box>
   );
 }
+
+
+
