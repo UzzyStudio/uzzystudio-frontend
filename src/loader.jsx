@@ -12,7 +12,7 @@ const Loader = ({ onComplete }) => {
 
     useEffect(() => {
         const controls = animate(0, 100, {
-            duration: 2.8,
+            duration: 7,
             ease: [0.45, 0, 0.55, 1],
             onUpdate(value) {
                 setCount(Math.round(value));
@@ -23,27 +23,27 @@ const Loader = ({ onComplete }) => {
                 await Promise.all([
                     wipeControls.start({
                         scale: 1.5,
-                        borderRadius: "100%", // Keep it circular for the "lens" look
-                        transition: { duration: 0.8, ease: "easeInOut" }
+                        borderRadius: "100%",
+                        transition: { duration: 1.5, ease: "easeInOut" } // was 0.8 → increase
                     }),
                     textControls.start({
-                        color: "#fff", // Change text to white as black fills behind it
+                        color: "#fff",
                         scale: 1.1,
-                        transition: { duration: 0.8, ease: "easeInOut" }
+                        transition: { duration: 1.5, ease: "easeInOut" } // was 0.8 → increase
                     })
                 ]);
 
-                // 2. Zoom everything OUT together with smoothness
+
                 await Promise.all([
                     wipeControls.start({
-                        scale: 10, // Massive scale to clear the screen
+                        scale: 10,
                         borderRadius: "0%",
-                        transition: { duration: 1, ease: [0.7, 0, 0.3, 1] }
+                        transition: { duration: 2, ease: [0.7, 0, 0.3, 1] } // was 1 → slower
                     }),
                     textControls.start({
                         opacity: 0,
                         scale: 1.5,
-                        transition: { duration: 0.8, ease: "easeIn" }
+                        transition: { duration: 1.5, ease: "easeIn" } // was 0.8 → slower
                     })
                 ]);
 
@@ -73,7 +73,7 @@ const Loader = ({ onComplete }) => {
                 initial={{ color: "#000" }}
                 sx={{
                     fontFamily: "Inter Tight, sans-serif",
-                    fontSize: { xs: "48px", md: "120px" },
+                    fontSize: { xs: "20px", md: "50px" },
                     fontWeight: 500,
                     letterSpacing: "-0.04em",
                     zIndex: 3,

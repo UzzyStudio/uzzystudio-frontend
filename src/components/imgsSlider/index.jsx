@@ -103,7 +103,7 @@ const SmoothAlternatingSlider1 = () => {
   const isXs = useMediaQuery("(max-width:600px)");
   const isSm = useMediaQuery("(min-width:601px) and (max-width:900px)");
   const isMd = useMediaQuery("(min-width:901px) and (max-width:1350px)");
-  const isLg = useMediaQuery("(min-width:1201px) and (max-width:1999px)");
+  const isLg = useMediaQuery("(min-width:1351px) and (max-width:1999px)");
   const isUltraWide = useMediaQuery("(min-width:2000px)");
   const VISIBLE_IMAGES = isUltraWide ? 3 : 3;
   const IMAGE_RADIUS = isUltraWide
@@ -153,9 +153,11 @@ const SmoothAlternatingSlider1 = () => {
       ? 40      // small tablets
       : isMd
         ? 67       // laptops
-        : isUltraWide
-          ? 120        // ultra-wide / 4K
-          : 64;       // large desktop
+        : isLg
+          ? 95     // large desktops
+          : isUltraWide
+            ? 120        // ultra-wide / 4K
+            : 64;       // large desktop
 
 
   // const calculateItemWidths = () => {
