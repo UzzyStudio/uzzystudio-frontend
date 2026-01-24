@@ -357,8 +357,8 @@ const PortfolioSection = () => {
                 flex: { xs: "unset", md: 1 },   // FIX FOR MOBILE
                 width: { xs: "auto", md: "auto" },  // FULL WIDTH ON MOBILE
                 position: "relative",
-                // height: { xs: "280px", md: "500px" }, // MORE HEIGHT FOR MOBILE TEXT
-                height: "auto",
+                height: { xs: "280px", md: "auto" }, // MORE HEIGHT FOR MOBILE TEXT
+                // height: "auto",
                 borderRadius: 2,
                 display: "flex",
                 flexDirection: "column",
