@@ -212,23 +212,49 @@ export default function ContactSection() {
                             {/* SOCIALS */}
                             <Stack direction="row" spacing={3} sx={{ mt: 1 }}>
                                 <Box
-                                    component="img"
-                                    src={BehanceLogo}
-                                    alt="Behance"
-                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
-                                />
+                                    component="a"
+                                    href="https://www.behance.net/uzzystudio"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ display: "inline-block" }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={BehanceLogo}
+                                        alt="Behance"
+                                        sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
+                                    />
+                                </Box>
+                                {/* Dribbble */}
                                 <Box
-                                    component="img"
-                                    src={DribbbleLogo}
-                                    alt="Dribbble"
-                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
-                                />
+                                    component="a"
+                                    href="https://dribbble.com/uzzy-studios"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ display: "inline-block" }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={DribbbleLogo}
+                                        alt="Dribbble"
+                                        sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
+                                    />
+                                </Box>
+                                {/* Instagram */}
                                 <Box
-                                    component="img"
-                                    src={InstagramLogo}
-                                    alt="Instagram"
-                                    sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
-                                />
+                                    component="a"
+                                    href="https://www.instagram.com/uzzy_studios/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ display: "inline-block" }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={InstagramLogo}
+                                        alt="Instagram"
+                                        sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
+                                    />
+                                </Box>
                             </Stack>
 
                             {/* EMAIL */}
