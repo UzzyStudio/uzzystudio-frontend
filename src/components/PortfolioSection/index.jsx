@@ -60,21 +60,21 @@ const PortfolioSection = () => {
     const ClickableBox = ({ link, children }) => {
         if (!link) return children;
 
-        return (
-            <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    display: "block",
-                }}
-            >
-                {children}
-            </a>
-        );
+        return React.cloneElement(children, {
+            component: "a",
+            href: link,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            sx: {
+                ...children.props.sx,
+                textDecoration: "none",
+                color: "inherit",
+                display: "block",
+                width: "100%", // 🔥 important
+            },
+        });
     };
+
 
 
     const handleScrollToContact = () => {
@@ -241,7 +241,7 @@ const PortfolioSection = () => {
         <ClickableBox link={link}>
             <Box
                 className="portfolio-card"
-                onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
+                // onLoad={() => ScrollTrigger.refresh()}   // 🔥 REQUIRED
                 sx={{
                     flex: { xs: "unset", md: 1.1 },
                     px: { xs: 0, md: isLargeScreen ? 12 : 6 },
