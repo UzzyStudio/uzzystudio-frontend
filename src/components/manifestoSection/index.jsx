@@ -213,7 +213,7 @@ const ManifestoSection = () => {
     const bigTextSize = isMobile ? "40px" : isLargeScreen ? "165px" : "110px";
 
     return (
-        <Box sx={{ width: "100%", position: "relative", top: "50px", overflow: "hidden", mx: "auto", paddingTop: "330px" }}>
+        <Box sx={{ width: "100%", position: "relative", top: "50px", overflow: "hidden", mx: "auto", paddingTop: isMobile ? "204px" : "330px", }}>
 
             {/* ------------------------------------
                 1️⃣ TOP AUTO-SLIDING MANIFESTO STRIP
@@ -224,7 +224,7 @@ const ManifestoSection = () => {
                     overflow: "hidden",
                     position: "relative",
                     width: "100%",
-                    top: { xs: "-286px", md: "0" },
+                    top: { xs: "-106px", md: "0" },
                     whiteSpace: "nowrap",
                     transform: { xs: "skewY(-8deg)", md: "skewY(-3deg)" },
 
@@ -298,7 +298,7 @@ const ManifestoSection = () => {
             {/* ------------------------------------
                 2️⃣ OVERLAY FLOATING IMAGES
             ------------------------------------- */}
-            <Box sx={{ position: "relative", width: "100%", height: "420px", maxWidth: "1200px", margin: "15px auto 0 auto", }}>
+            <Box sx={{ position: "relative", width: "100%", height: isMobile ? "334px" : "420px", maxWidth: "1200px", margin: "15px auto 0 auto", }}>
 
                 {/* Left photo */}
                 <Box
@@ -368,7 +368,7 @@ const ManifestoSection = () => {
                     width: "100%",
                     overflow: "hidden",
                     position: "relative",
-                    bottom: isMobile ? "-100px" : "150px",
+                    bottom: isMobile ? "-30px" : "150px",
                     transform: "skewY(-3deg)",
 
                 }}

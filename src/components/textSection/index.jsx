@@ -40,6 +40,7 @@ LINES_CHARS.forEach((chars, idx) => {
    MAIN COMPONENT
 --------------------------------*/
 const CreativeTextSection = () => {
+    const isTightMobile = useMediaQuery("(max-width:370px)");
     const isMobile = useMediaQuery("(max-width:599px)");
 
     const isTablet = useMediaQuery(
@@ -88,17 +89,19 @@ const CreativeTextSection = () => {
     }, []);
 
     /** Responsive font sizes */
-    const fontSize = isMobile
-        ? "38px"
-        : isTablet
-            ? "70px"
-            : isSmallDesktop
-                ? "110px"
-                : isBigScreen
-                    ? "160px"
-                    : isLargeScreen
-                        ? "180px"
-                        : "100px";
+    const fontSize = isTightMobile
+        ? "35px"
+        : isMobile
+            ? "39px"
+            : isTablet
+                ? "70px"
+                : isSmallDesktop
+                    ? "110px"
+                    : isBigScreen
+                        ? "160px"
+                        : isLargeScreen
+                            ? "180px"
+                            : "100px";
     const lineSpacingFix = isMobile ? "-5px" : isTablet ? "-10px" : isLargeScreen ? "-35px" : "-25px";
 
     /** Responsive indent scale */

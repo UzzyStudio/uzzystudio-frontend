@@ -169,6 +169,7 @@ export default function AnimatedMembers() {
                       ? "90px"
                       : "0px",
               // x: wordLeftX,
+              x: isMobile ? 0 : wordLeftX,
               letterSpacing: "-2px",
             }}
           >
@@ -239,6 +240,7 @@ export default function AnimatedMembers() {
                       : "0px",
               letterSpacing: "-2px",
               // x: wordRightX,
+              x: isMobile ? 0 : wordRightX,
             }}
           >
             {data?.wordAfterImages}
