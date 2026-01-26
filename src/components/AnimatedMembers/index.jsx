@@ -103,7 +103,7 @@ export default function AnimatedMembers() {
           ? "100%"
           : isLargeScreen ? "100%" : "100%",
         mx: "auto",
-        height: isMobile ? "600px" : "100vh",
+        height: isMobile ? "400px" : "100vh",
         background: "#F8F8F8",
         display: "flex",
         alignItems: "center",
@@ -150,7 +150,7 @@ export default function AnimatedMembers() {
             flexDirection: isTightMobile ? "column" : "row",
             alignItems: "center",
             justifyContent: "center",
-            gap: isTightMobile ? "16px" : "0",
+            gap: isTightMobile ? "0px" : "0",
           }}
         >
 
@@ -168,7 +168,7 @@ export default function AnimatedMembers() {
                     : isUltraWide
                       ? "90px"
                       : "0px",
-              x: wordLeftX,
+              // x: wordLeftX,
               letterSpacing: "-2px",
             }}
           >
@@ -238,7 +238,7 @@ export default function AnimatedMembers() {
                       ? "90px"
                       : "0px",
               letterSpacing: "-2px",
-              x: wordRightX,
+              // x: wordRightX,
             }}
           >
             {data?.wordAfterImages}

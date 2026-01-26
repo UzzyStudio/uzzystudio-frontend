@@ -62,8 +62,8 @@ const ServiceCard = ({ card, screen, index, totalCards }) => {
         : screen.isMedium
           ? "30px"
           : screen.isSmall
-            ? "20px"
-            : "20px";
+            ? "23px"
+            : "23px";
 
 
   const descSize = screen.isXXL
@@ -75,8 +75,8 @@ const ServiceCard = ({ card, screen, index, totalCards }) => {
         : screen.isMedium
           ? "15px"
           : screen.isSmall
-            ? "10px"
-            : "10px";
+            ? "13px"
+            : "13px";
 
 
   const buttonSize = screen.isXXL
@@ -157,7 +157,7 @@ const ServiceCard = ({ card, screen, index, totalCards }) => {
           margin: "0 auto",     // ✅ center content
           padding: { xs: "20px 20px", md: "57px 40px" }
         }}>
-          < Grid container spacing={{ xs: 2, sm: 6, md: 16 }} // smaller spacing on mobile
+          < Grid container spacing={{ xs: 7, sm: 7, md: 16 }} // smaller spacing on mobile
             alignItems="stretch">
             {/* COLUMN 1: Text and Button */}
             <Grid
@@ -289,14 +289,22 @@ const ServiceCard = ({ card, screen, index, totalCards }) => {
 
               }}
             >
-              <Stack spacing={1}>
+              <Stack
+                sx={{
+                  // ✅ Only on mobile + only if more than 7 items
+                  ...(screen.isMobile && card.services.length > 8 && {
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    columnGap: "12px",
+                  }),
+                }}
+                spacing={1}
+              >
                 {card.services.map((item, index) => (
                   <Typography
                     key={`${card.id}-${index}`}
                     sx={{
                       fontSize: descSize,
-
-
                       fontFamily: "Inter Tight, sans-serif",
                       fontWeight: 400,
                       lineHeight: 1.2,
@@ -310,6 +318,7 @@ const ServiceCard = ({ card, screen, index, totalCards }) => {
                   </Typography>
                 ))}
               </Stack>
+
             </Grid>
 
 
