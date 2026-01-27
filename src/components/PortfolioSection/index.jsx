@@ -372,7 +372,7 @@ const PortfolioSection = () => {
         >
             {/* Doodles */}
             <Box sx={{ position: "absolute", top: { xs: "73px", md: "230px" }, right: { xs: "255px", md: "531px" } }}>
-                <img src={ThreeLines} alt="" width={70} height={70} />
+                <img src={ThreeLines} alt="" width={70} height={72} />
             </Box>
 
             <Box sx={{ position: "absolute", top: { xs: "190px", md: "550px" }, left: { xs: "193px", md: "682px" } }}>
