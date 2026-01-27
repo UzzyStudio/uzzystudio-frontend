@@ -65,15 +65,17 @@ const PortfolioSection = () => {
             href: link,
             target: "_blank",
             rel: "noopener noreferrer",
+            "data-clickable": true, // 🔥 important for cursor
             sx: {
                 ...children.props.sx,
                 textDecoration: "none",
                 color: "inherit",
                 display: "block",
-                width: "100%", // 🔥 important
+                width: "100%",
             },
         });
     };
+
 
 
 

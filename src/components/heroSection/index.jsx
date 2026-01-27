@@ -18,10 +18,18 @@ const slideUp = keyframes`
 `;
 
 const Hero = () => {
-  const isTablet = useMediaQuery("(max-width:1024px)");
-  const isMobile = useMediaQuery("(max-width:600px)");
+  // const isTablet = useMediaQuery("(max-width:1024px)");
+  // const isMobile = useMediaQuery("(max-width:600px)");
+  // const isSmallScreen = useMediaQuery("(max-width:480px)");
+  // const isLargeScreen = useMediaQuery("(min-width: 2060px)");
   const isSmallScreen = useMediaQuery("(max-width:480px)");
-  const isLargeScreen = useMediaQuery("(min-width: 2560px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(min-width:601px) and (max-width:1024px)");
+
+  const isMediumScreen = useMediaQuery("(min-width:1250px) and (max-width:1599px)");
+  const isLargeScreen = useMediaQuery("(min-width:1600px) and (max-width:1999px)");
+  const isUltraWide = useMediaQuery("(min-width:2000px) and (max-width:2560px)");
+
 
   const [hero, setHero] = useState(null);
 
@@ -42,14 +50,14 @@ const Hero = () => {
       component="section"
       sx={{
         width: "100%",
-        maxWidth: isLargeScreen ? "100%" : "1600px",
+        maxWidth: isLargeScreen ? "100%" : "100%",
         margin: "auto",
         px: isSmallScreen
           ? 2
           : isMobile
             ? 3
             : isLargeScreen
-              ? { xs: 2, sm: 4, md: 12 }
+              ? { xs: 2, sm: 4, md: 8 }
               : { xs: 2, sm: 4, md: 6 },
         pt: isSmallScreen ? 12 : isMobile ? 14 : 10,
         pb: isSmallScreen ? 6 : isMobile ? 16 : 20,
@@ -80,8 +88,10 @@ const Hero = () => {
                   : isMobile
                     ? "90%"
                     : isLargeScreen
-                      ? "60vw"
-                      : "50.625vw",
+                      ? "57vw"
+                      : isUltraWide
+                        ? "57vw"
+                        : "50.625vw",
                 maxWidth: isSmallScreen ? "80%" : isMobile ? "100%" : "none",
                 height: "auto",
                 position: "relative",
@@ -102,9 +112,9 @@ const Hero = () => {
           <Box
             sx={{
               position: isMobile ? "relative" : "absolute",
-              right: isSmallScreen ? 0 : isMobile ? "-135px" : "130px",
+              right: isSmallScreen ? 0 : isMobile ? "-135px" : isLargeScreen ? "268px" : isUltraWide ? "268px" : "130px",
               left: !isSmallScreen ? "100" : isMobile ? "0px" : "130px",
-              top: isSmallScreen ? 0 : isMobile ? "-28px" : "200px",
+              top: isSmallScreen ? 0 : isMobile ? "-28px" : isLargeScreen ? "370px" : isUltraWide ? "370px" : "200px",
               textAlign: isSmallScreen
                 ? "center"
                 : isMobile
@@ -131,7 +141,7 @@ const Hero = () => {
                 src={SmallIcon}
                 alt="icon"
                 width={
-                  isSmallScreen ? 20 : isMobile ? 22 : isLargeScreen ? 30 : 24
+                  isSmallScreen ? 20 : isMobile ? 22 : isLargeScreen ? 30 : isUltraWide ? 35 : 24
                 }
               />
             </Box>
@@ -146,7 +156,9 @@ const Hero = () => {
                     ? "12px"
                     : isLargeScreen
                       ? "18px"
-                      : "13px",
+                      : isUltraWide
+                        ? "22px"
+                        : "13px",
                 fontWeight: 900,
                 letterSpacing: "0.5px",
                 textTransform: "uppercase",

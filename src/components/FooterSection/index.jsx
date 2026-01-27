@@ -226,6 +226,7 @@ export default function FooterSection() {
                                     textAlign: "center", position: "relative",
                                     top: { xs: "90px", sm: "140px", md: "160px" },
                                     zIndex: "2", transform: "translateX(-50%)",
+
                                     left: { xs: "290px", sm: "200px", md: isLargeScreen ? "1500px" : isXLScreen ? "1129px" : isLGScreen ? "900px" : "861px" },
                                     // "@media (min-width:1300px)": {
                                     //     top: "164px",
@@ -243,6 +244,8 @@ export default function FooterSection() {
                                     <Button
                                         onClick={handleScrollToContact}
                                         disableElevation
+                                        data-clickable={true} // ✅ triggers green arrow
+
                                         sx={{
                                             position: "relative",
                                             overflow: "hidden",
@@ -333,6 +336,7 @@ export default function FooterSection() {
                                     >
                                         <img
                                             src={RandomImg}
+
                                             alt="random"
                                             style={{
                                                 width: isLargeScreen ? "112px" : { xs: "5px", md: "75px" }, height: "auto", maxWidth: isLargeScreen ? "112px" : { xs: "20px", sm: "55px", md: "75px" }
@@ -341,6 +345,8 @@ export default function FooterSection() {
                                     </motion.div>
                                     <Typography
                                         component="a"
+                                        data-clickable={true} // ✅ triggers green arrow
+
                                         href={`mailto:${footerData?.footerEmail}`}
                                         sx={{
                                             zIndex: "5",
@@ -359,6 +365,7 @@ export default function FooterSection() {
 
                                             "&:hover": {
                                                 textDecoration: "underline",
+                                                color: "#CAF55E",
                                                 opacity: 0.85,
                                             },
                                         }}
@@ -392,7 +399,6 @@ export default function FooterSection() {
                                     width: { md: isLargeScreen ? "80vw" : isXLScreen ? "80vw" : isLGScreen ? "80vw" : "100%" },
                                     position: "relative",
 
-
                                     marginLeft: {
                                         xs: "-10px", // mobile 
                                         sm: "-35px",
@@ -415,7 +421,6 @@ export default function FooterSection() {
                                             display: "block", // remove default inline spacing
                                             willChange: 'transform, opacity',
                                             objectFit: "cover",
-
                                         }}
                                     />
                                 </motion.div>
