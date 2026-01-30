@@ -172,6 +172,7 @@ export default function ContactForm({ variant = "Drawer" }) {
                 <Button
                     onClick={handleSubmit}
                     variant="contained"
+                    disableElevation
                     sx={submitStyle}
                 >
                     <Box className="button-text-wrapper">Submit</Box>
@@ -254,16 +255,25 @@ const submitStyle = {
     fontSize: { xs: "10px", sm: "12px" },
     textTransform: "none",
     overflow: "hidden",
+    /* 🔴 REMOVE SHADOW COMPLETELY */
+    boxShadow: "none",
     position: "relative",
     "&::before": {
         content: '""',
         position: "absolute",
         inset: 0,
         backgroundColor: "#CAF55E",
+        /* 🔴 REMOVE SHADOW COMPLETELY */
+        boxShadow: "none",
         transform: "scaleY(0)",
         transformOrigin: "bottom",
         transition: "transform 0.6s ease",
         zIndex: 0,
+    },
+    /* 🔴 HOVER (THIS WAS MISSING) */
+    "&:hover": {
+        backgroundColor: "#000",
+        boxShadow: "none",
     },
     "&:hover::before": {
         transform: "scaleY(1)",
@@ -275,6 +285,8 @@ const submitStyle = {
     },
     "&:hover .button-text-wrapper": {
         color: "#1D1D1B",
+        /* 🔴 REMOVE SHADOW COMPLETELY */
+        boxShadow: "none",
     },
     "&:focus": {
         outline: "none",

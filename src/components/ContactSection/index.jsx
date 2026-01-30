@@ -16,6 +16,11 @@ import RatingImg from "../../assets/rating.png";
 import BehanceLogo from "../../assets/Behance.svg";
 import DribbbleLogo from "../../assets/dribble.svg";
 import InstagramLogo from "../../assets/insta.png";
+import whatsappicon from "../../assets/whatsappicon.png";
+import gmailicon from "../../assets/gmailicon.webp";
+import linkeidnicon from "../../assets/linkeidnicon.png";
+
+
 
 export default function ContactSection() {
 
@@ -255,6 +260,21 @@ export default function ContactSection() {
                                         sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                     />
                                 </Box>
+                                {/* LinkedIn */}
+                                <Box
+                                    component="a"
+                                    href="https://www.linkedin.com/in/uzzystudio/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ display: "inline-block" }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={linkeidnicon} // import this at top
+                                        alt="LinkedIn"
+                                        sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
+                                    />
+                                </Box>
                             </Stack>
 
                             {/* EMAIL */}
@@ -266,10 +286,24 @@ export default function ContactSection() {
                                     color: "black",
                                     textDecoration: "underline",
                                     cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1, // space between icon and text
                                 }}
                             >
+                                <Box
+                                    component="img"
+                                    src={gmailicon} // import this at top
+                                    alt="Gmail"
+                                    sx={{
+                                        height: isLargeScreen ? "35px" : "25px",
+                                        width: "auto",
+                                    }}
+                                />
                                 uzzystudios@gmail.com
                             </Typography>
+
+                            {/* WHATSAPP */}
                             <Typography
                                 sx={{
                                     mt: 2,
@@ -278,11 +312,24 @@ export default function ContactSection() {
                                     color: "black",
                                     textDecoration: "underline",
                                     cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1, // space between icon and text
                                 }}
                                 onClick={() => window.open("https://wa.me/447592131117", "_blank")}
                             >
+                                <Box
+                                    component="img"
+                                    src={whatsappicon} // import this at top
+                                    alt="WhatsApp"
+                                    sx={{
+                                        height: isLargeScreen ? "30px" : "20px",
+                                        width: "auto",
+                                    }}
+                                />
                                 +44 7592 131117
                             </Typography>
+
                         </Box>
                     </Grid>
 
@@ -574,6 +621,13 @@ export default function ContactSection() {
                                         overflow: "hidden",
                                         position: "relative",
                                         cursor: "default",
+                                        /* 🔴 REMOVE SHADOW COMPLETELY */
+                                        boxShadow: "none",
+                                        /* 🔴 HOVER (THIS WAS MISSING) */
+                                        "&:hover": {
+                                            backgroundColor: "#000",
+                                            boxShadow: "none",
+                                        },
 
                                         "&::before": {
                                             content: '""',

@@ -101,17 +101,25 @@ const MotionSection = () => {
 
   const bgRef = useRef(null);
 
-  const handleScrollToServices = () => {
-    const servicesSection = document.getElementById("services");
-    if (!servicesSection || !window.lenis) return;
+  // const handleScrollToServices = () => {
+  //   const servicesSection = document.getElementById("services");
+  //   if (!servicesSection || !window.lenis) return;
 
-    const headerOffset = 120;
-    const y = servicesSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+  //   const headerOffset = 120;
+  //   const y = servicesSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
 
-    window.lenis.scrollTo(y, {
-      duration: 1.2,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-    });
+  //   window.lenis.scrollTo(y, {
+  //     duration: 1.2,
+  //     easing: (t) => 1 - Math.pow(1 - t, 3),
+  //   });
+  // };
+
+  const handleOpenWhatsapp = () => {
+    window.open(
+      "https://api.whatsapp.com/send/?phone=447592131117&text&type=phone_number&app_absent=0",
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
   useEffect(() => {
@@ -181,7 +189,7 @@ const MotionSection = () => {
       >
         <Box
           ref={sectionRef}
-          onClick={handleScrollToServices}
+          onClick={handleOpenWhatsapp}
           data-clickable="true"
           borderRadius=".5rem"
           sx={{

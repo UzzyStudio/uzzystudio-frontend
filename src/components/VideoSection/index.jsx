@@ -78,7 +78,7 @@ const VideoSection = () => {
                     start: "top+=25% center",
                     end: "bottom-=25% center",
                     scrub: 0.05,
-                    markers: true,
+                    // markers: true,
 
                     invalidateOnRefresh: true,
                 },
