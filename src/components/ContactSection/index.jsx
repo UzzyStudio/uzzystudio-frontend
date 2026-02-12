@@ -206,7 +206,7 @@ export default function ContactSection() {
                             </Typography>
 
 
-                            <Typography
+                            {/* <Typography
                                 sx={{
                                     mt: 3, mb: 1, fontWeight: 500, color: "black", fontFamily: "Inter Tight, sans-serif",
                                     fontSize: isLargeScreen ? "22px" : undefined,
@@ -214,7 +214,7 @@ export default function ContactSection() {
                             >
                                 Follow Us
                             </Typography>
-                            {/* SOCIALS */}
+                           
                             <Stack direction="row" spacing={3} sx={{ mt: 1 }}>
                                 <Box
                                     component="a"
@@ -230,7 +230,7 @@ export default function ContactSection() {
                                         sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                     />
                                 </Box>
-                                {/* Dribbble */}
+                              
                                 <Box
                                     component="a"
                                     href="https://dribbble.com/uzzy-studios"
@@ -245,7 +245,7 @@ export default function ContactSection() {
                                         sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                     />
                                 </Box>
-                                {/* Instagram */}
+                                
                                 <Box
                                     component="a"
                                     href="https://www.instagram.com/uzzy_studios/"
@@ -260,7 +260,7 @@ export default function ContactSection() {
                                         sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                     />
                                 </Box>
-                                {/* LinkedIn */}
+                               
                                 <Box
                                     component="a"
                                     href="https://www.linkedin.com/in/uzzystudio/"
@@ -275,10 +275,10 @@ export default function ContactSection() {
                                         sx={{ height: { xs: "32px", md: isLargeScreen ? "67px" : "45px" } }}
                                     />
                                 </Box>
-                            </Stack>
+                            </Stack> */}
 
                             {/* EMAIL */}
-                            <Typography
+                            {/* <Typography
                                 sx={{
                                     mt: 5,
                                     fontSize: isLargeScreen ? "30px" : "20px",
@@ -301,10 +301,10 @@ export default function ContactSection() {
                                     }}
                                 />
                                 uzzystudios@gmail.com
-                            </Typography>
+                            </Typography> */}
 
                             {/* WHATSAPP */}
-                            <Typography
+                            {/* <Typography
                                 sx={{
                                     mt: 2,
                                     fontSize: isLargeScreen ? "30px" : "20px",
@@ -328,7 +328,7 @@ export default function ContactSection() {
                                     }}
                                 />
                                 +44 7592 131117
-                            </Typography>
+                            </Typography> */}
 
                         </Box>
                     </Grid>
@@ -605,69 +605,49 @@ export default function ContactSection() {
                             <Box sx={{ mt: 4 }}>
                                 <Button
                                     data-clickable
-
+                                    disableElevation
                                     // disabled={!formData.nameCompany.trim()}
                                     onClick={handleSubmit}
                                     variant="contained"
                                     sx={{
+                                        position: "relative",
+                                        overflow: "hidden",
+
                                         py: { xs: 1.3, md: isLargeScreen ? 2.4 : 1.6 },
                                         px: { xs: 4, md: isLargeScreen ? 10.5 : 7 },
-                                        fontSize: { xs: "13px", md: isLargeScreen ? "21px" : "14px" },
-                                        backgroundColor: "black",
+                                        fontSize: isLargeScreen ? "18px" : "15px",
+                                        borderRadius: "30px",
+                                        backgroundColor: "#CAF55E",
+                                        fontWeight: 500,
                                         fontFamily: "Inter Tight, sans-serif",
-                                        borderRadius: "80px",
-                                        fontWeight: 400,
                                         textTransform: "none",
-                                        overflow: "hidden",
-                                        position: "relative",
-                                        cursor: "default",
-                                        /* 🔴 REMOVE SHADOW COMPLETELY */
                                         boxShadow: "none",
-                                        /* 🔴 HOVER (THIS WAS MISSING) */
-                                        "&:hover": {
-                                            backgroundColor: "#000",
-                                            boxShadow: "none",
-                                        },
+                                        cursor: "pointer",
 
+                                        /* Hover BG animation */
                                         "&::before": {
                                             content: '""',
                                             position: "absolute",
-                                            inset: 0,
-                                            backgroundColor: "#CAF55E",
-                                            transform: "scaleY(0)",
-                                            transformOrigin: "bottom",
-                                            transition: "transform 0.99s cubic-bezier(0.16, 1, 0.3, 1)",
+                                            bottom: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "0%",
+                                            backgroundColor: "#000",
+                                            transition: "height 0.99s cubic-bezier(0.22, 1, 0.36, 1)",
                                             zIndex: 0,
                                         },
 
                                         "&:hover::before": {
-                                            transform: "scaleY(1)",
+                                            height: "100%",
                                         },
 
-                                        "& .button-text-wrapper": {
-                                            position: "relative",
-                                            zIndex: 2,
-                                            color: "white",
-                                            transition: "color 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-                                        },
-
+                                        /* Change TEXT color safely */
                                         "&:hover .button-text-wrapper": {
-                                            color: "#1D1D1B",
-                                        },
-                                        "&:focus": {
-                                            outline: "none",
-                                            boxShadow: "none",
-                                        },
-                                        "&.Mui-focusVisible": {
-                                            boxShadow: "none",
-                                        },
-                                        "&:active": {
-                                            boxShadow: "none",
-                                        },
-                                        "& .MuiTouchRipple-root": {
-                                            display: "none",
+                                            color: "#fff",
                                         },
 
+                                        "&:focus": { outline: "none" },
+                                        "&.Mui-focusVisible": { boxShadow: "none" },
                                     }}
                                 >
                                     <Box
@@ -675,8 +655,8 @@ export default function ContactSection() {
                                         sx={{
                                             position: "relative",
                                             zIndex: 2,
-                                            color: "white",
-                                            transition: "color 0.4s ease",
+                                            color: "#1D1D1B",
+                                            transition: "color 0.3s ease",
                                         }}
                                     >
                                         Submit

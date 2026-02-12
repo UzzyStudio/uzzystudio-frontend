@@ -276,6 +276,10 @@ export default function FooterSection() {
                                             "&:hover::before": {
                                                 height: "100%",
                                             },
+                                            "&:hover": {
+                                                backgroundColor: "transparent",
+                                            },
+
                                             "&:hover .button-text-wrapper": {
                                                 color: "#fff",
                                             },
@@ -286,6 +290,7 @@ export default function FooterSection() {
                                             "&:focus": { outline: "none" },
                                             "&:focus-visible": { outline: "none", boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
                                             "&.Mui-focusVisible": { boxShadow: "0px 4px 10px rgba(0,0,0,0.12)" },
+
                                         }}
                                     >
                                         <Box
