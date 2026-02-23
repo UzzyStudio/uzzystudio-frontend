@@ -18,6 +18,7 @@ import ContactSection from "./components/ContactSection";
 import SmoothAlternatingSlider1 from "./components/imgsSlider";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Loader from "./loader.jsx";
+import WhatsappFloating from "./components/WhatsappFloating.jsx";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
           <ContactSection />
           <FooterSection />
           <ScrollToTop />
+          <WhatsappFloating />
         </>
       )}
     </>

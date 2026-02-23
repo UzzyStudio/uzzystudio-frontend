@@ -12,14 +12,6 @@ import {
 import { client, urlFor } from "../../sanityClient";
 import { useState } from "react";
 import CharacterContact from "../../assets/character-contact.svg";
-import RatingImg from "../../assets/rating.png";
-import BehanceLogo from "../../assets/Behance.svg";
-import DribbbleLogo from "../../assets/dribble.svg";
-import InstagramLogo from "../../assets/insta.png";
-import whatsappicon from "../../assets/whatsappicon.png";
-import gmailicon from "../../assets/gmailicon.webp";
-import linkeidnicon from "../../assets/linkeidnicon.png";
-
 
 
 export default function ContactSection() {
@@ -203,6 +195,38 @@ export default function ContactSection() {
                                 }}
                             >
                                 Tell us about it
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: 4,
+                                    fontSize: { xs: "16px", md: isLargeScreen ? "40px" : "28px" },
+                                    fontWeight: 500,
+                                    fontFamily: "Inter Tight, sans-serif",
+                                    color: "black",
+                                }}
+                            >
+                                Address:
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: 1,
+                                    fontSize: {
+                                        xs: "14px",
+                                        sm: "15px",
+                                        md: isLargeScreen ? "26px" : "18px"
+                                    },
+                                    fontWeight: 500,
+                                    fontFamily: "Inter Tight, sans-serif",
+                                    color: "#292929",
+                                    lineHeight: 1.6,
+                                    letterSpacing: "0.3px",
+                                    maxWidth: "420px",
+                                }}
+                            >
+                                UZZY STUDIO LTD<br />
+                                20 WENLOCK ROAD<br />
+                                LONDON <br />
+                                N1  7GU
                             </Typography>
 
 
